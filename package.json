@@ -2,9 +2,10 @@
   "name": "2021-portfolio",
   "version": "0.0.1",
   "description": "Personal works",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "rollup --watch --c",
+    "serve": "http-serve dist",
+    "start:local": "run-p watch serve"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,15 @@
   },
   "homepage": "https://github.com/gnikoloff/2021-portfolio#readme",
   "devDependencies": {
-    "rollup": "^2.47.0"
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "http-serve": "^1.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.0",
+    "rollup": "^2.47.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-sourcemaps": "^0.6.3"
   }
 }
