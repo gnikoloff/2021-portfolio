@@ -1,0 +1,17 @@
+{
+  "home": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "Georgi",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "type": "TEXT",
+      "value": "Nikolov",
+      "x": 1,
+      "y": 3,
+      "paddingLeft": 0.3
+    }
+  ]
+}
