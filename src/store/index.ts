@@ -3,6 +3,9 @@ import { createStore } from 'redux'
 import * as actions from './actions'
 
 const initialState = {
+  activeView: null,
+  hoveredItem: null,
+
   hoverItemStartX: -1,
   hoverItemEndX: -1,
   hoverItemY: -1,
@@ -10,6 +13,27 @@ const initialState = {
 
 const appState = (state = initialState, action) => {
   switch (action.type) {
+    case actions.SET_ACTIVE_VIEW: {
+      return {
+        ...state,
+        activeView: action.activeView,
+      }
+    }
+
+    case actions.SET_HOVERED_ITEM: {
+      if (action.hoveredItem !== state.hoveredItem) {
+        if (action.hoveredItem) {
+          document.body.classList.add('isHovering')
+        } else {
+          document.body.classList.remove('isHovering')
+        }
+      }
+      return {
+        ...state,
+        hoveredItem: action.hoveredItem,
+      }
+    }
+
     case actions.SET_HOVER_ITEM_START_X: {
       return {
         ...state,

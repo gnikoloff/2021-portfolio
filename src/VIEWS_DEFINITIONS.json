@@ -1,24 +1,36 @@
 {
-  "home": [
+  "HOME": [
     {
       "type": "TEXT_SPLIT",
       "value": "GEORGI NIKOLOV",
       "x": 3,
-      "y": 1
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "WORKS",
-      "x": 1,
-      "y": 3,
-      "paddingLeft": 0.3
+      "y": 1,
+      "link": "WORKS"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "ABOUT",
-      "x": 1,
-      "y": 5,
-      "paddingLeft": 0.3
+      "x": 3,
+      "y": 3,
+      "link": "ABOUT"
+    }
+  ],
+  "WORKS": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "MY WORKS",
+      "x": 3,
+      "y": 1,
+      "link": "HOME"
+    }
+  ],
+  "ABOUT": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "ABOUT PAGE",
+      "x": 3,
+      "y": 1,
+      "link": "HOME"
     }
   ]
 }

@@ -35,7 +35,11 @@ export default class TextureManager {
     this.#cellHeight = this.#maxSize / GRID_COUNT_Y
   }
 
-  setActiveView(viewItems): this {
+  getTextureCanvas(idx: number, viewItems): HTMLCanvasElement {
+    const ctx = idx === 0 ? this.#ctx0 : this.#ctx1
+    const canvas = idx === 0 ? this.#canvas0 : this.#canvas1
+
+    ctx.clearRect(0, 0, this.#maxSize, this.#maxSize)
     viewItems.forEach((item) => {
       if (item.type === CONTENT_TYPE_SPLIT_TEXT) {
         const x = item.x * this.#cellWidth
@@ -45,16 +49,16 @@ export default class TextureManager {
         const fontSize =
           this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
 
-        this.#ctx0.font = `${fontSize}px Helvetica`
-        this.#ctx0.textAlign = 'center'
-        this.#ctx0.textBaseline = 'middle'
-        this.#ctx0.fillStyle = 'red'
+        ctx.font = `${fontSize}px Helvetica`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillStyle = 'red'
 
         for (let i = 0; i < count; i++) {
           const char = item.value[i]
           const charX = i * this.#cellWidth + this.#cellWidth / 2
           const charY = y + this.#cellHeight / 2
-          this.#ctx0.fillText(char, x + charX, charY)
+          ctx.fillText(char, x + charX, charY)
         }
       } else if (item.type === CONTENT_TYPE_TEXT) {
         const paddingLeft = (item.paddingLeft || 0) * this.#cellWidth
@@ -64,18 +68,14 @@ export default class TextureManager {
         const fontSize =
           this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
 
-        this.#ctx0.font = `${fontSize}px Helvetica`
-        this.#ctx0.textBaseline = 'middle'
-        this.#ctx0.textAlign = 'left'
-        this.#ctx0.fillStyle = 'white'
-        this.#ctx0.fillText(item.value, x, y)
+        ctx.font = `${fontSize}px Helvetica`
+        ctx.textBaseline = 'middle'
+        ctx.textAlign = 'left'
+        ctx.fillStyle = 'white'
+        ctx.fillText(item.value, x, y)
       }
     })
-    return this
-  }
-
-  getActiveCanvas(): HTMLCanvasElement {
-    return this.#canvas0
+    return canvas
   }
 
   showDebug(scaleFactor: number = 1): this {

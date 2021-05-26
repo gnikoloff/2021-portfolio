@@ -16,6 +16,7 @@ import {
   setHoverItemStartX,
   setHoverItemEndX,
   setHoverItemY,
+  setHoveredItem,
 } from '../../store/actions'
 
 import {
@@ -36,6 +37,7 @@ export default class View {
   #gl: WebGLRenderingContext
   #textTexture: Texture
   #textureManager: TextureManager
+  #idx: number
   #viewDefinition
 
   #meshes: Array<Mesh> = []
@@ -44,7 +46,8 @@ export default class View {
 
   #scaleZ = 1
 
-  constructor(gl: WebGLRenderingContext, { textureManager }) {
+  constructor(gl: WebGLRenderingContext, { idx, textureManager }) {
+    this.#idx = idx
     this.#gl = gl
     this.#textureManager = textureManager
 
@@ -150,10 +153,24 @@ export default class View {
     })
   }
 
+  resetScaleZ(): this {
+    this.#scaleZ = 1
+    return this
+  }
+
+  setPosition(x = 0, y = 0, z = 0): this {
+    this.#meshes.forEach((mesh) => {
+      mesh.setPosition({ x, y, z })
+    })
+    return this
+  }
+
   setView(viewDefiniton) {
     this.#viewDefinition = viewDefiniton
-    this.#textureManager.setActiveView(viewDefiniton)
-    const canvas = this.#textureManager.getActiveCanvas()
+    const canvas = this.#textureManager.getTextureCanvas(
+      this.#idx,
+      viewDefiniton,
+    )
     this.#textTexture.bind().setIsFlip().fromImage(canvas).generateMipmap()
     return this
   }
@@ -170,9 +187,11 @@ export default class View {
       store.dispatch(setHoverItemStartX(hoveredItem.x))
       store.dispatch(setHoverItemEndX(hoveredItem.x + hoveredItem.value.length))
       store.dispatch(setHoverItemY(y))
-      this.#scaleZ = 2
+      store.dispatch(setHoveredItem(hoveredItem.link))
+      this.#scaleZ = 3
     } else {
       this.#scaleZ = 1
+      store.dispatch(setHoveredItem(null))
       // store.dispatch(setHoverItemStartX(-1))
       // store.dispatch(setHoverItemEndX(-1))
       // store.dispatch(setHoverItemY(-1))
@@ -206,11 +225,6 @@ export default class View {
         mesh.setMatrixAt(i, this.#instanceMatrix)
       })
     }
-    // for (let i = this.#hoverItemStartIdx; i < this.#hoverItemEndIdx; i++) {
-    //   const x = Math.round(i / GRID_COUNT_X)
-    //   const y = i % GRID_COUNT_Y
-    //
-    // }
 
     this.#gl.activeTexture(this.#gl.TEXTURE0)
     this.#textTexture.bind()

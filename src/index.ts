@@ -1,17 +1,24 @@
-import { vec3, mat4 } from 'gl-matrix'
-
 import {
   CameraController,
   PerspectiveCamera,
 } from './lib/hwoa-rang-gl/dist/esm'
 
 import store from './store'
+import {
+  setActiveView,
+  setHoveredItem,
+  setHoverItemEndX,
+  setHoverItemStartX,
+  setHoverItemY,
+} from './store/actions'
 import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
 import ViewManager from './view-manager'
 import HoverManager from './hover-manager'
 
 import './index.css'
+
+store.dispatch(setActiveView('home'))
 
 const mousePosition = { x: -1000, y: -1000 }
 const canvas = document.createElement('canvas')
@@ -40,16 +47,29 @@ new CameraController(camera)
 const hoverManager = new HoverManager(gl, {})
 const viewManager = new ViewManager(gl)
 
-viewManager.setActiveView(VIEWS_DEFINITIONS['home'])
+viewManager.setActiveView(VIEWS_DEFINITIONS['HOME'])
 
-requestAnimationFrame(updateFrame)
+document.body.addEventListener('click', onMouseClick)
 document.body.addEventListener('mousemove', onMouseMove)
+requestAnimationFrame(updateFrame)
 
-function updateFrame(ts) {
-  if (!gl) {
+function onMouseClick(e) {
+  e.preventDefault()
+  const { hoveredItem } = store.getState()
+  if (!hoveredItem) {
     return
   }
+  viewManager.setActiveView(VIEWS_DEFINITIONS[hoveredItem]).resetScaleZ()
+}
 
+function onMouseMove(e) {
+  e.preventDefault()
+  const rect = canvas.getBoundingClientRect()
+  mousePosition.x = e.clientX - rect.left
+  mousePosition.y = e.clientY - rect.top
+}
+
+function updateFrame(ts) {
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
@@ -72,10 +92,4 @@ function updateFrame(ts) {
   }
 
   requestAnimationFrame(updateFrame)
-}
-
-function onMouseMove(e) {
-  const rect = canvas.getBoundingClientRect()
-  mousePosition.x = e.clientX - rect.left
-  mousePosition.y = e.clientY - rect.top
 }
