@@ -5,10 +5,10 @@ import {
   PerspectiveCamera,
 } from './lib/hwoa-rang-gl/dist/esm'
 
+import store from './store'
 import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
 import ViewManager from './view-manager'
-
 import HoverManager from './hover-manager'
 
 import './index.css'

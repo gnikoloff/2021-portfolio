@@ -11,6 +11,13 @@ import {
   Texture,
 } from '../../lib/hwoa-rang-gl/dist/esm'
 
+import store from '../../store'
+import {
+  setHoverItemStartX,
+  setHoverItemEndX,
+  setHoverItemY,
+} from '../../store/actions'
+
 import {
   GRID_COUNT_X,
   GRID_COUNT_Y,
@@ -35,9 +42,6 @@ export default class View {
   #instanceMatrix = mat4.create()
   #transformVec3 = vec3.create()
 
-  #hoverItemStartX = -1
-  #hoverItemEndX = -1
-  #hoverItemY = -1
   #scaleZ = 1
 
   constructor(gl: WebGLRenderingContext, { textureManager }) {
@@ -163,21 +167,22 @@ export default class View {
     )
 
     if (hoveredItem) {
-      this.#hoverItemStartX = hoveredItem.x
-      this.#hoverItemEndX = hoveredItem.x + hoveredItem.value.length
-      this.#hoverItemY = y
+      store.dispatch(setHoverItemStartX(hoveredItem.x))
+      store.dispatch(setHoverItemEndX(hoveredItem.x + hoveredItem.value.length))
+      store.dispatch(setHoverItemY(y))
       this.#scaleZ = 2
     } else {
       this.#scaleZ = 1
-      // this.#hoverItemStartX = -1
-      // this.#hoverItemEndX = -1
-      // this.#hoverItemY = -1
+      // store.dispatch(setHoverItemStartX(-1))
+      // store.dispatch(setHoverItemEndX(-1))
+      // store.dispatch(setHoverItemY(-1))
     }
   }
 
   render(camera: PerspectiveCamera): this {
-    for (let x = this.#hoverItemStartX; x < this.#hoverItemEndX; x++) {
-      const y = GRID_COUNT_Y - this.#hoverItemY - 1
+    const { hoverItemStartX, hoverItemEndX, hoverItemY } = store.getState()
+    for (let x = hoverItemStartX; x < hoverItemEndX; x++) {
+      const y = GRID_COUNT_Y - hoverItemY - 1
       const i = GRID_COUNT_X * x + y
       mat4.identity(this.#instanceMatrix)
       const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2

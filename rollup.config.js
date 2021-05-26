@@ -6,6 +6,7 @@ import css from 'rollup-plugin-import-css'
 import typescript from 'rollup-plugin-typescript2'
 import json from '@rollup/plugin-json'
 import glslify from 'rollup-plugin-glslify'
+import replace from '@rollup/plugin-replace'
 
 export default {
   input: 'src/index.ts',
@@ -16,13 +17,16 @@ export default {
   },
   plugins: [
     json(),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
+    commonjs(),
+    nodeResolve(),
     typescript({
       useTsconfigDeclarationDir: true,
       declarationDir: 'dist/src',
     }),
     css(),
-    commonjs(),
-    nodeResolve(),
     sourcemaps(),
     copy({
       targets: [{ src: `index.html`, dest: `dist` }],
