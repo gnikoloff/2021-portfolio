@@ -1,4 +1,5 @@
 import { vec3, mat4 } from 'gl-matrix'
+
 import {
   CameraController,
   Geometry,
@@ -11,20 +12,21 @@ import {
   UNIFORM_TYPE_VEC2,
 } from './lib/hwoa-rang-gl/dist/esm'
 
+import {
+  GRID_COUNT_X,
+  GRID_COUNT_Y,
+  GRID_TOTAL_COUNT,
+  GRID_WIDTH_X,
+  GRID_WIDTH_Y,
+  GRID_STEP_X,
+  GRID_STEP_Y,
+} from './constants'
+
 import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
 import TextureManager from './texture-manager'
 
 import './index.css'
-
-const COUNT_X = 15
-const COUNT_Y = 15
-const TOTAL_COUNT = COUNT_X * COUNT_Y
-const WIDTH_X = 10
-const WIDTH_Y = 10
-
-const stepX = WIDTH_X / COUNT_X
-const stepY = WIDTH_Y / COUNT_Y
 
 const canvas = document.createElement('canvas')
 const gl = canvas.getContext('webgl')
@@ -42,8 +44,8 @@ camera.lookAt([0, 0, 0])
 new CameraController(camera)
 
 const texManager = new TextureManager({
-  cellsCountX: COUNT_X,
-  cellsCountY: COUNT_Y,
+  cellsCountX: GRID_COUNT_X,
+  cellsCountY: GRID_COUNT_Y,
   idealFontSize: 110,
   maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
 })
@@ -109,15 +111,15 @@ const transform = vec3.create()
 const meshes: Array<Mesh> = []
 
 const faces = GeometryUtils.createBoxSeparateFace({
-  width: stepX,
-  height: stepY,
+  width: GRID_STEP_X,
+  height: GRID_STEP_Y,
   separateFaces: true,
 })
 
 faces.forEach((side) => {
   const { orientation, vertices, normal, uv, indices } = side
 
-  const totalCount = COUNT_X * COUNT_Y
+  const totalCount = GRID_COUNT_X * GRID_COUNT_Y
 
   const instancedIndexes = new Float32Array(totalCount)
 
@@ -148,10 +150,13 @@ faces.forEach((side) => {
 
       uniforms: {
         text: { type: UNIFORM_TYPE_INT, value: 0 },
-        cellSize: { type: UNIFORM_TYPE_VEC2, value: [COUNT_X, COUNT_Y] },
+        cellSize: {
+          type: UNIFORM_TYPE_VEC2,
+          value: [GRID_COUNT_X, GRID_COUNT_Y],
+        },
       },
       defines: {},
-      instanceCount: TOTAL_COUNT,
+      instanceCount: GRID_TOTAL_COUNT,
       vertexShaderSource: vShader,
       fragmentShaderSource: fShaderFront,
     })
@@ -161,7 +166,7 @@ faces.forEach((side) => {
       geometry,
       uniforms: {},
       defines: {},
-      instanceCount: TOTAL_COUNT,
+      instanceCount: GRID_TOTAL_COUNT,
       vertexShaderSource: vShader,
       fragmentShaderSource: fShader,
     })
@@ -169,8 +174,8 @@ faces.forEach((side) => {
 
   meshes.push(mesh)
 
-  for (let x = 0; x < COUNT_X; x++) {
-    for (let y = 0; y < COUNT_Y; y++) {
+  for (let x = 0; x < GRID_COUNT_X; x++) {
+    for (let y = 0; y < GRID_COUNT_Y; y++) {
       const scalex = 1
       const scaley = 1
       const scalez = 1
@@ -179,13 +184,13 @@ faces.forEach((side) => {
       vec3.set(transform, scalex, scaley, scalez)
       mat4.scale(mat, mat, transform)
 
-      const posx = x * stepX - WIDTH_X / 2
-      const posy = y * stepY - WIDTH_Y / 2
+      const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2
+      const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2
       const posz = 1
 
       vec3.set(transform, posx, posy, posz)
       mat4.translate(mat, mat, transform)
-      const i = COUNT_X * x + y
+      const i = GRID_COUNT_X * x + y
       mesh.setMatrixAt(i, mat)
     }
   }
