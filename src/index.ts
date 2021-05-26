@@ -20,13 +20,14 @@ import './index.css'
 
 store.dispatch(setActiveView('home'))
 
+const dpr = Math.min(2.5, devicePixelRatio)
 const mousePosition = { x: -1000, y: -1000 }
 const canvas = document.createElement('canvas')
 const gl = canvas.getContext('webgl')
 
-let hoveredIdx = -1
+const hoverManager = new HoverManager(gl, {})
+const viewManager = new ViewManager(gl)
 
-const dpr = Math.min(2.5, devicePixelRatio)
 canvas.width = innerWidth * dpr
 canvas.height = innerHeight * dpr
 canvas.style.setProperty('width', `${innerWidth}px`)
@@ -42,10 +43,6 @@ const camera = new PerspectiveCamera(
 camera.position = [0, 0, 25]
 camera.lookAt([0, 0, 0])
 new CameraController(camera)
-
-// .setActiveView()
-const hoverManager = new HoverManager(gl, {})
-const viewManager = new ViewManager(gl)
 
 viewManager.setActiveView(VIEWS_DEFINITIONS['HOME'])
 
@@ -81,15 +78,7 @@ function updateFrame(ts) {
 
   viewManager.render(camera)
 
-  const pickIdx = hoverManager.getHoveredIdx(
-    camera,
-    mousePosition.x,
-    mousePosition.y,
-  )
-  if (pickIdx !== hoveredIdx) {
-    hoveredIdx = pickIdx
-    viewManager.setHoveredIdx(pickIdx)
-  }
+  hoverManager.determineHoveredIdx(camera, mousePosition.x, mousePosition.y)
 
   requestAnimationFrame(updateFrame)
 }

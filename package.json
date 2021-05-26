@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "gl-matrix": "^3.3.0",
+    "popmotion": "^9.3.6",
     "redux": "^4.1.0"
   }
 }

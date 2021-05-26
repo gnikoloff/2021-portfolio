@@ -6,6 +6,7 @@ const initialState = {
   activeView: null,
   hoveredItem: null,
 
+  hoverIdx: -1,
   hoverItemStartX: -1,
   hoverItemEndX: -1,
   hoverItemY: -1,
@@ -31,6 +32,13 @@ const appState = (state = initialState, action) => {
       return {
         ...state,
         hoveredItem: action.hoveredItem,
+      }
+    }
+
+    case actions.SET_HOVERED_IDX: {
+      return {
+        ...state,
+        hoverIdx: action.hoverIdx,
       }
     }
 

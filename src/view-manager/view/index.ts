@@ -1,4 +1,5 @@
 import { mat4, vec3 } from 'gl-matrix'
+import { animate } from 'popmotion'
 
 import {
   Mesh,
@@ -45,6 +46,8 @@ export default class View {
   #transformVec3 = vec3.create()
 
   #scaleZ = 1
+  #isTweeningScaleZ = false
+  #tween
 
   constructor(gl: WebGLRenderingContext, { idx, textureManager }) {
     this.#idx = idx
@@ -124,9 +127,14 @@ export default class View {
 
       for (let x = 0; x < GRID_COUNT_X; x++) {
         for (let y = 0; y < GRID_COUNT_Y; y++) {
+          const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2
+          const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2
+          const posz = 1
+
           const scalex = 1
           const scaley = 1
           const scalez = 1
+          // Math.sin(posx * 10) * 1 + 1 + (Math.cos(posy * 10) * 1 + 1)
 
           mat4.identity(this.#instanceMatrix)
           vec3.set(this.#transformVec3, scalex, scaley, scalez)
@@ -135,10 +143,6 @@ export default class View {
             this.#instanceMatrix,
             this.#transformVec3,
           )
-
-          const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2
-          const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2
-          const posz = 1
 
           vec3.set(this.#transformVec3, posx, posy, posz)
           mat4.translate(
@@ -183,15 +187,47 @@ export default class View {
       (item) => x >= item.x && x < item.x + item.value.length && item.y === y,
     )
 
-    if (hoveredItem) {
+    if (hoveredItem && hoveredItem.link) {
       store.dispatch(setHoverItemStartX(hoveredItem.x))
       store.dispatch(setHoverItemEndX(hoveredItem.x + hoveredItem.value.length))
       store.dispatch(setHoverItemY(y))
       store.dispatch(setHoveredItem(hoveredItem.link))
-      this.#scaleZ = 3
+
+      if (!this.#isTweeningScaleZ && this.#scaleZ === 1) {
+        this.#isTweeningScaleZ = true
+        if (this.#tween) {
+          // this.#tween.stop()
+        }
+        this.#tween = animate({
+          duration: 50,
+          onUpdate: (v) => {
+            this.#scaleZ = 1 + v * 2
+          },
+          onComplete: () => {
+            this.#isTweeningScaleZ = false
+            this.#tween = null
+          },
+        })
+      }
     } else {
-      this.#scaleZ = 1
-      store.dispatch(setHoveredItem(null))
+      if (!this.#isTweeningScaleZ && this.#scaleZ === 3) {
+        this.#isTweeningScaleZ = true
+        if (this.#tween) {
+          this.#tween.stop()
+        }
+        this.#tween = animate({
+          duration: 50,
+          onUpdate: (v) => {
+            this.#scaleZ = 3 - v * 2
+            console.log(this.#scaleZ)
+          },
+          onComplete: () => {
+            this.#isTweeningScaleZ = false
+            this.#tween = null
+            store.dispatch(setHoveredItem(null))
+          },
+        })
+      }
       // store.dispatch(setHoverItemStartX(-1))
       // store.dispatch(setHoverItemEndX(-1))
       // store.dispatch(setHoverItemY(-1))

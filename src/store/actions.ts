@@ -10,6 +10,12 @@ export const setHoveredItem = (hoveredItem) => ({
   hoveredItem,
 })
 
+export const SET_HOVERED_IDX = 'SET_HOVERED_IDX'
+export const setHoverIdx = (hoverIdx) => ({
+  type: SET_HOVERED_IDX,
+  hoverIdx,
+})
+
 export const SET_HOVER_ITEM_START_X = 'SET_HOVER_ITEM_START_X'
 export const setHoverItemStartX = (x) => ({
   type: SET_HOVER_ITEM_START_X,

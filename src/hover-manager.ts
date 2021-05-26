@@ -18,6 +18,8 @@ import {
   PROJECTION_MATRIX_UNIFORM_NAME,
   UNIFORM_TYPE_MATRIX4X4,
 } from './lib/hwoa-rang-gl/dist/esm/index'
+import store from './store'
+import { setHoverIdx } from './store/actions'
 
 let oldId
 
@@ -118,11 +120,11 @@ export default class HoverManager {
     })
   }
 
-  getHoveredIdx(
+  determineHoveredIdx(
     camera: PerspectiveCamera,
     mouseX: number,
     mouseY: number,
-  ): number {
+  ) {
     const { fieldOfView, near, far } = camera
 
     const gl = this.#gl
@@ -187,7 +189,7 @@ export default class HoverManager {
       pickNdx = id - 1
     }
 
-    return pickNdx
+    store.dispatch(setHoverIdx(pickNdx))
   }
 
   render(camera: PerspectiveCamera) {}
