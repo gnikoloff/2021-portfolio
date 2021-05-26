@@ -2,34 +2,22 @@ import { vec3, mat4 } from 'gl-matrix'
 
 import {
   CameraController,
-  Geometry,
-  GeometryUtils,
-  InstancedMesh,
-  Mesh,
-  Texture,
   PerspectiveCamera,
-  UNIFORM_TYPE_INT,
-  UNIFORM_TYPE_VEC2,
 } from './lib/hwoa-rang-gl/dist/esm'
-
-import {
-  GRID_COUNT_X,
-  GRID_COUNT_Y,
-  GRID_TOTAL_COUNT,
-  GRID_WIDTH_X,
-  GRID_WIDTH_Y,
-  GRID_STEP_X,
-  GRID_STEP_Y,
-} from './constants'
 
 import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
-import TextureManager from './texture-manager'
+import ViewManager from './view-manager'
+
+import HoverManager from './hover-manager'
 
 import './index.css'
 
+const mousePosition = { x: -1000, y: -1000 }
 const canvas = document.createElement('canvas')
 const gl = canvas.getContext('webgl')
+
+let hoveredIdx = -1
 
 const dpr = Math.min(2.5, devicePixelRatio)
 canvas.width = innerWidth * dpr
@@ -38,178 +26,56 @@ canvas.style.setProperty('width', `${innerWidth}px`)
 canvas.style.setProperty('height', `${innerHeight}px`)
 document.body.appendChild(canvas)
 
-const camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000)
-camera.position = [0, 0, 10]
+const camera = new PerspectiveCamera(
+  (45 * Math.PI) / 180,
+  innerWidth / innerHeight,
+  0.1,
+  100,
+)
+camera.position = [0, 0, 25]
 camera.lookAt([0, 0, 0])
 new CameraController(camera)
 
-const texManager = new TextureManager({
-  cellsCountX: GRID_COUNT_X,
-  cellsCountY: GRID_COUNT_Y,
-  idealFontSize: 110,
-  maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
-})
-  .showDebug(0.1)
-  .setActiveView(VIEWS_DEFINITIONS['home'])
+// .setActiveView()
+const hoverManager = new HoverManager(gl, {})
+const viewManager = new ViewManager(gl)
 
-const viewCanvas = texManager.getActiveCanvas()
-const texture = new Texture(gl, {
-  format: gl.RGB,
-  minFilter: gl.LINEAR_MIPMAP_LINEAR,
-  magFilter: gl.NEAREST,
-})
-  .bind()
-  .setIsFlip()
-  .fromImage(viewCanvas)
-  .generateMipmap()
-
-const vShader = `
-  uniform vec2 cellSize;
-
-  attribute vec4 position;
-  attribute mat4 instanceModelMatrix;
-  attribute vec2 uv;
-  attribute float instanceIndex;
-
-  varying vec2 v_uv;
-
-  void main () {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * instanceModelMatrix * position;
-
-    float texOffsetX = mod(instanceIndex, cellSize.x);
-    float texOffsetY = (instanceIndex - texOffsetX) / cellSize.y;
-
-    v_uv = uv *
-           vec2(1.0 / cellSize.x) +
-           vec2(texOffsetY / cellSize.x, texOffsetX / cellSize.y);
-  }
-`
-
-const fShader = `
-  precision highp float;
-
-  void main () {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  }
-`
-
-const fShaderFront = `
-  precision highp float;
-
-  uniform sampler2D text;
-
-  varying vec2 v_uv;
-
-  void main () {
-    gl_FragColor = texture2D(text, v_uv);
-  }
-`
-
-const mat = mat4.create()
-const transform = vec3.create()
-
-const meshes: Array<Mesh> = []
-
-const faces = GeometryUtils.createBoxSeparateFace({
-  width: GRID_STEP_X,
-  height: GRID_STEP_Y,
-  separateFaces: true,
-})
-
-faces.forEach((side) => {
-  const { orientation, vertices, normal, uv, indices } = side
-
-  const totalCount = GRID_COUNT_X * GRID_COUNT_Y
-
-  const instancedIndexes = new Float32Array(totalCount)
-
-  for (let i = 0; i < totalCount; i++) {
-    instancedIndexes[i] = i
-  }
-
-  const geometry = new Geometry(gl)
-    .addIndex({ typedArray: indices })
-    .addAttribute('position', {
-      size: 3,
-      typedArray: vertices,
-    })
-    .addAttribute('uv', {
-      size: 2,
-      typedArray: uv,
-    })
-    .addAttribute('instanceIndex', {
-      size: 1,
-      typedArray: instancedIndexes,
-      instancedDivisor: 1,
-    })
-
-  let mesh
-  if (orientation === 'front') {
-    mesh = new InstancedMesh(gl, {
-      geometry,
-
-      uniforms: {
-        text: { type: UNIFORM_TYPE_INT, value: 0 },
-        cellSize: {
-          type: UNIFORM_TYPE_VEC2,
-          value: [GRID_COUNT_X, GRID_COUNT_Y],
-        },
-      },
-      defines: {},
-      instanceCount: GRID_TOTAL_COUNT,
-      vertexShaderSource: vShader,
-      fragmentShaderSource: fShaderFront,
-    })
-    mesh.orientation = 'front'
-  } else {
-    mesh = new InstancedMesh(gl, {
-      geometry,
-      uniforms: {},
-      defines: {},
-      instanceCount: GRID_TOTAL_COUNT,
-      vertexShaderSource: vShader,
-      fragmentShaderSource: fShader,
-    })
-  }
-
-  meshes.push(mesh)
-
-  for (let x = 0; x < GRID_COUNT_X; x++) {
-    for (let y = 0; y < GRID_COUNT_Y; y++) {
-      const scalex = 1
-      const scaley = 1
-      const scalez = 1
-
-      mat4.identity(mat)
-      vec3.set(transform, scalex, scaley, scalez)
-      mat4.scale(mat, mat, transform)
-
-      const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2
-      const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2
-      const posz = 1
-
-      vec3.set(transform, posx, posy, posz)
-      mat4.translate(mat, mat, transform)
-      const i = GRID_COUNT_X * x + y
-      mesh.setMatrixAt(i, mat)
-    }
-  }
-})
+viewManager.setActiveView(VIEWS_DEFINITIONS['home'])
 
 requestAnimationFrame(updateFrame)
+document.body.addEventListener('mousemove', onMouseMove)
+
 function updateFrame(ts) {
   if (!gl) {
     return
   }
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
+
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
   gl.enable(gl.DEPTH_TEST)
+  gl.depthFunc(gl.LEQUAL)
+
   gl.clearColor(0.2, 0.2, 0.2, 1)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-  texture.bind()
-  meshes.forEach((mesh) => mesh.use().setCamera(camera).draw())
-  texture.unbind()
+  viewManager.render(camera)
+
+  const pickIdx = hoverManager.getHoveredIdx(
+    camera,
+    mousePosition.x,
+    mousePosition.y,
+  )
+  if (pickIdx !== hoveredIdx) {
+    hoveredIdx = pickIdx
+    viewManager.setHoveredIdx(pickIdx)
+  }
 
   requestAnimationFrame(updateFrame)
+}
+
+function onMouseMove(e) {
+  const rect = canvas.getBoundingClientRect()
+  mousePosition.x = e.clientX - rect.left
+  mousePosition.y = e.clientY - rect.top
 }

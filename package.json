@@ -38,6 +38,7 @@
     "rollup": "^2.47.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-glslify": "^1.2.0",
     "rollup-plugin-import-css": "^2.0.1",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.30.0",

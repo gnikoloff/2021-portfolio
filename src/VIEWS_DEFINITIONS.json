@@ -2,15 +2,22 @@
   "home": [
     {
       "type": "TEXT_SPLIT",
-      "value": "Georgi",
-      "x": 1,
+      "value": "GEORGI NIKOLOV",
+      "x": 3,
       "y": 1
     },
     {
-      "type": "TEXT",
-      "value": "Nikolov",
+      "type": "TEXT_SPLIT",
+      "value": "WORKS",
       "x": 1,
       "y": 3,
+      "paddingLeft": 0.3
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "ABOUT",
+      "x": 1,
+      "y": 5,
       "paddingLeft": 0.3
     }
   ]

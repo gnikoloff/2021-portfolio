@@ -1,3 +1,10 @@
+import {
+  CONTENT_TYPE_SPLIT_TEXT,
+  CONTENT_TYPE_TEXT,
+  GRID_COUNT_X,
+  GRID_COUNT_Y,
+} from './constants'
+
 const IDEAL_TEXTURE_SIZE = 2048
 
 export default class TextureManager {
@@ -9,18 +16,12 @@ export default class TextureManager {
 
   #cellWidth: number
   #cellHeight: number
-  #cellsCountX: number
-  #cellsCountY: number
+  #GRID_COUNT_X: number
+  #GRID_COUNT_Y: number
   #maxSize: number
   #idealFontSize: number
-  
 
-  constructor ({
-    cellsCountX,
-    cellsCountY,
-    maxSize,
-    idealFontSize,
-  }) {
+  constructor({ maxSize, idealFontSize }) {
     this.#canvas0.width = maxSize
     this.#canvas0.height = maxSize
 
@@ -30,22 +31,20 @@ export default class TextureManager {
     this.#maxSize = maxSize
     this.#idealFontSize = idealFontSize
 
-    this.#cellsCountX = cellsCountX
-    this.#cellsCountY = cellsCountY
-
-    this.#cellWidth = this.#maxSize / this.#cellsCountX
-    this.#cellHeight = this.#maxSize / this.#cellsCountY
+    this.#cellWidth = this.#maxSize / GRID_COUNT_X
+    this.#cellHeight = this.#maxSize / GRID_COUNT_Y
   }
 
-  setActiveView (viewItems): this {
+  setActiveView(viewItems): this {
     viewItems.forEach((item) => {
-      if (item.type === 'TEXT_SPLIT') {
+      if (item.type === CONTENT_TYPE_SPLIT_TEXT) {
         const x = item.x * this.#cellWidth
         const y = item.y * this.#cellHeight
         const count = item.value.length
 
-        const fontSize = this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
-        
+        const fontSize =
+          this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
+
         this.#ctx0.font = `${fontSize}px Helvetica`
         this.#ctx0.textAlign = 'center'
         this.#ctx0.textBaseline = 'middle'
@@ -57,12 +56,13 @@ export default class TextureManager {
           const charY = y + this.#cellHeight / 2
           this.#ctx0.fillText(char, x + charX, charY)
         }
-      } else if (item.type === 'TEXT') {
+      } else if (item.type === CONTENT_TYPE_TEXT) {
         const paddingLeft = (item.paddingLeft || 0) * this.#cellWidth
         const x = item.x * this.#cellWidth + paddingLeft
         const y = item.y * this.#cellHeight + this.#cellHeight / 2
-        
-        const fontSize = this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
+
+        const fontSize =
+          this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
 
         this.#ctx0.font = `${fontSize}px Helvetica`
         this.#ctx0.textBaseline = 'middle'
@@ -74,14 +74,16 @@ export default class TextureManager {
     return this
   }
 
-  getActiveCanvas (): HTMLCanvasElement {
+  getActiveCanvas(): HTMLCanvasElement {
     return this.#canvas0
   }
 
-  showDebug (scaleFactor: number = 1): this {
+  showDebug(scaleFactor: number = 1): this {
     const div = document.createElement('div')
     div.setAttribute('id', 'texture-manager-debug')
-    div.setAttribute('style', `
+    div.setAttribute(
+      'style',
+      `
       position: fixed;
       bottom: 1rem;
       right: 1rem;
@@ -89,18 +91,25 @@ export default class TextureManager {
       pointer-events: none;
       transform-origin: 100% 100%;
       transform: scale(${scaleFactor});
-    `)
+    `,
+    )
 
-    this.#canvas0.setAttribute('style', `
+    this.#canvas0.setAttribute(
+      'style',
+      `
       border: 16px dotted red;
       margin-bottom: 62px;
-    `)
+    `,
+    )
 
     div.appendChild(this.#canvas0)
 
-    this.#canvas1.setAttribute('style', `
+    this.#canvas1.setAttribute(
+      'style',
+      `
       border: 16px dotted red;
-    `)
+    `,
+    )
 
     div.appendChild(this.#canvas1)
 
@@ -110,19 +119,19 @@ export default class TextureManager {
     this.#ctx0.strokeStyle = 'white'
     this.#ctx1.strokeStyle = 'white'
 
-    for (let x = 0; x < this.#cellsCountX; x++) {
-      for (let y = 0; y < this.#cellsCountY; y++) {
+    for (let x = 0; x < GRID_COUNT_X; x++) {
+      for (let y = 0; y < GRID_COUNT_Y; y++) {
         this.#ctx0.strokeRect(
           x * this.#cellWidth,
           y * this.#cellHeight,
           this.#cellWidth,
-          this.#cellHeight
+          this.#cellHeight,
         )
         this.#ctx1.strokeRect(
           x * this.#cellWidth,
           y * this.#cellHeight,
           this.#cellWidth,
-          this.#cellHeight
+          this.#cellHeight,
         )
       }
     }
@@ -130,5 +139,4 @@ export default class TextureManager {
     document.body.appendChild(div)
     return this
   }
-  
 }
