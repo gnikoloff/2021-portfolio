@@ -16,8 +16,6 @@ export default class TextureManager {
 
   #cellWidth: number
   #cellHeight: number
-  #GRID_COUNT_X: number
-  #GRID_COUNT_Y: number
   #maxSize: number
   #idealFontSize: number
 
@@ -47,9 +45,13 @@ export default class TextureManager {
         const count = item.value.length
 
         const fontSize =
-          this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
+          this.#idealFontSize *
+          (this.#maxSize / IDEAL_TEXTURE_SIZE) *
+          (item.fontSize || 1)
 
-        ctx.font = `${fontSize}px Helvetica`
+        const fontFamily = item.fontFamily || 'Venus-Rising'
+
+        ctx.font = `${fontSize}px ${fontFamily}`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillStyle = 'red'
@@ -57,18 +59,22 @@ export default class TextureManager {
         for (let i = 0; i < count; i++) {
           const char = item.value[i]
           const charX = i * this.#cellWidth + this.#cellWidth / 2
-          const charY = y + this.#cellHeight / 2
+          const charY = y + this.#cellHeight * 0.6
           ctx.fillText(char, x + charX, charY)
         }
       } else if (item.type === CONTENT_TYPE_TEXT) {
         const paddingLeft = (item.paddingLeft || 0) * this.#cellWidth
         const x = item.x * this.#cellWidth + paddingLeft
-        const y = item.y * this.#cellHeight + this.#cellHeight / 2
+        const y = item.y * this.#cellHeight + this.#cellHeight * 0.6
 
         const fontSize =
-          this.#idealFontSize * (this.#maxSize / IDEAL_TEXTURE_SIZE)
+          this.#idealFontSize *
+          (this.#maxSize / IDEAL_TEXTURE_SIZE) *
+          (item.fontSize || 1)
 
-        ctx.font = `${fontSize}px Helvetica`
+        const fontFamily = item.fontFamily || 'Venus-Rising'
+
+        ctx.font = `${fontSize}px ${fontFamily}`
         ctx.textBaseline = 'middle'
         ctx.textAlign = 'left'
         ctx.fillStyle = 'white'
