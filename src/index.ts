@@ -16,6 +16,7 @@ import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
 import ViewManager from './view-manager'
 import HoverManager from './hover-manager'
+import LightingManager from './lighting-manager'
 
 import './index.css'
 import { mat4, vec3 } from 'gl-matrix'
@@ -54,35 +55,14 @@ const camera = new PerspectiveCamera(
 camera.position = [0, 0, 25]
 camera.lookAt([0, 0, 0])
 
-const lightWorldMatrix = mat4.create()
-const lightProjectionMatrix = mat4.create()
-const textureMatrix = mat4.create()
+const lightingManager = new LightingManager({
+  position: [0, 5, 5],
+  lookAt: [0, 0, 0],
+})
 
-const projectionPos = vec3.create()
-const projectionTarget = vec3.create()
+const shadowTextureMatrix = lightingManager.getShadowTextureMatrix()
 
-vec3.set(projectionPos, 0, 5, 5)
-vec3.set(projectionTarget, 0, 0, 0)
-mat4.identity(textureMatrix)
-mat4.lookAt(lightWorldMatrix, projectionPos, projectionTarget, [0, 1, 0])
-mat4.invert(lightWorldMatrix, lightWorldMatrix)
-
-const fov = 150
-const near = 0.5
-const far = 30
-mat4.perspective(lightProjectionMatrix, (fov * Math.PI) / 180, 1, near, far)
-
-const textureWorldMatrixInv = mat4.create()
-mat4.invert(textureWorldMatrixInv, lightWorldMatrix)
-
-const transformVec = vec3.create()
-vec3.set(transformVec, 0.5, 0.5, 0.5)
-mat4.translate(textureMatrix, textureMatrix, transformVec)
-mat4.scale(textureMatrix, textureMatrix, transformVec)
-mat4.mul(textureMatrix, textureMatrix, lightProjectionMatrix)
-mat4.mul(textureMatrix, textureMatrix, textureWorldMatrixInv)
-
-viewManager.setShadowTextureMatrix(textureMatrix)
+viewManager.setShadowTextureMatrix(shadowTextureMatrix)
 
 const orthoCamera = new OrthographicCamera(
   -innerWidth / 2,
@@ -131,8 +111,8 @@ let depthDebugMesh
 
       varying vec2 v_uv;
 
-      const float near_plane = ${near};
-      const float far_plane = ${far}.0;
+      const float near_plane = ${lightingManager.shadowNear};
+      const float far_plane = ${lightingManager.shadowFar}.0;
 
       float LinearizeDepth(float depth) {
         float z = depth * 2.0 - 1.0; // Back to NDC 
@@ -152,7 +132,7 @@ let depthDebugMesh
   })
 }
 
-new CameraController(camera)
+new CameraController(camera, document.body, true)
 
 viewManager.setActiveView(VIEWS_DEFINITIONS['HOME'])
 
@@ -196,8 +176,8 @@ function updateFrame(ts) {
     viewManager.render(
       // @ts-ignore
       {
-        projectionMatrix: lightProjectionMatrix,
-        viewMatrix: textureWorldMatrixInv,
+        projectionMatrix: lightingManager.lightProjectionMatrix,
+        viewMatrix: lightingManager.shadowTextureWorldMatrixInv,
       },
       true,
       null,

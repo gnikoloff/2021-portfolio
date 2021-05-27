@@ -13,6 +13,7 @@ import {
   CUBE_SIDE_FRONT,
   UNIFORM_TYPE_FLOAT,
   UNIFORM_TYPE_MATRIX4X4,
+  UNIFORM_TYPE_VEC3,
 } from '../../lib/hwoa-rang-gl/dist/esm'
 
 import store from '../../store'
@@ -74,7 +75,7 @@ export default class View {
       width: GRID_STEP_X,
       height: GRID_STEP_Y,
       depth: GRID_STEP_Y,
-      radius: 0.01,
+      radius: 0.0155,
     })
 
     faces.forEach((side) => {
@@ -98,6 +99,10 @@ export default class View {
           size: 2,
           typedArray: uv,
         })
+        .addAttribute('normal', {
+          size: 3,
+          typedArray: normal,
+        })
         .addAttribute('instanceIndex', {
           size: 1,
           typedArray: instancedIndexes,
@@ -105,14 +110,44 @@ export default class View {
         })
 
       let mesh
+
+      const lightDirection = vec3.create()
+      vec3.set(lightDirection, 0, 0, 10)
+      vec3.normalize(lightDirection, lightDirection)
+
+      const sharedUniforms = {
+        solidColor: { type: UNIFORM_TYPE_FLOAT, value: 1 },
+        eyePosition: { type: UNIFORM_TYPE_VEC3, value: [0, 0, 25] },
+        'PointLight.worldPosition': {
+          type: UNIFORM_TYPE_VEC3,
+          value: [0, 5, 5],
+        },
+        'PointLight.shininess': {
+          type: UNIFORM_TYPE_FLOAT,
+          value: 20,
+        },
+        'PointLight.lightColor': {
+          type: UNIFORM_TYPE_VEC3,
+          value: [1, 0, 0],
+        },
+        'PointLight.specularColor': {
+          type: UNIFORM_TYPE_VEC3,
+          value: [0, 1, 0],
+        },
+        'PointLight.specularFactor': {
+          type: UNIFORM_TYPE_FLOAT,
+          value: 0.1,
+        },
+      }
+
       if (orientation === CUBE_SIDE_FRONT) {
         mesh = new InstancedMesh(gl, {
           geometry,
 
           uniforms: {
+            ...sharedUniforms,
             text: { type: UNIFORM_TYPE_INT, value: 0 },
             projectedShadowTexture: { type: UNIFORM_TYPE_INT, value: 1 },
-            solidColor: { type: UNIFORM_TYPE_FLOAT, value: 1 },
             cellSize: {
               type: UNIFORM_TYPE_VEC2,
               value: [GRID_COUNT_X, GRID_COUNT_Y],
@@ -129,7 +164,7 @@ export default class View {
         mesh = new InstancedMesh(gl, {
           geometry,
           uniforms: {
-            solidColor: { type: UNIFORM_TYPE_FLOAT, value: 1 },
+            ...sharedUniforms,
             projectedShadowTexture: { type: UNIFORM_TYPE_INT, value: 0 },
           },
           defines: {},
