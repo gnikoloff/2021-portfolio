@@ -6,6 +6,19 @@ const initialState = {
   activeView: null,
   hoveredItem: null,
 
+  cameraX: 0,
+  cameraY: 0,
+  cameraZ: 16,
+
+  lightX: 0,
+  lightY: 5,
+  lightZ: 5,
+
+  pointLightShininess: 20,
+  pointLightColor: [1, 0, 0],
+  pointLightSpecularColor: [0, 0, 1],
+  pointLightSpecularFactor: 0.1,
+
   hoverIdx: -1,
   hoverItemStartX: -1,
   hoverItemEndX: -1,
@@ -18,6 +31,76 @@ const appState = (state = initialState, action) => {
       return {
         ...state,
         activeView: action.activeView,
+      }
+    }
+
+    case actions.SET_CAMERA_X: {
+      return {
+        ...state,
+        cameraX: action.cameraX,
+      }
+    }
+
+    case actions.SET_CAMERA_Y: {
+      return {
+        ...state,
+        cameraY: action.cameraY,
+      }
+    }
+
+    case actions.SET_CAMERA_Z: {
+      return {
+        ...state,
+        cameraZ: action.cameraZ,
+      }
+    }
+
+    case actions.SET_LIGHT_X: {
+      return {
+        ...state,
+        lightX: action.lightX,
+      }
+    }
+
+    case actions.SET_LIGHT_Y: {
+      return {
+        ...state,
+        lightY: action.lightY,
+      }
+    }
+
+    case actions.SET_LIGHT_Z: {
+      return {
+        ...state,
+        lightZ: action.lightZ,
+      }
+    }
+
+    case actions.SET_POINT_LIGHT_SHININESS: {
+      return {
+        ...state,
+        pointLightShininess: action.pointLightShininess,
+      }
+    }
+
+    case actions.SET_POINT_LIGHT_COLOR: {
+      return {
+        ...state,
+        pointLightColor: action.pointLightColor,
+      }
+    }
+
+    case actions.SET_POINT_LIGHT_SPECULAR_COLOR: {
+      return {
+        ...state,
+        pointLightSpecularColor: action.pointLightSpecularColor,
+      }
+    }
+
+    case actions.SET_POINT_LIGHT_SPECULAR_FACTOR: {
+      return {
+        ...state,
+        pointLightSpecularFactor: action.pointLightSpecularFactor,
       }
     }
 

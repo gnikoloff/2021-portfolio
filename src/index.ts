@@ -52,13 +52,18 @@ const camera = new PerspectiveCamera(
   0.1,
   100,
 )
-camera.position = [0, 0, 25]
-camera.lookAt([0, 0, 0])
 
-const lightingManager = new LightingManager({
-  position: [0, 5, 5],
-  lookAt: [0, 0, 0],
-})
+{
+  const { cameraX, cameraY, cameraZ } = store.getState()
+  camera.position = [cameraX, cameraY, cameraZ]
+  camera.lookAt([0, 0, 0])
+}
+
+const lightingManager = new LightingManager()
+{
+  const { lightX, lightY, lightZ } = store.getState()
+  lightingManager.position = [lightX, lightY, lightZ]
+}
 
 const shadowTextureMatrix = lightingManager.getShadowTextureMatrix()
 

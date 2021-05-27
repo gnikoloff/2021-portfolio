@@ -8,35 +8,45 @@ export default class LightingManager {
   shadowTextureMatrix = mat4.create()
   shadowTextureWorldMatrixInv = mat4.create()
 
-  position = vec3.create()
-  lookAtTarget = vec3.create()
+  position = [0, 0, 0]
+  lookAt = [0, 0, 0]
 
   shadowFoV: number
   shadowNear: number
   shadowFar: number
 
   constructor({
-    position,
-    lookAt,
+    position = [0, 0, 0],
+    lookAt = [0, 0, 0],
     shadowFoV = 150,
     shadowNear = 0.5,
     shadowFar = 30,
-  }) {
+  } = {}) {
+    this.position = position
+    this.lookAt = lookAt
     this.shadowFoV = shadowFoV
     this.shadowNear = shadowNear
     this.shadowFar = shadowFar
-
-    vec3.set(this.position, position[0], position[1], position[2])
-    vec3.set(this.lookAtTarget, lookAt[0], lookAt[1], lookAt[2])
   }
 
   getShadowTextureMatrix(): ReadonlyMat4 {
+    const position = vec3.fromValues(
+      this.position[0],
+      this.position[1],
+      this.position[2],
+    )
+    const lookAtTarget = vec3.fromValues(
+      this.lookAt[0],
+      this.lookAt[1],
+      this.lookAt[2],
+    )
+
     mat4.identity(this.shadowTextureMatrix)
 
     mat4.lookAt(
       this.lightWorldMatrix,
-      this.position,
-      this.lookAtTarget,
+      position,
+      lookAtTarget,
       LightingManager.UP_VECTOR,
     )
     mat4.invert(this.lightWorldMatrix, this.lightWorldMatrix)

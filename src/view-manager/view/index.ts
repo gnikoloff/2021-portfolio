@@ -115,28 +115,44 @@ export default class View {
       vec3.set(lightDirection, 0, 0, 10)
       vec3.normalize(lightDirection, lightDirection)
 
+      const {
+        cameraX,
+        cameraY,
+        cameraZ,
+        lightX,
+        lightY,
+        lightZ,
+        pointLightShininess,
+        pointLightColor,
+        pointLightSpecularColor,
+        pointLightSpecularFactor,
+      } = store.getState()
+
       const sharedUniforms = {
         solidColor: { type: UNIFORM_TYPE_FLOAT, value: 1 },
-        eyePosition: { type: UNIFORM_TYPE_VEC3, value: [0, 0, 25] },
+        eyePosition: {
+          type: UNIFORM_TYPE_VEC3,
+          value: [cameraX, cameraY, cameraZ],
+        },
         'PointLight.worldPosition': {
           type: UNIFORM_TYPE_VEC3,
-          value: [0, 5, 5],
+          value: [lightX, lightY, lightZ],
         },
         'PointLight.shininess': {
           type: UNIFORM_TYPE_FLOAT,
-          value: 20,
+          value: pointLightShininess,
         },
         'PointLight.lightColor': {
           type: UNIFORM_TYPE_VEC3,
-          value: [1, 0, 0],
+          value: pointLightColor,
         },
         'PointLight.specularColor': {
           type: UNIFORM_TYPE_VEC3,
-          value: [0, 1, 0],
+          value: pointLightSpecularColor,
         },
         'PointLight.specularFactor': {
           type: UNIFORM_TYPE_FLOAT,
-          value: 0.1,
+          value: pointLightSpecularFactor,
         },
       }
 
