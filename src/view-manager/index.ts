@@ -1,6 +1,7 @@
 // import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
 
-import { PerspectiveCamera } from '../lib/hwoa-rang-gl/dist/esm'
+import { ReadonlyMat4 } from 'gl-matrix'
+import { PerspectiveCamera, Texture } from '../lib/hwoa-rang-gl/dist/esm'
 import store from '../store'
 
 import TextureManager from '../texture-manager'
@@ -41,9 +42,9 @@ export default class ViewManager {
     return this
   }
 
-  resetScaleZ(): this {
-    this.#view0.resetScaleZ()
-    this.#view1.resetScaleZ()
+  resetPosZ(): this {
+    this.#view0.resetPosZ()
+    this.#view1.resetPosZ()
     return this
   }
 
@@ -72,11 +73,28 @@ export default class ViewManager {
     return this
   }
 
-  render(camera: PerspectiveCamera) {
+  updateMatrix() {
     if (this.#activeView === 0) {
-      this.#view0.render(camera)
+      this.#view0.updateMatrix()
     } else {
-      this.#view1.render(camera)
+      this.#view1.updateMatrix()
+    }
+  }
+
+  setShadowTextureMatrix(shadowTextureMatrix: ReadonlyMat4) {
+    this.#view0.setShadowTextureMatrix(shadowTextureMatrix)
+    this.#view1.setShadowTextureMatrix(shadowTextureMatrix)
+  }
+
+  render(
+    camera: PerspectiveCamera,
+    renderAsSolidColor: boolean = false,
+    shadowTexture: Texture = null,
+  ) {
+    if (this.#activeView === 0) {
+      this.#view0.render(camera, renderAsSolidColor, shadowTexture)
+    } else {
+      this.#view1.render(camera, renderAsSolidColor, shadowTexture)
     }
 
     const { hoverIdx } = store.getState()

@@ -3,59 +3,65 @@
     {
       "type": "TEXT_SPLIT",
       "value": "GEORGI NIKOLOV",
-      "x": 3,
+      "x": 4,
       "y": 1
     },
     {
       "type": "TEXT",
       "value": "Personal Portfolio",
-      "x": 5,
-      "y": 3,
+      "x": 6,
+      "y": 4,
       "paddingLeft": 0.9
     },
     {
       "type": "TEXT_SPLIT",
       "value": "WORKS",
-      "x": 7,
-      "y": 8,
+      "x": 9,
+      "y": 9,
       "link": "WORKS"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "ABOUT",
-      "x": 7,
-      "y": 10,
+      "x": 9,
+      "y": 11,
       "link": "ABOUT"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "ARCHIVE",
-      "x": 6,
-      "y": 12,
+      "x": 8,
+      "y": 13,
       "link": "ABOUT"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "JOURNAL",
-      "x": 6,
-      "y": 14,
+      "x": 8,
+      "y": 15,
       "link": "ABOUT"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "HIRE ME",
-      "x": 6,
-      "y": 16,
+      "x": 8,
+      "y": 17,
       "link": "ABOUT"
     }
   ],
   "WORKS": [
     {
       "type": "TEXT_SPLIT",
-      "value": "MY WORKS",
-      "x": 3,
+      "value": "BACK",
+      "x": 1,
       "y": 1,
       "link": "HOME"
+    },
+    {
+      "type": "TEXT",
+      "value": "Lorem ipsum dolar sit amet",
+      "x": 1,
+      "y": 3
     }
   ],
   "ABOUT": [
