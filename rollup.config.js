@@ -29,7 +29,10 @@ export default {
     css(),
     sourcemaps(),
     copy({
-      targets: [{ src: `index.html`, dest: `dist` }],
+      targets: [
+        { src: `index.html`, dest: `dist` },
+        { src: 'src/assets/**/*', dest: 'dist/assets' },
+      ],
     }),
     glslify(),
   ],

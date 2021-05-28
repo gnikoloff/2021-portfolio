@@ -4,6 +4,7 @@ import {
   GRID_COUNT_X,
   GRID_COUNT_Y,
 } from './constants'
+import ResourceManager from './resource-manager'
 
 const IDEAL_TEXTURE_SIZE = 2048
 
@@ -19,7 +20,16 @@ export default class TextureManager {
   #maxSize: number
   #idealFontSize: number
 
-  constructor({ maxSize, idealFontSize }) {
+  loadManager
+
+  static FILL_STYLE = 'white'
+  static FONT_WEIGHT = 400
+  static DEFAULT_FONT_FAMILY = 'Venus-Rising'
+  static DEFAULT_FONT_SIZE = 1
+
+  constructor({ maxSize, idealFontSize, loadManager }) {
+    this.loadManager = loadManager
+
     this.#canvas0.width = maxSize
     this.#canvas0.height = maxSize
 
@@ -49,12 +59,14 @@ export default class TextureManager {
           (this.#maxSize / IDEAL_TEXTURE_SIZE) *
           (item.fontSize || 1)
 
-        const fontFamily = item.fontFamily || 'Venus-Rising'
+        const fontWeight = TextureManager.FONT_WEIGHT
+        const fontFamily = item.fontFamily || TextureManager.DEFAULT_FONT_FAMILY
 
-        ctx.font = `${fontSize}px ${fontFamily}`
+        ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillStyle = 'red'
+        ctx.fillStyle = TextureManager.FILL_STYLE
+        ctx.globalAlpha = item.opacity || 1
 
         for (let i = 0; i < count; i++) {
           const char = item.value[i]
@@ -70,15 +82,25 @@ export default class TextureManager {
         const fontSize =
           this.#idealFontSize *
           (this.#maxSize / IDEAL_TEXTURE_SIZE) *
-          (item.fontSize || 1)
+          (item.fontSize || TextureManager.DEFAULT_FONT_SIZE)
 
-        const fontFamily = item.fontFamily || 'Venus-Rising'
+        const fontWeight = TextureManager.FONT_WEIGHT
+        const fontFamily = item.fontFamily || TextureManager.DEFAULT_FONT_FAMILY
 
-        ctx.font = `${fontSize}px ${fontFamily}`
+        ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`
         ctx.textBaseline = 'middle'
         ctx.textAlign = 'left'
-        ctx.fillStyle = 'white'
+        ctx.fillStyle = TextureManager.FILL_STYLE
+        ctx.globalAlpha = item.opacity || 1
+
         ctx.fillText(item.value, x, y)
+      } else if (item.type === 'IMAGE') {
+        const x = item.x * this.#cellWidth
+        const y = item.y * this.#cellHeight
+
+        const image = this.loadManager.getImage(item.value)
+
+        ctx.drawImage(image, x, y)
       }
     })
     return canvas

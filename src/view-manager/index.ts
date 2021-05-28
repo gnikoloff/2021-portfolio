@@ -14,10 +14,11 @@ export default class ViewManager {
   #textureManager: TextureManager
   #viewDefinition
 
-  constructor(gl) {
+  constructor(gl, { loadManager }) {
     this.#textureManager = new TextureManager({
-      idealFontSize: 110,
+      idealFontSize: 80,
       maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
+      loadManager,
     }).showDebug(0.1)
 
     this.#view0 = new View(gl, {

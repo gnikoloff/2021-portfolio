@@ -10,42 +10,42 @@
       "type": "TEXT",
       "value": "Personal Portfolio",
       "x": 6,
-      "y": 4,
-      "paddingLeft": 0.9
+      "y": 3,
+      "paddingLeft": 0.62
     },
     {
       "type": "TEXT_SPLIT",
       "value": "WORKS",
-      "x": 9,
-      "y": 9,
+      "x": 8,
+      "y": 6,
       "link": "WORKS"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "ABOUT",
-      "x": 9,
-      "y": 11,
+      "x": 8,
+      "y": 8,
       "link": "ABOUT"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "ARCHIVE",
-      "x": 8,
-      "y": 13,
-      "link": "ABOUT"
+      "x": 7,
+      "y": 10,
+      "link": "https://archive.georgi-nikolov.com"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "JOURNAL",
-      "x": 8,
-      "y": 15,
-      "link": "ABOUT"
+      "x": 7,
+      "y": 12,
+      "link": "https://archive.georgi-nikolov.com/blog"
     },
     {
       "type": "TEXT_SPLIT",
-      "value": "HIRE ME",
-      "x": 8,
-      "y": 17,
+      "value": "CONTACT",
+      "x": 7,
+      "y": 14,
       "link": "ABOUT"
     }
   ],
@@ -53,24 +53,145 @@
     {
       "type": "TEXT_SPLIT",
       "value": "BACK",
-      "x": 1,
+      "x": 2,
       "y": 1,
       "link": "HOME"
     },
     {
-      "type": "TEXT",
-      "value": "Lorem ipsum dolar sit amet",
-      "x": 1,
+      "type": "IMAGE",
+      "value": "assets/img0.jpeg",
+      "x": 0,
       "y": 3
+    },
+    {
+      "type": "TEXT",
+      "value": "01.",
+      "x": 2,
+      "y": 5,
+      "paddingLeft": 0.125,
+      "fontSize": 0.8,
+      "opacity": 0.5
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "hwoa-rang-gl",
+      "x": 4,
+      "y": 5,
+      "link": "HOME"
+    },
+    {
+      "type": "TEXT",
+      "value": "02.",
+      "x": 2,
+      "y": 7,
+      "paddingLeft": 0.125,
+      "fontSize": 0.8,
+      "opacity": 0.5
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "Happy 2021",
+      "x": 4,
+      "y": 7,
+      "link": "HOME"
+    },
+    {
+      "type": "TEXT",
+      "value": "03.",
+      "x": 2,
+      "y": 9,
+      "paddingLeft": 0.125,
+      "fontSize": 0.8,
+      "opacity": 0.5
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "Demo shop",
+      "x": 4,
+      "y": 9,
+      "link": "HOME"
+    },
+    {
+      "type": "TEXT",
+      "value": "04.",
+      "x": 2,
+      "y": 11,
+      "paddingLeft": 0.125,
+      "fontSize": 0.8,
+      "opacity": 0.5
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "Merch Legend",
+      "x": 4,
+      "y": 11,
+      "link": "HOME"
+    },
+    {
+      "type": "TEXT",
+      "value": "05.",
+      "x": 2,
+      "y": 13,
+      "paddingLeft": 0.125,
+      "fontSize": 0.8,
+      "opacity": 0.5
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "Old codesketch",
+      "x": 4,
+      "y": 13,
+      "link": "HOME"
+    },
+    {
+      "type": "TEXT",
+      "value": "06.",
+      "x": 2,
+      "y": 15,
+      "paddingLeft": 0.125,
+      "fontSize": 0.8,
+      "opacity": 0.5
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "More works",
+      "x": 4,
+      "y": 15,
+      "link": "HOME"
     }
   ],
   "ABOUT": [
     {
       "type": "TEXT_SPLIT",
-      "value": "ABOUT PAGE",
-      "x": 3,
+      "value": "BACK",
+      "x": 2,
       "y": 1,
       "link": "HOME"
+    },
+    {
+      "type": "TEXT",
+      "value": "I specialize in developing rich user interfaces and",
+      "x": 2,
+      "y": 3,
+      "fontFamily": "Helvetica",
+      "fontSize": 0.9
+    },
+    {
+      "type": "TEXT",
+      "value": "graphics, such as websites, web apps, VR, AR and",
+      "x": 2,
+      "y": 4,
+      "fontFamily": "Helvetica",
+      "fontSize": 0.9
+    },
+    {
+      "type": "TEXT",
+      "value": "3D visualizations and simulations.",
+      "x": 2,
+      "y": 5,
+      "fontFamily": "Helvetica",
+      "fontSize": 0.9
     }
+    
   ]
 }

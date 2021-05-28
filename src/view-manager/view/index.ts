@@ -37,7 +37,7 @@ import {
 import vertexShaderSource from './shader.vert'
 import fragmentShaderSource from './shader.frag'
 import TextureManager from '../../texture-manager'
-let a = 0
+
 export default class View {
   #gl: WebGLRenderingContext
   #textTexture: Texture
@@ -66,7 +66,7 @@ export default class View {
     this.#emptyTexture = new Texture(gl).bind().fromSize(1, 1)
 
     this.#textTexture = new Texture(gl, {
-      format: gl.RGB,
+      format: gl.RGBA,
       minFilter: gl.LINEAR_MIPMAP_LINEAR,
       magFilter: gl.NEAREST,
     })
@@ -75,7 +75,7 @@ export default class View {
       width: GRID_STEP_X,
       height: GRID_STEP_Y,
       depth: GRID_STEP_Y,
-      radius: 0.0155,
+      radius: 0.01,
     })
 
     faces.forEach((side) => {
@@ -204,6 +204,12 @@ export default class View {
       mesh.setPosition({ x, y, z })
     })
     return this
+  }
+
+  transitionOut() {
+    animate({
+      onUpdate: (v) => {},
+    })
   }
 
   setView(viewDefiniton) {
@@ -357,11 +363,6 @@ export default class View {
       mesh.setUniform('solidColor', UNIFORM_TYPE_FLOAT, renderAsSolidColor)
       mesh.draw()
     })
-    // this.#textTexture.unbind()
-    // if (shadowTexture) {
-    //   this.#gl.activeTexture(this.#gl.TEXTURE1)
-    //   shadowTexture.unbind()
-    // }
     return this
   }
 }

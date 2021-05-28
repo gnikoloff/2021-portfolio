@@ -63,7 +63,7 @@ void main () {
     
     #ifdef IS_FRONT_VIEW
       vec2 uv = vec2(v_uv.x, 1.0 - v_uv.y);
-      float textMixFactor = texture2D(text, uv).r;
+      float textMixFactor = texture2D(text, uv).a;
       // float textMixFactor = 0.4;
 
       // gl_FragColor = vec4(
@@ -73,7 +73,7 @@ void main () {
 
       gl_FragColor = mix(
         vec4(1.0, 1.0, 1.0, 1.0),
-        vec4(0.0, 1.0, 0.0, 1.0),
+        vec4(0.2, 0.2, 0.2, 1.0),
         textMixFactor
       );
     #else

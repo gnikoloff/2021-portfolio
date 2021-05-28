@@ -13,7 +13,8 @@
     "declaration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "types": [
+    "typeRoots": [
+      "./npm_modules/@types/",
       "./src/types"
     ]
   },

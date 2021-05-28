@@ -15,7 +15,7 @@ const initialState = {
   lightZ: 5,
 
   pointLightShininess: 20,
-  pointLightColor: [1, 0, 0],
+  pointLightColor: [0.9, 0.9, 0.9],
   pointLightSpecularColor: [0, 0, 1],
   pointLightSpecularFactor: 0.1,
 
