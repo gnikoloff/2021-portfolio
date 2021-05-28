@@ -10,7 +10,7 @@ import {
 } from './lib/hwoa-rang-gl/dist/esm'
 
 import store from './store'
-import { setActiveView } from './store/actions'
+import { setActiveView, setHoveredItem } from './store/actions'
 
 import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
@@ -24,24 +24,25 @@ import './index.css'
 const loadManager = new ResourceManager()
 
 loadManager
-  .addLoadResource('url(assets/venus-rising.woff)', {
-    type: ResourceManager.FONT_TYPE,
-    fontName: 'Venus-Rising',
-    fontWeight: 300,
+  .addFontResource({
+    type: ResourceManager.FONT_FACE,
+    name: 'Venus Rising',
+    weight: 400,
+    style: 'normal',
   })
-  .addLoadResource('assets/img0.jpeg', {
-    type: ResourceManager.IMAGE_TYPE,
+  .addFontResource({
+    type: ResourceManager.FONT_GOOGLE,
+    name: 'Noto Sans JP',
+    weight: 400,
+    style: 'normal',
   })
-  // .addLoadResource('https://picsum.photos/200/305', {
-  //   type: ResourceManager.IMAGE_TYPE,
-  // })
-  // .addLoadResource('https://picsum.photos/200/306', {
-  //   type: ResourceManager.IMAGE_TYPE,
-  // })
+  .addImageResource('assets/works/hwoa-rang-gl.png', {
+    type: ResourceManager.IMAGE,
+  })
   .load()
 
-const DEPTH_TEXTURE_WIDTH = 512
-const DEPTH_TEXTURE_HEIGHT = 512
+const DEPTH_TEXTURE_WIDTH = 2048
+const DEPTH_TEXTURE_HEIGHT = 2048
 
 store.dispatch(setActiveView('home'))
 
@@ -160,7 +161,7 @@ let depthDebugMesh
 
 new CameraController(camera, document.body, true)
 
-viewManager.setActiveView(VIEWS_DEFINITIONS['HOME'])
+viewManager.setActiveView(VIEWS_DEFINITIONS['Home'])
 
 document.body.addEventListener('click', onMouseClick)
 document.body.addEventListener('mousemove', onMouseMove)
@@ -170,6 +171,7 @@ function onMouseClick(e) {
   e.preventDefault()
   const { hoveredItem } = store.getState()
   if (!hoveredItem) {
+    store.dispatch(setHoveredItem(null))
     return
   }
   if (hoveredItem.startsWith('https')) {

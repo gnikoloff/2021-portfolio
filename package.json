@@ -50,6 +50,7 @@
     "@types/css-font-loading-module": "0.0.4",
     "gl-matrix": "^3.3.0",
     "popmotion": "^9.3.6",
-    "redux": "^4.1.0"
+    "redux": "^4.1.0",
+    "webfontloader": "^1.6.28"
   }
 }

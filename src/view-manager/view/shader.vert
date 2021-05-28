@@ -16,12 +16,14 @@ attribute vec2 uv;
 attribute vec3 normal;
 attribute mat4 instanceModelMatrix;
 attribute float instanceIndex;
+attribute float shadedMixFactor;
 
 varying vec2 v_uv;
 varying vec4 v_projectedShadowUvs;
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
+varying float v_shadedMixFactor;
 
 void main () {
   mat4 worldMatrix = modelMatrix * instanceModelMatrix;
@@ -31,7 +33,7 @@ void main () {
 
   #ifdef IS_FRONT_VIEW
     float texOffsetY = mod(instanceIndex, cellSize.y);
-    float texOffsetX = cellSize.x - (instanceIndex - texOffsetY) / cellSize.x;
+    float texOffsetX = ceil(instanceIndex / cellSize.x) - 1.0;
     v_uv = uv *
            vec2(1.0 / cellSize.x, 1.0 / cellSize.y) +
            vec2(texOffsetX / cellSize.x, texOffsetY / cellSize.y);
@@ -44,4 +46,6 @@ void main () {
 
   v_surfaceToLight = PointLight.worldPosition - worldPosition.xyz;
   v_surfaceToView = eyePosition - worldPosition.xyz;
+
+  v_shadedMixFactor = shadedMixFactor;
 }

@@ -1,15 +1,15 @@
 {
-  "HOME": [
+  "Home": [
     {
       "type": "TEXT_SPLIT",
       "value": "GEORGI NIKOLOV",
-      "x": 4,
+      "x": 0,
       "y": 1
     },
     {
       "type": "TEXT",
       "value": "Personal Portfolio",
-      "x": 6,
+      "x": 5,
       "y": 3,
       "paddingLeft": 0.62
     },
@@ -18,180 +18,343 @@
       "value": "WORKS",
       "x": 8,
       "y": 6,
-      "link": "WORKS"
+      "link": "Works"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "ABOUT",
       "x": 8,
       "y": 8,
+      "link": "About"
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "CONTACT",
+      "x": 7,
+      "y": 10,
       "link": "ABOUT"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "ARCHIVE",
       "x": 7,
-      "y": 10,
+      "y": 15,
       "link": "https://archive.georgi-nikolov.com"
     },
     {
       "type": "TEXT_SPLIT",
       "value": "JOURNAL",
       "x": 7,
-      "y": 12,
+      "y": 17,
       "link": "https://archive.georgi-nikolov.com/blog"
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "CONTACT",
-      "x": 7,
-      "y": 14,
-      "link": "ABOUT"
     }
   ],
-  "WORKS": [
+  "Works": [
     {
       "type": "TEXT_SPLIT",
       "value": "BACK",
-      "x": 2,
+      "x": 1,
       "y": 1,
-      "link": "HOME"
-    },
-    {
-      "type": "IMAGE",
-      "value": "assets/img0.jpeg",
-      "x": 0,
-      "y": 3
+      "link": "Home"
     },
     {
       "type": "TEXT",
       "value": "01.",
-      "x": 2,
+      "x": 1,
       "y": 5,
       "paddingLeft": 0.125,
       "fontSize": 0.8,
+      "fontFamily": "Venus Rising",
       "opacity": 0.5
     },
     {
       "type": "TEXT_SPLIT",
       "value": "hwoa-rang-gl",
-      "x": 4,
+      "x": 3,
       "y": 5,
-      "link": "HOME"
+      "link": "hwoa-rang-gl"
     },
     {
       "type": "TEXT",
       "value": "02.",
-      "x": 2,
+      "x": 1,
       "y": 7,
       "paddingLeft": 0.125,
       "fontSize": 0.8,
+      "fontFamily": "Venus Rising",
       "opacity": 0.5
     },
     {
       "type": "TEXT_SPLIT",
-      "value": "Happy 2021",
-      "x": 4,
+      "value": "JS Anim Course",
+      "x": 3,
       "y": 7,
-      "link": "HOME"
+      "link": "JS Anim Course"
     },
     {
       "type": "TEXT",
       "value": "03.",
-      "x": 2,
+      "x": 1,
       "y": 9,
       "paddingLeft": 0.125,
       "fontSize": 0.8,
+      "fontFamily": "Venus Rising",
       "opacity": 0.5
     },
     {
       "type": "TEXT_SPLIT",
-      "value": "Demo shop",
-      "x": 4,
+      "value": "Demo web shop",
+      "x": 3,
       "y": 9,
       "link": "HOME"
     },
     {
       "type": "TEXT",
       "value": "04.",
-      "x": 2,
+      "x": 1,
       "y": 11,
       "paddingLeft": 0.125,
       "fontSize": 0.8,
+      "fontFamily": "Venus Rising",
       "opacity": 0.5
     },
     {
       "type": "TEXT_SPLIT",
       "value": "Merch Legend",
-      "x": 4,
+      "x": 3,
       "y": 11,
       "link": "HOME"
     },
     {
       "type": "TEXT",
       "value": "05.",
-      "x": 2,
+      "x": 1,
       "y": 13,
       "paddingLeft": 0.125,
       "fontSize": 0.8,
+      "fontFamily": "Venus Rising",
       "opacity": 0.5
     },
     {
       "type": "TEXT_SPLIT",
       "value": "Old codesketch",
-      "x": 4,
+      "x": 3,
       "y": 13,
       "link": "HOME"
     },
     {
       "type": "TEXT",
       "value": "06.",
-      "x": 2,
+      "x": 1,
       "y": 15,
       "paddingLeft": 0.125,
       "fontSize": 0.8,
+      "fontFamily": "Venus Rising",
       "opacity": 0.5
     },
     {
       "type": "TEXT_SPLIT",
       "value": "More works",
-      "x": 4,
+      "x": 3,
       "y": 15,
       "link": "HOME"
     }
   ],
-  "ABOUT": [
+  "About": [
     {
       "type": "TEXT_SPLIT",
       "value": "BACK",
-      "x": 2,
+      "x": 1,
       "y": 1,
-      "link": "HOME"
+      "link": "Home"
     },
     {
       "type": "TEXT",
-      "value": "I specialize in developing rich user interfaces and",
-      "x": 2,
+      "value": "My name is Georgi Nikolov, a frontend developer from",
+      "x": 1,
       "y": 3,
-      "fontFamily": "Helvetica",
-      "fontSize": 0.9
+      "fontSize": 0.8
     },
     {
       "type": "TEXT",
-      "value": "graphics, such as websites, web apps, VR, AR and",
-      "x": 2,
+      "value": "Bulgaria and I am based in Berlin, Germany.",
+      "x": 1,
       "y": 4,
-      "fontFamily": "Helvetica",
+      "fontSize": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "My daily work consists of developing tools, complex",
+      "x": 1,
+      "y": 6,
+      "fontSize": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "dashboards, consumer facing products and award winning",
+      "x": 1,
+      "y": 7,
+      "fontSize": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "websites using wide range of backends and web APIs.",
+      "x": 1,
+      "y": 8,
+      "fontSize": 0.8
+    },
+    
+    {
+      "type": "TEXT",
+      "value": "I specialize in developing rich user interfaces and graphics,",
+      "x": 1,
+      "y": 10,
+      "fontSize": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "such as websites, web apps, VR, AR and 3D visualisations and",
+      "x": 1,
+      "y": 11,
+      "fontSize": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "simulations.",
+      "x": 1,
+      "y": 12,
+      "fontSize": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "Skills:",
+      "x": 1,
+      "y": 14,
+      "fontSize": 0.8,
+      "fontFamily": "Venus Rising",
+      "opacity": 0.72
+    },
+    {
+      "type": "TEXT",
+      "value": "JS / Typescript / React / Firebase / Node.js / WebGL / GLSL / (S)CSS /",
+      "x": 1,
+      "y": 15,
+      "fontSize": 0.7,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "SVG / Wordpress / Photoshop / Illustrator / Animation Theory & Math",
+      "x": 1,
+      "y": 16,
+      "fontSize": 0.7,
+      "color": 0.8
+    }
+  ],
+  "hwoa-rang-gl": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "BACK",
+      "x": 1,
+      "y": 1,
+      "link": "Works",
+      "opacity": 0.75
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "OPEN",
+      "x": 14,
+      "y": 1,
+      "link": "https://gnikoloff.github.io/hwoa-rang-gl/"
+    },
+    {
+      "type": "IMAGE",
+      "value": "assets/works/hwoa-rang-gl.png",
+      "x": 0,
+      "y": 3,
+      "width": 19,
+      "height": 12
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "hwoa-rang-gl",
+      "x": 1,
+      "y": 13,
       "fontSize": 0.9
     },
     {
       "type": "TEXT",
-      "value": "3D visualizations and simulations.",
-      "x": 2,
-      "y": 5,
-      "fontFamily": "Helvetica",
-      "fontSize": 0.9
+      "value": "I developed a lightweight WebGL library in Typescript for personal use",
+      "x": 1,
+      "y": 14,
+      "fontSize": 0.7,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "and my work, along with documentation, examples and tutorials for it",
+      "x": 1,
+      "y": 15,
+      "fontSize": 0.7,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "I used it to develop the graphics powering this website.",
+      "x": 1,
+      "y": 16,
+      "fontSize": 0.7,
+      "color": 0.8
     }
-    
+  ],
+  "JS Anim Course": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "BACK",
+      "x": 1,
+      "y": 1,
+      "link": "Works",
+      "opacity": 0.75
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "OPEN",
+      "x": 14,
+      "y": 1,
+      "link": "https://gnikoloff.github.io/hwoa-rang-gl/"
+    },
+    {
+      "type": "IMAGE",
+      "value": "assets/works/hwoa-rang-gl.png",
+      "x": 0,
+      "y": 3,
+      "width": 19,
+      "height": 12
+    },
+    {
+      "type": "TEXT",
+      "value": "JS Animation Course",
+      "x": 1,
+      "y": 13,
+      "fontSize": 0.9,
+      "fontFamily": "Venus Rising",
+      "letterSpacing": 10
+    },
+    {
+      "type": "TEXT",
+      "value": "I made a video course for AWWWARDS for creating dynamic animation",
+      "x": 1,
+      "y": 14,
+      "fontSize": 0.7,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "and physics based motion with Javascript using the HTML5 canvas.",
+      "x": 1,
+      "y": 15,
+      "fontSize": 0.7,
+      "color": 0.8
+    }
   ]
 }

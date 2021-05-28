@@ -21,6 +21,7 @@ varying vec4 v_projectedShadowUvs;
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
+varying float v_shadedMixFactor;
 
 const float near_plane = 0.1;
 const float far_plane = 1.0;
@@ -62,8 +63,8 @@ void main () {
     }
     
     #ifdef IS_FRONT_VIEW
-      vec2 uv = vec2(v_uv.x, 1.0 - v_uv.y);
-      float textMixFactor = texture2D(text, uv).a;
+      vec2 uv = vec2(v_uv.x, v_uv.y);
+      // float textMixFactor = texture2D(text, uv);
       // float textMixFactor = 0.4;
 
       // gl_FragColor = vec4(
@@ -71,11 +72,19 @@ void main () {
       //   1.0
       // );
 
-      gl_FragColor = mix(
+
+
+      vec4 texColor = texture2D(text, uv);
+      float textMixFactor = texColor.a;
+
+      vec4 textColor = mix(
         vec4(1.0, 1.0, 1.0, 1.0),
         vec4(0.2, 0.2, 0.2, 1.0),
         textMixFactor
       );
+
+      gl_FragColor = mix(texColor, textColor, v_shadedMixFactor);
+
     #else
       // gl_FragColor = vec4(
       //   vec3(currentDepth/40.0),
@@ -85,8 +94,12 @@ void main () {
       gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
     #endif
 
-    gl_FragColor.rgb *= pointLight * PointLight.lightColor;
-    gl_FragColor.rgb += specular * PointLight.specularColor * PointLight.specularFactor;
-    gl_FragColor.rgb *= shadowLight;
+    vec4 shadedColor = gl_FragColor;
+
+    shadedColor.rgb *= pointLight * PointLight.lightColor;
+    shadedColor.rgb += specular * PointLight.specularColor * PointLight.specularFactor;
+    shadedColor.rgb *= shadowLight;
+
+    gl_FragColor = mix(gl_FragColor, shadedColor, v_shadedMixFactor);
   }
 }

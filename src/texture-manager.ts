@@ -4,7 +4,6 @@ import {
   GRID_COUNT_X,
   GRID_COUNT_Y,
 } from './constants'
-import ResourceManager from './resource-manager'
 
 const IDEAL_TEXTURE_SIZE = 2048
 
@@ -24,8 +23,31 @@ export default class TextureManager {
 
   static FILL_STYLE = 'white'
   static FONT_WEIGHT = 400
-  static DEFAULT_FONT_FAMILY = 'Venus-Rising'
+  static DEFAULT_HEADING_FONT_FAMILY = 'Venus Rising'
+  static DEFAULT_BODY_FONT_FAMILY = 'Noto Sans JP'
   static DEFAULT_FONT_SIZE = 1
+
+  static fitDimensions(contains) {
+    return (parentWidth, parentHeight, childWidth, childHeight) => {
+      const doRatio = childWidth / childHeight
+      const cRatio = parentWidth / parentHeight
+      let width = parentWidth
+      let height = parentHeight
+
+      if (contains ? doRatio > cRatio : doRatio < cRatio) {
+        height = width / doRatio
+      } else {
+        width = height * doRatio
+      }
+
+      return {
+        width,
+        height,
+        x: (parentWidth - width) / 2,
+        y: (parentHeight - height) / 2,
+      }
+    }
+  }
 
   constructor({ maxSize, idealFontSize, loadManager }) {
     this.loadManager = loadManager
@@ -50,7 +72,7 @@ export default class TextureManager {
     ctx.clearRect(0, 0, this.#maxSize, this.#maxSize)
     viewItems.forEach((item) => {
       if (item.type === CONTENT_TYPE_SPLIT_TEXT) {
-        const x = item.x * this.#cellWidth
+        const x = item.x * this.#cellWidth + this.#cellWidth / 2
         const y = item.y * this.#cellHeight
         const count = item.value.length
 
@@ -60,7 +82,8 @@ export default class TextureManager {
           (item.fontSize || 1)
 
         const fontWeight = TextureManager.FONT_WEIGHT
-        const fontFamily = item.fontFamily || TextureManager.DEFAULT_FONT_FAMILY
+        const fontFamily =
+          item.fontFamily || TextureManager.DEFAULT_HEADING_FONT_FAMILY
 
         ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`
         ctx.textAlign = 'center'
@@ -70,7 +93,7 @@ export default class TextureManager {
 
         for (let i = 0; i < count; i++) {
           const char = item.value[i]
-          const charX = i * this.#cellWidth + this.#cellWidth / 2
+          const charX = i * this.#cellWidth
           const charY = y + this.#cellHeight * 0.6
           ctx.fillText(char, x + charX, charY)
         }
@@ -85,22 +108,48 @@ export default class TextureManager {
           (item.fontSize || TextureManager.DEFAULT_FONT_SIZE)
 
         const fontWeight = TextureManager.FONT_WEIGHT
-        const fontFamily = item.fontFamily || TextureManager.DEFAULT_FONT_FAMILY
+        const fontFamily =
+          item.fontFamily || TextureManager.DEFAULT_BODY_FONT_FAMILY
+
+        const idealLetterSpacing = item.letterSpacing || 0
+        const letterSpacing =
+          idealLetterSpacing * (this.#maxSize / IDEAL_TEXTURE_SIZE)
 
         ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`
-        ctx.textBaseline = 'middle'
         ctx.textAlign = 'left'
+        ctx.textBaseline = 'middle'
         ctx.fillStyle = TextureManager.FILL_STYLE
         ctx.globalAlpha = item.opacity || 1
 
-        ctx.fillText(item.value, x, y)
+        let accX = x
+
+        for (let i = 0; i < item.value.length; i++) {
+          const char = item.value.charAt(i)
+          const charWidth = ctx.measureText(char).width
+          ctx.fillText(char, accX, y)
+          accX += charWidth + letterSpacing
+        }
+
+        // ctx.fillText(item.value, x, y)
       } else if (item.type === 'IMAGE') {
         const x = item.x * this.#cellWidth
         const y = item.y * this.#cellHeight
 
+        const containerWidth = (item.width - item.x) * this.#cellWidth
+        const containerHeight = item.height * this.#cellHeight
+
         const image = this.loadManager.getImage(item.value)
 
-        ctx.drawImage(image, x, y)
+        const cover = TextureManager.fitDimensions(false)
+
+        const { width, height } = cover(
+          containerWidth,
+          containerHeight,
+          image.naturalWidth,
+          image.naturalHeight,
+        )
+
+        ctx.drawImage(image, x, y, width - x, height - y)
       }
     })
     return canvas

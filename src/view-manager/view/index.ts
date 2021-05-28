@@ -71,7 +71,7 @@ export default class View {
       magFilter: gl.NEAREST,
     })
 
-    const faces = GeometryUtils.createRoundedBoxSeparateFace({
+    const faces = GeometryUtils.createBoxSeparateFace({
       width: GRID_STEP_X,
       height: GRID_STEP_Y,
       depth: GRID_STEP_Y,
@@ -81,12 +81,12 @@ export default class View {
     faces.forEach((side) => {
       const { orientation, vertices, normal, uv, indices } = side
 
-      const totalCount = GRID_COUNT_X * GRID_COUNT_Y
+      const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
+      const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
 
-      const instancedIndexes = new Float32Array(totalCount)
-
-      for (let i = 0; i < totalCount; i++) {
-        instancedIndexes[i] = totalCount - i - 1
+      for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+        instancedIndexes[i] = i
+        shadedMixFactors[i] = 1
       }
 
       const geometry = new Geometry(gl)
@@ -106,6 +106,11 @@ export default class View {
         .addAttribute('instanceIndex', {
           size: 1,
           typedArray: instancedIndexes,
+          instancedDivisor: 1,
+        })
+        .addAttribute('shadedMixFactor', {
+          size: 1,
+          typedArray: shadedMixFactors,
           instancedDivisor: 1,
         })
 
@@ -214,6 +219,37 @@ export default class View {
 
   setView(viewDefiniton) {
     this.#viewDefinition = viewDefiniton
+
+    const image = viewDefiniton.find(({ type }) => type === 'IMAGE')
+
+    const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+
+    for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+      if (image) {
+        const y = GRID_COUNT_Y - (i % GRID_COUNT_Y) - 1
+        const x = i / GRID_COUNT_X
+        if (
+          x >= image.x &&
+          x < image.width &&
+          y >= image.y &&
+          y < image.height
+        ) {
+          shadedMixFactors[i] = 0
+        } else {
+          shadedMixFactors[i] = 1
+        }
+      } else {
+        shadedMixFactors[i] = 1
+      }
+    }
+    const frontMesh = this.#meshes[this.#meshes.length - 1]
+    frontMesh.updateGeometryAttribute(
+      'shadedMixFactor',
+      0,
+      GRID_TOTAL_COUNT,
+      shadedMixFactors,
+    )
+
     const canvas = this.#textureManager.getTextureCanvas(
       this.#idx,
       viewDefiniton,
@@ -234,10 +270,8 @@ export default class View {
     )
 
     if (hoveredItem && hoveredItem.link) {
-      store.dispatch(setHoverItemStartX(hoveredItem.x - 1))
-      store.dispatch(
-        setHoverItemEndX(hoveredItem.x + hoveredItem.value.length - 1),
-      )
+      store.dispatch(setHoverItemStartX(hoveredItem.x))
+      store.dispatch(setHoverItemEndX(hoveredItem.x + hoveredItem.value.length))
       store.dispatch(setHoverItemY(y))
       store.dispatch(setHoveredItem(hoveredItem.link))
 
@@ -307,6 +341,7 @@ export default class View {
         const scalex = 1
         const scaley = 1
         const scalez = 1
+        // const scalez = Math.sqrt(posx * posx + posy * posy)
 
         mat4.identity(this.#instanceMatrix)
 
@@ -341,7 +376,7 @@ export default class View {
   ): this {
     this.#meshes.forEach((mesh, i) => {
       if (shadowTexture) {
-        const isFront = i === 1
+        const isFront = i === this.#meshes.length - 1
         if (isFront) {
           this.#gl.activeTexture(this.#gl.TEXTURE0)
           this.#textTexture.bind()

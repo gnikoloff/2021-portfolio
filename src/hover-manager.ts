@@ -21,8 +21,6 @@ import {
 import store from './store'
 import { setHoverIdx } from './store/actions'
 
-let oldId
-
 export default class HoverManager {
   #gl: WebGLRenderingContext
   #mesh: InstancedMesh
