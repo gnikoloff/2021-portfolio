@@ -23,6 +23,12 @@ import './index.css'
 
 const loadManager = new ResourceManager()
 
+let allImagesInProject = []
+for (const [key, view] of Object.entries(VIEWS_DEFINITIONS)) {
+  const images = (view as Array<any>).filter(({ type }) => type === 'IMAGE')
+  allImagesInProject.push(...images)
+}
+
 loadManager
   .addFontResource({
     type: ResourceManager.FONT_FACE,
@@ -36,10 +42,13 @@ loadManager
     weight: 400,
     style: 'normal',
   })
-  .addImageResource('assets/works/hwoa-rang-gl.png', {
-    type: ResourceManager.IMAGE,
-  })
-  .load()
+allImagesInProject.forEach(({ value: url }) => {
+  loadManager
+    .addImageResource(url, {
+      type: ResourceManager.IMAGE,
+    })
+    .load()
+})
 
 const DEPTH_TEXTURE_WIDTH = 2048
 const DEPTH_TEXTURE_HEIGHT = 2048
@@ -171,7 +180,6 @@ function onMouseClick(e) {
   e.preventDefault()
   const { hoveredItem } = store.getState()
   if (!hoveredItem) {
-    store.dispatch(setHoveredItem(null))
     return
   }
   if (hoveredItem.startsWith('https')) {
@@ -179,6 +187,8 @@ function onMouseClick(e) {
   } else {
     viewManager.setActiveView(VIEWS_DEFINITIONS[hoveredItem]).resetPosZ()
   }
+
+  store.dispatch(setHoveredItem(null))
 }
 
 function onMouseMove(e) {
@@ -223,11 +233,11 @@ function updateFrame(ts) {
     viewManager.render(camera, false, depthFramebuffer.depthTexture)
   }
 
-  {
-    gl.activeTexture(gl.TEXTURE0)
-    depthFramebuffer.depthTexture.bind()
-    depthDebugMesh.use().setCamera(orthoCamera).draw()
-  }
+  // {
+  //   gl.activeTexture(gl.TEXTURE0)
+  //   depthFramebuffer.depthTexture.bind()
+  //   depthDebugMesh.use().setCamera(orthoCamera).draw()
+  // }
 
   requestAnimationFrame(updateFrame)
 }

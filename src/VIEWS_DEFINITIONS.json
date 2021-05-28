@@ -106,7 +106,7 @@
       "value": "Demo web shop",
       "x": 3,
       "y": 9,
-      "link": "HOME"
+      "link": "Demo web shop"
     },
     {
       "type": "TEXT",
@@ -120,10 +120,10 @@
     },
     {
       "type": "TEXT_SPLIT",
-      "value": "Merch Legend",
+      "value": "Demo AR Shop",
       "x": 3,
       "y": 11,
-      "link": "HOME"
+      "link": "Demo AR Shop"
     },
     {
       "type": "TEXT",
@@ -140,7 +140,7 @@
       "value": "Old codesketch",
       "x": 3,
       "y": 13,
-      "link": "HOME"
+      "link": "Codesketch"
     },
     {
       "type": "TEXT",
@@ -157,7 +157,7 @@
       "value": "More works",
       "x": 3,
       "y": 15,
-      "link": "HOME"
+      "link": "https://archive.georgi-nikolov.com/"
     }
   ],
   "About": [
@@ -239,7 +239,7 @@
       "value": "JS / Typescript / React / Firebase / Node.js / WebGL / GLSL / (S)CSS /",
       "x": 1,
       "y": 15,
-      "fontSize": 0.7,
+      "fontSize": 0.675,
       "color": 0.8
     },
     {
@@ -247,7 +247,7 @@
       "value": "SVG / Wordpress / Photoshop / Illustrator / Animation Theory & Math",
       "x": 1,
       "y": 16,
-      "fontSize": 0.7,
+      "fontSize": 0.675,
       "color": 0.8
     }
   ],
@@ -269,7 +269,7 @@
     },
     {
       "type": "IMAGE",
-      "value": "assets/works/hwoa-rang-gl.png",
+      "value": "assets/works/hwoa-rang-gl-preview.png",
       "x": 0,
       "y": 3,
       "width": 19,
@@ -287,7 +287,7 @@
       "value": "I developed a lightweight WebGL library in Typescript for personal use",
       "x": 1,
       "y": 14,
-      "fontSize": 0.7,
+      "fontSize": 0.675,
       "color": 0.8
     },
     {
@@ -295,7 +295,7 @@
       "value": "and my work, along with documentation, examples and tutorials for it",
       "x": 1,
       "y": 15,
-      "fontSize": 0.7,
+      "fontSize": 0.675,
       "color": 0.8
     },
     {
@@ -303,7 +303,7 @@
       "value": "I used it to develop the graphics powering this website.",
       "x": 1,
       "y": 16,
-      "fontSize": 0.7,
+      "fontSize": 0.675,
       "color": 0.8
     }
   ],
@@ -321,11 +321,11 @@
       "value": "OPEN",
       "x": 14,
       "y": 1,
-      "link": "https://gnikoloff.github.io/hwoa-rang-gl/"
+      "link": "https://www.awwwards.com/academy/course/dynamically-scripted-animations-with-javascript"
     },
     {
       "type": "IMAGE",
-      "value": "assets/works/hwoa-rang-gl.png",
+      "value": "assets/works/awwwwards-course-preview.png",
       "x": 0,
       "y": 3,
       "width": 19,
@@ -345,7 +345,7 @@
       "value": "I made a video course for AWWWARDS for creating dynamic animation",
       "x": 1,
       "y": 14,
-      "fontSize": 0.7,
+      "fontSize": 0.675,
       "color": 0.8
     },
     {
@@ -353,7 +353,213 @@
       "value": "and physics based motion with Javascript using the HTML5 canvas.",
       "x": 1,
       "y": 15,
-      "fontSize": 0.7,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "It covers basic trigonometry, velocity & acceleration, easing, springing",
+      "x": 1,
+      "y": 16,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "and collision detection.",
+      "x": 1,
+      "y": 17,
+      "fontSize": 0.675,
+      "color": 0.8
+    }
+  ],
+  "Demo web shop": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "BACK",
+      "x": 1,
+      "y": 1,
+      "link": "Works",
+      "opacity": 0.75
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "OPEN",
+      "x": 14,
+      "y": 1,
+      "link": "https://acrnm-product-explorer.vercel.app/"
+    },
+    {
+      "type": "IMAGE",
+      "value": "assets/works/acronym-preview.png",
+      "x": 0,
+      "y": 3,
+      "width": 19,
+      "height": 12
+    },
+    {
+      "type": "TEXT",
+      "value": "Demo web shop",
+      "x": 1,
+      "y": 13,
+      "fontSize": 0.9,
+      "fontFamily": "Venus Rising",
+      "letterSpacing": 10
+    },
+    {
+      "type": "TEXT",
+      "value": "I used THREE.js and GLSL for the layout, sliders, cursor and loader of the",
+      "x": 1,
+      "y": 14,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "website. The rest is built using vanilla JS for DOM manipulation and the",
+      "x": 1,
+      "y": 15,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "popmotion animation library for advanced animation playback.",
+      "x": 1,
+      "y": 16,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "NOTE * All materials and product specs belong to Acronym GmbH",
+      "x": 1,
+      "y": 17,
+      "fontSize": 0.675,
+      "color": 0.8
+    }
+  ],
+  "Codesketch": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "BACK",
+      "x": 1,
+      "y": 1,
+      "link": "Works",
+      "opacity": 0.75
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "OPEN",
+      "x": 14,
+      "y": 1,
+      "link": "https://codesketch.georgi-nikolov.com/"
+    },
+    {
+      "type": "IMAGE",
+      "value": "assets/works/codesketch-preview.png",
+      "x": 0,
+      "y": 3,
+      "width": 19,
+      "height": 12
+    },
+    {
+      "type": "TEXT",
+      "value": "Codesketch",
+      "x": 1,
+      "y": 13,
+      "fontSize": 0.9,
+      "fontFamily": "Venus Rising",
+      "letterSpacing": 10
+    },
+    {
+      "type": "TEXT",
+      "value": "I made this interactive showcase of my CodePen collection using drag",
+      "x": 1,
+      "y": 14,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "interactions and CSS3D for the layout and WebGL & canvas2d for the",
+      "x": 1,
+      "y": 15,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "animations. I used this as a tool to explore motion principles and math.",
+      "x": 1,
+      "y": 16,
+      "fontSize": 0.675,
+      "color": 0.8
+    }
+  ],
+  "Demo AR Shop": [
+    {
+      "type": "TEXT_SPLIT",
+      "value": "BACK",
+      "x": 1,
+      "y": 1,
+      "link": "Works",
+      "opacity": 0.75
+    },
+    {
+      "type": "TEXT_SPLIT",
+      "value": "OPEN",
+      "x": 14,
+      "y": 1,
+      "link": "https://archive.georgi-nikolov.com/project/web-ar-furniture-demo"
+    },
+    {
+      "type": "IMAGE",
+      "value": "assets/works/web-ar-demo-preview.png",
+      "x": 0,
+      "y": 3,
+      "width": 19,
+      "height": 12
+    },
+    {
+      "type": "TEXT",
+      "value": "Web AR Demo Shop",
+      "x": 1,
+      "y": 13,
+      "fontSize": 0.9,
+      "fontFamily": "Venus Rising",
+      "letterSpacing": 10
+    },
+    {
+      "type": "TEXT",
+      "value": "I developed this AR demo shop for Apple Quick Look and ARCore during",
+      "x": 1,
+      "y": 14,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "the first COVID quarantine here in Berlin.",
+      "x": 1,
+      "y": 15,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "It lets you easily preview furniture in Augmented Reality and gracefully",
+      "x": 1,
+      "y": 16,
+      "fontSize": 0.675,
+      "color": 0.8
+    },
+    {
+      "type": "TEXT",
+      "value": "fallbacks to regular 3D using WebGL if your device does not have AR.",
+      "x": 1,
+      "y": 17,
+      "fontSize": 0.675,
       "color": 0.8
     }
   ]

@@ -83,10 +83,12 @@ export default class View {
 
       const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
       const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+      const colorMixFactors = new Float32Array(GRID_TOTAL_COUNT)
 
       for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
         instancedIndexes[i] = i
         shadedMixFactors[i] = 1
+        colorMixFactors[i] = 0.875 + Math.random() * 0.125
       }
 
       const geometry = new Geometry(gl)
@@ -103,16 +105,25 @@ export default class View {
           size: 3,
           typedArray: normal,
         })
-        .addAttribute('instanceIndex', {
-          size: 1,
-          typedArray: instancedIndexes,
-          instancedDivisor: 1,
-        })
-        .addAttribute('shadedMixFactor', {
-          size: 1,
-          typedArray: shadedMixFactors,
-          instancedDivisor: 1,
-        })
+
+      if (orientation === CUBE_SIDE_FRONT) {
+        geometry
+          .addAttribute('instanceIndex', {
+            size: 1,
+            typedArray: instancedIndexes,
+            instancedDivisor: 1,
+          })
+          .addAttribute('shadedMixFactor', {
+            size: 1,
+            typedArray: shadedMixFactors,
+            instancedDivisor: 1,
+          })
+          .addAttribute('colorScaleFactor', {
+            size: 1,
+            typedArray: colorMixFactors,
+            instancedDivisor: 1,
+          })
+      }
 
       let mesh
 

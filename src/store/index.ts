@@ -17,7 +17,7 @@ const initialState = {
   pointLightShininess: 20,
   pointLightColor: [0.9, 0.9, 0.9],
   pointLightSpecularColor: [0, 0, 1],
-  pointLightSpecularFactor: 0.1,
+  pointLightSpecularFactor: 0.5,
 
   hoverIdx: -1,
   hoverItemStartX: -1,

@@ -17,6 +17,7 @@ attribute vec3 normal;
 attribute mat4 instanceModelMatrix;
 attribute float instanceIndex;
 attribute float shadedMixFactor;
+attribute float colorScaleFactor;
 
 varying vec2 v_uv;
 varying vec4 v_projectedShadowUvs;
@@ -24,6 +25,7 @@ varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
 varying float v_shadedMixFactor;
+varying float v_colorScaleFactor;
 
 void main () {
   mat4 worldMatrix = modelMatrix * instanceModelMatrix;
@@ -48,4 +50,5 @@ void main () {
   v_surfaceToView = eyePosition - worldPosition.xyz;
 
   v_shadedMixFactor = shadedMixFactor;
+  v_colorScaleFactor = colorScaleFactor;
 }

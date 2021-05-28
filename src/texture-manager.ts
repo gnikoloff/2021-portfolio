@@ -136,20 +136,30 @@ export default class TextureManager {
         const y = item.y * this.#cellHeight
 
         const containerWidth = (item.width - item.x) * this.#cellWidth
-        const containerHeight = item.height * this.#cellHeight
+        const containerHeight = (item.height - item.y) * this.#cellHeight
 
         const image = this.loadManager.getImage(item.value)
 
         const cover = TextureManager.fitDimensions(false)
 
-        const { width, height } = cover(
+        const {
+          x: offsetX,
+          y: offsetY,
+          width,
+          height,
+        } = cover(
           containerWidth,
           containerHeight,
           image.naturalWidth,
           image.naturalHeight,
         )
 
-        ctx.drawImage(image, x, y, width - x, height - y)
+        console.log({ offsetX, offsetY })
+
+        const drawX = x + offsetX
+        const drawY = y + offsetY
+
+        ctx.drawImage(image, drawX, drawY, width - offsetX, height - offsetY)
       }
     })
     return canvas

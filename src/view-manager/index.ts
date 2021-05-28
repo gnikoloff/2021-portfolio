@@ -19,7 +19,7 @@ export default class ViewManager {
       idealFontSize: 80,
       maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
       loadManager,
-    }).showDebug(0.1)
+    }) //.showDebug(0.1)
 
     this.#view0 = new View(gl, {
       idx: 0,

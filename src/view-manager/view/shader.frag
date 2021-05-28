@@ -22,6 +22,7 @@ varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
 varying float v_shadedMixFactor;
+varying float v_colorScaleFactor;
 
 const float near_plane = 0.1;
 const float far_plane = 1.0;
@@ -77,8 +78,10 @@ void main () {
       vec4 texColor = texture2D(text, uv);
       float textMixFactor = texColor.a;
 
+      vec3 bgColor = vec3(1.0, 1.0, 1.0) * v_colorScaleFactor;
+
       vec4 textColor = mix(
-        vec4(1.0, 1.0, 1.0, 1.0),
+        vec4(bgColor, 1.0),
         vec4(0.2, 0.2, 0.2, 1.0),
         textMixFactor
       );
