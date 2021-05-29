@@ -50,7 +50,7 @@ export default class View {
   #meshes: Array<Mesh> = []
 
   #positionsOffsets = new Float32Array(GRID_TOTAL_COUNT * 3).fill(0)
-  #scaleOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(1)
+  #scaleOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(0)
 
   #instanceMatrix = mat4.create()
   #transformVec3 = vec3.create()
@@ -240,8 +240,8 @@ export default class View {
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
             const offset = offsets[i]
             this.#positionsOffsets[i * 3 + 2] = clamp(
-              mapNumberRange(v, offset, 1, -2, 0),
-              -2,
+              mapNumberRange(v, offset, 1, -4, 0),
+              -4,
               0,
             )
             this.#scaleOffsets[i] = v
@@ -263,9 +263,9 @@ export default class View {
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
             const offset = offsets[i]
             this.#positionsOffsets[i * 3 + 2] = clamp(
-              mapNumberRange(v, offset, 1, 0, 2),
+              mapNumberRange(v, offset, 1, 0, 4),
               0,
-              2,
+              4,
             )
             this.#scaleOffsets[i] = 1 - v
           }

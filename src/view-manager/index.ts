@@ -24,7 +24,11 @@ export default class ViewManager {
       idealFontSize: 80,
       maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
       loadManager,
-    }).showDebug(0.1)
+    })
+    const state = store.getState()
+    if (state.debugMode) {
+      this.#textureManager.showDebug(0.1)
+    }
 
     this.#view0 = new View(gl, {
       idx: 0,
@@ -60,7 +64,7 @@ export default class ViewManager {
           this.#activeViewName = activeView
         }
       } else {
-        this.setActiveView(VIEWS_DEFINITIONS[activeView].items)
+        this.setActiveView(VIEWS_DEFINITIONS[activeView].items, false)
         // this.resetPosZ()
         this.#activeViewName = activeView
       }
@@ -81,13 +85,16 @@ export default class ViewManager {
     }
   }
 
-  setActiveView = (viewDefiniton: Object) => {
+  setActiveView = (viewDefiniton: Object, fadeOutLastView = true) => {
     const oldViewDefinition = this.#viewDefinition
     this.#view0.setView(oldViewDefinition || viewDefiniton)
     this.#view1.setView(viewDefiniton)
 
-    Promise.all([this.#view0.transitionOut(), this.#view1.transitionIn()])
-
+    if (fadeOutLastView) {
+      Promise.all([this.#view0.transitionOut(), this.#view1.transitionIn()])
+    } else {
+      this.#view0.transitionIn()
+    }
     // if (this.#activeView != null) {
     //   // this.#activeView = this.#activeView === 0 ? 1 : 0
     //   const temp = this.#view0

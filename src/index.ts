@@ -40,13 +40,7 @@ const viewManager = new ViewManager(gl, {
   loadManager,
 })
 
-const depthFramebuffer = new Framebuffer(gl, {
-  width: DEPTH_TEXTURE_WIDTH,
-  height: DEPTH_TEXTURE_HEIGHT,
-  useDepthRenderBuffer: false,
-})
-
-const lightingManager = new LightingManager()
+const lightingManager = new LightingManager(gl)
 
 const camera = new PerspectiveCamera(
   (45 * Math.PI) / 180,
@@ -80,68 +74,16 @@ const orthoCamera = new OrthographicCamera(
   lightingManager.computeShadowTextureMatrix()
 }
 
-new CameraController(camera, document.body, true)
+{
+  const { debugMode } = store.getState()
+  if (debugMode) {
+    new CameraController(camera, document.body, true)
+  }
+}
 
 {
   const viewName = getActiveViewFromURL()
   store.dispatch(setActiveView(viewName))
-}
-
-let depthDebugMesh
-{
-  const width = innerWidth * 0.2
-  const height = innerHeight * 0.2
-  const { indices, vertices, uv } = GeometryUtils.createPlane({
-    width,
-    height,
-  })
-  const geometry = new Geometry(gl)
-    .addIndex({ typedArray: indices })
-    .addAttribute('position', { typedArray: vertices, size: 3 })
-    .addAttribute('uv', { typedArray: uv, size: 2 })
-  depthDebugMesh = new Mesh(gl, {
-    geometry,
-    uniforms: {
-      depthTex: { type: UNIFORM_TYPE_INT, value: 0 },
-    },
-    vertexShaderSource: `
-      attribute vec4 position;
-      attribute vec2 uv;
-
-      varying vec2 v_uv;
-
-      void main () {
-        gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
-
-        v_uv = uv;
-      }
-    `,
-    fragmentShaderSource: `
-      precision highp float;
-
-      uniform sampler2D depthTex;
-
-      varying vec2 v_uv;
-
-      const float near_plane = ${lightingManager.shadowNear};
-      const float far_plane = ${lightingManager.shadowFar}.0;
-
-      float LinearizeDepth(float depth) {
-        float z = depth * 2.0 - 1.0; // Back to NDC 
-        return (2.0 * near_plane * far_plane) / (far_plane + near_plane - z * (far_plane - near_plane));
-      }
-
-      void main () {
-        float depth = texture2D(depthTex, v_uv).r;
-        gl_FragColor = vec4(vec3(LinearizeDepth(depth) / far_plane), 1.0);
-      }
-
-    `,
-  })
-  depthDebugMesh.setPosition({
-    x: -innerWidth / 2 + width / 2 + 20,
-    y: -innerHeight / 2 + height / 2 + 20,
-  })
 }
 
 loadManager
@@ -214,7 +156,7 @@ function updateFrame(ts) {
   viewManager.updateMatrix()
 
   {
-    depthFramebuffer.bind()
+    lightingManager.depthFramebuffer.bind()
     gl.viewport(0, 0, DEPTH_TEXTURE_WIDTH, DEPTH_TEXTURE_HEIGHT)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -228,18 +170,22 @@ function updateFrame(ts) {
       null,
     )
 
-    depthFramebuffer.unbind()
+    lightingManager.depthFramebuffer.unbind()
   }
 
   {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
-    viewManager.render(camera, false, depthFramebuffer.depthTexture)
+    viewManager.render(
+      camera,
+      false,
+      lightingManager.depthFramebuffer.depthTexture,
+    )
   }
 
-  {
-    gl.activeTexture(gl.TEXTURE0)
-    depthFramebuffer.depthTexture.bind()
-    depthDebugMesh.use().setCamera(orthoCamera).draw()
+  const state = store.getState()
+
+  if (state.debugMode) {
+    lightingManager.renderDebugMesh(orthoCamera)
   }
 
   requestAnimationFrame(updateFrame)

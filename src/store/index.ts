@@ -6,6 +6,8 @@ import * as actions from './actions'
 import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
 
 const initialState = {
+  debugMode: new URLSearchParams(location.search).has('debugMode'),
+
   activeView: null,
   hoveredItem: null,
 
@@ -29,6 +31,8 @@ const initialState = {
   hoverItemEndX: -1,
   hoverItemY: -1,
 }
+
+console.log({ initialState })
 
 const appState = (state = initialState, action) => {
   switch (action.type) {
