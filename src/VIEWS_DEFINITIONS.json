@@ -3,51 +3,58 @@
     "label": "Home",
     "items": [
       {
-        "type": "TEXT_SPLIT",
+        "type": "TEXT",
         "value": "GEORGI NIKOLOV",
-        "x": 0,
-        "y": 1
+        "x": 3,
+        "y": 1,
+        "fontFamily": "Venus Rising",
+        "fontSize": 1.1,
+        "letterSpacing": 26
       },
       {
         "type": "TEXT",
         "value": "Personal Portfolio",
-        "x": 5,
+        "x": 4,
         "y": 3,
-        "paddingLeft": 0.62
+        "paddingLeft": 0,
+        "fontFamily": "Venus Rising",
+        "fontSize": 0.75,
+        "letterSpacing": 12,
+        "opacity": 0.8
       },
       {
         "type": "TEXT_SPLIT",
         "value": "WORKS",
-        "x": 8,
-        "y": 6,
+        "x": 7,
+        "y": 7,
         "link": "works"
       },
       {
         "type": "TEXT_SPLIT",
         "value": "ABOUT",
-        "x": 8,
-        "y": 8,
+        "x": 7,
+        "y": 9,
         "link": "about"
       },
       {
         "type": "TEXT_SPLIT",
         "value": "CONTACT",
-        "x": 7,
-        "y": 10,
+        "x": 6,
+        "y": 11,
         "link": "about"
       },
       {
         "type": "TEXT_SPLIT",
         "value": "ARCHIVE",
-        "x": 7,
-        "y": 15,
+        "x": 6,
+        "y": 13,
         "link": "https://archive.georgi-nikolov.com"
       },
       {
         "type": "TEXT_SPLIT",
         "value": "JOURNAL",
-        "x": 7,
-        "y": 17,
+        "x": 6,
+        "y": 15,
         "link": "https://archive.georgi-nikolov.com/blog"
       }
     ]
