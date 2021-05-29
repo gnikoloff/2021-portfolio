@@ -8,6 +8,7 @@ import TextureManager from '../texture-manager'
 import View from './view'
 
 import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
+import { GRID_COUNT_X, GRID_COUNT_Y, GRID_TOTAL_COUNT } from '../constants'
 
 export default class ViewManager {
   #view0: View
@@ -23,7 +24,7 @@ export default class ViewManager {
       idealFontSize: 80,
       maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
       loadManager,
-    }) //.showDebug(0.1)
+    }).showDebug(0.1)
 
     this.#view0 = new View(gl, {
       idx: 0,
@@ -34,8 +35,6 @@ export default class ViewManager {
       idx: 1,
       textureManager: this.#textureManager,
     })
-
-    this.#view1.setPosition(0, 0, -5)
 
     store.subscribe(this.onGlobalStateChange)
   }
@@ -57,12 +56,12 @@ export default class ViewManager {
       if (this.#activeViewName) {
         if (activeView !== this.#activeViewName) {
           this.setActiveView(VIEWS_DEFINITIONS[activeView].items)
-          this.resetPosZ()
+          // this.resetPosZ()
           this.#activeViewName = activeView
         }
       } else {
         this.setActiveView(VIEWS_DEFINITIONS[activeView].items)
-        this.resetPosZ()
+        // this.resetPosZ()
         this.#activeViewName = activeView
       }
     }
@@ -83,41 +82,48 @@ export default class ViewManager {
   }
 
   setActiveView = (viewDefiniton: Object) => {
-    if (this.#activeView != null) {
-      this.#activeView = this.#activeView === 0 ? 1 : 0
-      const temp = this.#view0
-      this.#view0 = this.#view1
-      this.#view1 = temp
-    } else {
-      this.#activeView = 0
-    }
     const oldViewDefinition = this.#viewDefinition
-    if (this.#activeView === 0) {
-      this.#view0.setView(viewDefiniton)
-      if (oldViewDefinition) {
-        this.#view1.setView(oldViewDefinition)
-      }
-    } else {
-      this.#view1.setView(viewDefiniton)
-      if (oldViewDefinition) {
-        this.#view0.setView(oldViewDefinition)
-      }
-    }
+    this.#view0.setView(oldViewDefinition || viewDefiniton)
+    this.#view1.setView(viewDefiniton)
+
+    Promise.all([this.#view0.transitionOut(), this.#view1.transitionIn()])
+
+    // if (this.#activeView != null) {
+    //   // this.#activeView = this.#activeView === 0 ? 1 : 0
+    //   const temp = this.#view0
+    //   this.#view0 = this.#view1
+    //   this.#view1 = temp
+    // } else {
+    //   // this.#activeView = 0
+    // }
+
+    // if (this.#activeView === 0) {
+    //   this.#view0.setView(viewDefiniton)
+    //   if (oldViewDefinition) {
+    //     this.#view1.setView(oldViewDefinition)
+    //   }
+    // } else {
+    //   this.#view1.setView(viewDefiniton)
+    //   if (oldViewDefinition) {
+    //     this.#view0.setView(oldViewDefinition)
+    //   }
+    // }
+
     this.#viewDefinition = viewDefiniton
   }
 
   resetPosZ(): this {
-    this.#view0.resetPosZ()
-    this.#view1.resetPosZ()
+    // this.#view0.resetPosZ()
+    // this.#view1.resetPosZ()
     return this
   }
 
   updateMatrix() {
-    if (this.#activeView === 0) {
-      this.#view0.updateMatrix()
-    } else {
-      this.#view1.updateMatrix()
-    }
+    // if (this.#activeView === 0) {
+    this.#view0.updateMatrix()
+    // } else {
+    this.#view1.updateMatrix()
+    // }
   }
 
   render(
@@ -125,13 +131,13 @@ export default class ViewManager {
     renderAsSolidColor: boolean = false,
     shadowTexture: Texture = null,
   ) {
-    if (this.#activeView === 0) {
-      this.#view0.render(camera, renderAsSolidColor, shadowTexture)
-    } else {
-      this.#view1.render(camera, renderAsSolidColor, shadowTexture)
-    }
-
     const { hoverIdx } = store.getState()
     this.setHoveredIdx(hoverIdx)
+
+    // if (this.#activeView === 0) {
+    this.#view0.render(camera, renderAsSolidColor, shadowTexture)
+    // } else {
+    this.#view1.render(camera, renderAsSolidColor, shadowTexture)
+    // }
   }
 }

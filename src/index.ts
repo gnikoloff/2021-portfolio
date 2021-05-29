@@ -191,7 +191,7 @@ function onMouseClick(e) {
     // .resetPosZ()
   }
 
-  store.dispatch(setHoveredItem(null))
+  // store.dispatch(setHoveredItem(null))
 }
 
 function onMouseMove(e) {
@@ -236,11 +236,11 @@ function updateFrame(ts) {
     viewManager.render(camera, false, depthFramebuffer.depthTexture)
   }
 
-  // {
-  //   gl.activeTexture(gl.TEXTURE0)
-  //   depthFramebuffer.depthTexture.bind()
-  //   depthDebugMesh.use().setCamera(orthoCamera).draw()
-  // }
+  {
+    gl.activeTexture(gl.TEXTURE0)
+    depthFramebuffer.depthTexture.bind()
+    depthDebugMesh.use().setCamera(orthoCamera).draw()
+  }
 
   requestAnimationFrame(updateFrame)
 }

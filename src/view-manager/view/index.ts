@@ -14,6 +14,8 @@ import {
   UNIFORM_TYPE_FLOAT,
   UNIFORM_TYPE_MATRIX4X4,
   UNIFORM_TYPE_VEC3,
+  mapNumberRange,
+  clamp,
 } from '../../lib/hwoa-rang-gl/dist/esm'
 
 import store from '../../store'
@@ -47,6 +49,9 @@ export default class View {
 
   #meshes: Array<Mesh> = []
 
+  #positionsOffsets = new Float32Array(GRID_TOTAL_COUNT * 3).fill(0)
+  #scaleOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(1)
+
   #instanceMatrix = mat4.create()
   #transformVec3 = vec3.create()
 
@@ -57,6 +62,7 @@ export default class View {
 
   static posZInitial = 0
   static posZHover = GRID_STEP_Y * 0.9
+  static transitionDuration = 1000
 
   constructor(gl: WebGLRenderingContext, { idx, textureManager }) {
     this.#idx = idx
@@ -211,7 +217,7 @@ export default class View {
   }
 
   resetPosZ(): this {
-    this.#posZ = View.posZInitial
+    // this.#posZ = View.posZInitial
     return this
   }
 
@@ -222,11 +228,51 @@ export default class View {
     return this
   }
 
-  transitionOut() {
-    animate({
-      onUpdate: (v) => {},
+  transitionIn = () =>
+    new Promise((resolve) => {
+      const offsets = []
+      for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+        offsets[i] = Math.random()
+      }
+      animate({
+        duration: View.transitionDuration,
+        onUpdate: (v) => {
+          for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+            const offset = offsets[i]
+            this.#positionsOffsets[i * 3 + 2] = clamp(
+              mapNumberRange(v, offset, 1, -2, 0),
+              -2,
+              0,
+            )
+            this.#scaleOffsets[i] = v
+          }
+        },
+        onComplete: () => resolve(null),
+      })
     })
-  }
+
+  transitionOut = () =>
+    new Promise((resolve) => {
+      const offsets = []
+      for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+        offsets[i] = Math.random()
+      }
+      animate({
+        duration: View.transitionDuration,
+        onUpdate: (v) => {
+          for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+            const offset = offsets[i]
+            this.#positionsOffsets[i * 3 + 2] = clamp(
+              mapNumberRange(v, offset, 1, 0, 2),
+              0,
+              2,
+            )
+            this.#scaleOffsets[i] = 1 - v
+          }
+        },
+        onComplete: () => resolve(null),
+      })
+    })
 
   setView(viewDefiniton) {
     this.#viewDefinition = viewDefiniton
@@ -318,7 +364,7 @@ export default class View {
           onComplete: () => {
             this.#isTweeningScaleZ = false
             this.#tweenForScaleZ = null
-            store.dispatch(setHoveredItem(null))
+            // store.dispatch(setHoveredItem(null))
           },
         })
       }
@@ -341,17 +387,20 @@ export default class View {
     const { hoverItemStartX, hoverItemEndX, hoverItemY } = store.getState()
     for (let x = 0; x < GRID_COUNT_X; x++) {
       for (let y = 0; y < GRID_COUNT_Y; y++) {
-        const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2
-        const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2
-        let posz = 0
+        const i = GRID_COUNT_X * x + y
+        const posx =
+          x * GRID_STEP_X - GRID_WIDTH_X / 2 + this.#positionsOffsets[i * 3 + 0]
+        const posy =
+          y * GRID_STEP_Y - GRID_WIDTH_Y / 2 + this.#positionsOffsets[i * 3 + 1]
+        let posz = 0 + this.#positionsOffsets[i * 3 + 2]
 
         if (x >= hoverItemStartX && x < hoverItemEndX && y === hoverItemY) {
-          posz = this.#posZ
+          posz = this.#posZ + this.#positionsOffsets[i * 3 + 2]
         }
 
-        const scalex = 1
-        const scaley = 1
-        const scalez = 1
+        const scalex = this.#scaleOffsets[i]
+        const scaley = this.#scaleOffsets[i]
+        const scalez = this.#scaleOffsets[i]
         // const scalez = Math.sqrt(posx * posx + posy * posy)
 
         mat4.identity(this.#instanceMatrix)
@@ -369,8 +418,6 @@ export default class View {
           this.#instanceMatrix,
           this.#transformVec3,
         )
-
-        const i = GRID_COUNT_X * x + y
 
         this.#meshes.forEach((mesh) =>
           // @ts-ignore
@@ -404,10 +451,11 @@ export default class View {
         this.#gl.activeTexture(this.#gl.TEXTURE1)
         this.#emptyTexture.bind()
       }
-      mesh.use()
-      mesh.setCamera(camera)
-      mesh.setUniform('solidColor', UNIFORM_TYPE_FLOAT, renderAsSolidColor)
-      mesh.draw()
+      mesh
+        .use()
+        .setCamera(camera)
+        .setUniform('solidColor', UNIFORM_TYPE_FLOAT, renderAsSolidColor)
+        .draw()
     })
     return this
   }
