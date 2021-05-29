@@ -1,7 +1,8 @@
 export const SET_ACTIVE_VIEW = 'SET_ACTIVE_VIEW'
-export const setActiveView = (activeView) => ({
+export const setActiveView = (activeView, shouldPush = true) => ({
   type: SET_ACTIVE_VIEW,
   activeView,
+  shouldPush,
 })
 
 export const SET_HOVERED_ITEM = 'SET_HOVERED_ITEM'

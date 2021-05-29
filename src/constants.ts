@@ -12,3 +12,5 @@ export const DEPTH_TEXTURE_HEIGHT = 2048
 
 export const CONTENT_TYPE_TEXT = 'TEXT'
 export const CONTENT_TYPE_SPLIT_TEXT = 'TEXT_SPLIT'
+
+export const VIEW_HOME = 'home'

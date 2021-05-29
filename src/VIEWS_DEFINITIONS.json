@@ -1,566 +1,596 @@
 {
-  "Home": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "GEORGI NIKOLOV",
-      "x": 0,
-      "y": 1
-    },
-    {
-      "type": "TEXT",
-      "value": "Personal Portfolio",
-      "x": 5,
-      "y": 3,
-      "paddingLeft": 0.62
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "WORKS",
-      "x": 8,
-      "y": 6,
-      "link": "Works"
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "ABOUT",
-      "x": 8,
-      "y": 8,
-      "link": "About"
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "CONTACT",
-      "x": 7,
-      "y": 10,
-      "link": "ABOUT"
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "ARCHIVE",
-      "x": 7,
-      "y": 15,
-      "link": "https://archive.georgi-nikolov.com"
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "JOURNAL",
-      "x": 7,
-      "y": 17,
-      "link": "https://archive.georgi-nikolov.com/blog"
-    }
-  ],
-  "Works": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "BACK",
-      "x": 1,
-      "y": 1,
-      "link": "Home"
-    },
-    {
-      "type": "TEXT",
-      "value": "01.",
-      "x": 1,
-      "y": 5,
-      "paddingLeft": 0.125,
-      "fontSize": 0.8,
-      "fontFamily": "Venus Rising",
-      "opacity": 0.5
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "hwoa-rang-gl",
-      "x": 3,
-      "y": 5,
-      "link": "hwoa-rang-gl"
-    },
-    {
-      "type": "TEXT",
-      "value": "02.",
-      "x": 1,
-      "y": 7,
-      "paddingLeft": 0.125,
-      "fontSize": 0.8,
-      "fontFamily": "Venus Rising",
-      "opacity": 0.5
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "JS Anim Course",
-      "x": 3,
-      "y": 7,
-      "link": "JS Anim Course"
-    },
-    {
-      "type": "TEXT",
-      "value": "03.",
-      "x": 1,
-      "y": 9,
-      "paddingLeft": 0.125,
-      "fontSize": 0.8,
-      "fontFamily": "Venus Rising",
-      "opacity": 0.5
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "Demo web shop",
-      "x": 3,
-      "y": 9,
-      "link": "Demo web shop"
-    },
-    {
-      "type": "TEXT",
-      "value": "04.",
-      "x": 1,
-      "y": 11,
-      "paddingLeft": 0.125,
-      "fontSize": 0.8,
-      "fontFamily": "Venus Rising",
-      "opacity": 0.5
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "Demo AR Shop",
-      "x": 3,
-      "y": 11,
-      "link": "Demo AR Shop"
-    },
-    {
-      "type": "TEXT",
-      "value": "05.",
-      "x": 1,
-      "y": 13,
-      "paddingLeft": 0.125,
-      "fontSize": 0.8,
-      "fontFamily": "Venus Rising",
-      "opacity": 0.5
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "Old codesketch",
-      "x": 3,
-      "y": 13,
-      "link": "Codesketch"
-    },
-    {
-      "type": "TEXT",
-      "value": "06.",
-      "x": 1,
-      "y": 15,
-      "paddingLeft": 0.125,
-      "fontSize": 0.8,
-      "fontFamily": "Venus Rising",
-      "opacity": 0.5
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "More works",
-      "x": 3,
-      "y": 15,
-      "link": "https://archive.georgi-nikolov.com/"
-    }
-  ],
-  "About": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "BACK",
-      "x": 1,
-      "y": 1,
-      "link": "Home"
-    },
-    {
-      "type": "TEXT",
-      "value": "My name is Georgi Nikolov, a frontend developer from",
-      "x": 1,
-      "y": 3,
-      "fontSize": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "Bulgaria and I am based in Berlin, Germany.",
-      "x": 1,
-      "y": 4,
-      "fontSize": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "My daily work consists of developing tools, complex",
-      "x": 1,
-      "y": 6,
-      "fontSize": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "dashboards, consumer facing products and award winning",
-      "x": 1,
-      "y": 7,
-      "fontSize": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "websites using wide range of backends and web APIs.",
-      "x": 1,
-      "y": 8,
-      "fontSize": 0.8
-    },
-    
-    {
-      "type": "TEXT",
-      "value": "I specialize in developing rich user interfaces and graphics,",
-      "x": 1,
-      "y": 10,
-      "fontSize": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "such as websites, web apps, VR, AR and 3D visualisations and",
-      "x": 1,
-      "y": 11,
-      "fontSize": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "simulations.",
-      "x": 1,
-      "y": 12,
-      "fontSize": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "Skills:",
-      "x": 1,
-      "y": 14,
-      "fontSize": 0.8,
-      "fontFamily": "Venus Rising",
-      "opacity": 0.72
-    },
-    {
-      "type": "TEXT",
-      "value": "JS / Typescript / React / Firebase / Node.js / WebGL / GLSL / (S)CSS /",
-      "x": 1,
-      "y": 15,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "SVG / Wordpress / Photoshop / Illustrator / Animation Theory & Math",
-      "x": 1,
-      "y": 16,
-      "fontSize": 0.675,
-      "color": 0.8
-    }
-  ],
-  "hwoa-rang-gl": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "BACK",
-      "x": 1,
-      "y": 1,
-      "link": "Works",
-      "opacity": 0.75
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "OPEN",
-      "x": 14,
-      "y": 1,
-      "link": "https://gnikoloff.github.io/hwoa-rang-gl/"
-    },
-    {
-      "type": "IMAGE",
-      "value": "assets/works/hwoa-rang-gl-preview.png",
-      "x": 0,
-      "y": 3,
-      "width": 19,
-      "height": 12
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "hwoa-rang-gl",
-      "x": 1,
-      "y": 13,
-      "fontSize": 0.9
-    },
-    {
-      "type": "TEXT",
-      "value": "I developed a lightweight WebGL library in Typescript for personal use",
-      "x": 1,
-      "y": 14,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "and my work, along with documentation, examples and tutorials for it",
-      "x": 1,
-      "y": 15,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "I used it to develop the graphics powering this website.",
-      "x": 1,
-      "y": 16,
-      "fontSize": 0.675,
-      "color": 0.8
-    }
-  ],
-  "JS Anim Course": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "BACK",
-      "x": 1,
-      "y": 1,
-      "link": "Works",
-      "opacity": 0.75
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "OPEN",
-      "x": 14,
-      "y": 1,
-      "link": "https://www.awwwards.com/academy/course/dynamically-scripted-animations-with-javascript"
-    },
-    {
-      "type": "IMAGE",
-      "value": "assets/works/awwwwards-course-preview.png",
-      "x": 0,
-      "y": 3,
-      "width": 19,
-      "height": 12
-    },
-    {
-      "type": "TEXT",
-      "value": "JS Animation Course",
-      "x": 1,
-      "y": 13,
-      "fontSize": 0.9,
-      "fontFamily": "Venus Rising",
-      "letterSpacing": 10
-    },
-    {
-      "type": "TEXT",
-      "value": "I made a video course for AWWWARDS for creating dynamic animation",
-      "x": 1,
-      "y": 14,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "and physics based motion with Javascript using the HTML5 canvas.",
-      "x": 1,
-      "y": 15,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "It covers basic trigonometry, velocity & acceleration, easing, springing",
-      "x": 1,
-      "y": 16,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "and collision detection.",
-      "x": 1,
-      "y": 17,
-      "fontSize": 0.675,
-      "color": 0.8
-    }
-  ],
-  "Demo web shop": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "BACK",
-      "x": 1,
-      "y": 1,
-      "link": "Works",
-      "opacity": 0.75
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "OPEN",
-      "x": 14,
-      "y": 1,
-      "link": "https://acrnm-product-explorer.vercel.app/"
-    },
-    {
-      "type": "IMAGE",
-      "value": "assets/works/acronym-preview.png",
-      "x": 0,
-      "y": 3,
-      "width": 19,
-      "height": 12
-    },
-    {
-      "type": "TEXT",
-      "value": "Demo web shop",
-      "x": 1,
-      "y": 13,
-      "fontSize": 0.9,
-      "fontFamily": "Venus Rising",
-      "letterSpacing": 10
-    },
-    {
-      "type": "TEXT",
-      "value": "I used THREE.js and GLSL for the layout, sliders, cursor and loader of the",
-      "x": 1,
-      "y": 14,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "website. The rest is built using vanilla JS for DOM manipulation and the",
-      "x": 1,
-      "y": 15,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "popmotion animation library for advanced animation playback.",
-      "x": 1,
-      "y": 16,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "NOTE * All materials and product specs belong to Acronym GmbH",
-      "x": 1,
-      "y": 17,
-      "fontSize": 0.675,
-      "color": 0.8
-    }
-  ],
-  "Codesketch": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "BACK",
-      "x": 1,
-      "y": 1,
-      "link": "Works",
-      "opacity": 0.75
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "OPEN",
-      "x": 14,
-      "y": 1,
-      "link": "https://codesketch.georgi-nikolov.com/"
-    },
-    {
-      "type": "IMAGE",
-      "value": "assets/works/codesketch-preview.png",
-      "x": 0,
-      "y": 3,
-      "width": 19,
-      "height": 12
-    },
-    {
-      "type": "TEXT",
-      "value": "Codesketch",
-      "x": 1,
-      "y": 13,
-      "fontSize": 0.9,
-      "fontFamily": "Venus Rising",
-      "letterSpacing": 10
-    },
-    {
-      "type": "TEXT",
-      "value": "I made this interactive showcase of my CodePen collection using drag",
-      "x": 1,
-      "y": 14,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "interactions and CSS3D for the layout and WebGL & canvas2d for the",
-      "x": 1,
-      "y": 15,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "animations. I used this as a tool to explore motion principles and math.",
-      "x": 1,
-      "y": 16,
-      "fontSize": 0.675,
-      "color": 0.8
-    }
-  ],
-  "Demo AR Shop": [
-    {
-      "type": "TEXT_SPLIT",
-      "value": "BACK",
-      "x": 1,
-      "y": 1,
-      "link": "Works",
-      "opacity": 0.75
-    },
-    {
-      "type": "TEXT_SPLIT",
-      "value": "OPEN",
-      "x": 14,
-      "y": 1,
-      "link": "https://archive.georgi-nikolov.com/project/web-ar-furniture-demo"
-    },
-    {
-      "type": "IMAGE",
-      "value": "assets/works/web-ar-demo-preview.png",
-      "x": 0,
-      "y": 3,
-      "width": 19,
-      "height": 12
-    },
-    {
-      "type": "TEXT",
-      "value": "Web AR Demo Shop",
-      "x": 1,
-      "y": 13,
-      "fontSize": 0.9,
-      "fontFamily": "Venus Rising",
-      "letterSpacing": 10
-    },
-    {
-      "type": "TEXT",
-      "value": "I developed this AR demo shop for Apple Quick Look and ARCore during",
-      "x": 1,
-      "y": 14,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "the first COVID quarantine here in Berlin.",
-      "x": 1,
-      "y": 15,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "It lets you easily preview furniture in Augmented Reality and gracefully",
-      "x": 1,
-      "y": 16,
-      "fontSize": 0.675,
-      "color": 0.8
-    },
-    {
-      "type": "TEXT",
-      "value": "fallbacks to regular 3D using WebGL if your device does not have AR.",
-      "x": 1,
-      "y": 17,
-      "fontSize": 0.675,
-      "color": 0.8
-    }
-  ]
+  "home": {
+    "label": "Home",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "GEORGI NIKOLOV",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "type": "TEXT",
+        "value": "Personal Portfolio",
+        "x": 5,
+        "y": 3,
+        "paddingLeft": 0.62
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "WORKS",
+        "x": 8,
+        "y": 6,
+        "link": "works"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "ABOUT",
+        "x": 8,
+        "y": 8,
+        "link": "about"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "CONTACT",
+        "x": 7,
+        "y": 10,
+        "link": "about"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "ARCHIVE",
+        "x": 7,
+        "y": 15,
+        "link": "https://archive.georgi-nikolov.com"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "JOURNAL",
+        "x": 7,
+        "y": 17,
+        "link": "https://archive.georgi-nikolov.com/blog"
+      }
+    ]
+  },
+  "works": {
+    "label": "Works",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "home"
+      },
+      {
+        "type": "TEXT",
+        "value": "01.",
+        "x": 1,
+        "y": 5,
+        "paddingLeft": 0.125,
+        "fontSize": 0.8,
+        "fontFamily": "Venus Rising",
+        "opacity": 0.5
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "hwoa-rang-gl",
+        "x": 3,
+        "y": 5,
+        "link": "hwoa-rang-gl"
+      },
+      {
+        "type": "TEXT",
+        "value": "02.",
+        "x": 1,
+        "y": 7,
+        "paddingLeft": 0.125,
+        "fontSize": 0.8,
+        "fontFamily": "Venus Rising",
+        "opacity": 0.5
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "JS Anim Course",
+        "x": 3,
+        "y": 7,
+        "link": "awwwards-js-animation-course"
+      },
+      {
+        "type": "TEXT",
+        "value": "03.",
+        "x": 1,
+        "y": 9,
+        "paddingLeft": 0.125,
+        "fontSize": 0.8,
+        "fontFamily": "Venus Rising",
+        "opacity": 0.5
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "Demo web shop",
+        "x": 3,
+        "y": 9,
+        "link": "demo-web-shop"
+      },
+      {
+        "type": "TEXT",
+        "value": "04.",
+        "x": 1,
+        "y": 11,
+        "paddingLeft": 0.125,
+        "fontSize": 0.8,
+        "fontFamily": "Venus Rising",
+        "opacity": 0.5
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "Demo AR Shop",
+        "x": 3,
+        "y": 11,
+        "link": "demo-ar-shop"
+      },
+      {
+        "type": "TEXT",
+        "value": "05.",
+        "x": 1,
+        "y": 13,
+        "paddingLeft": 0.125,
+        "fontSize": 0.8,
+        "fontFamily": "Venus Rising",
+        "opacity": 0.5
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "Codesketch",
+        "x": 3,
+        "y": 13,
+        "link": "codesketch"
+      },
+      {
+        "type": "TEXT",
+        "value": "06.",
+        "x": 1,
+        "y": 15,
+        "paddingLeft": 0.125,
+        "fontSize": 0.8,
+        "fontFamily": "Venus Rising",
+        "opacity": 0.5
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "More works",
+        "x": 3,
+        "y": 15,
+        "link": "https://archive.georgi-nikolov.com/"
+      }
+    ]
+  },
+  "about": {
+    "label": "About",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "home"
+      },
+      {
+        "type": "TEXT",
+        "value": "My name is Georgi Nikolov, a frontend developer from",
+        "x": 1,
+        "y": 3,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "Bulgaria and I am based in Berlin, Germany.",
+        "x": 1,
+        "y": 4,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "My daily work consists of developing tools, complex",
+        "x": 1,
+        "y": 6,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "dashboards, consumer facing products and award winning",
+        "x": 1,
+        "y": 7,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "websites using wide range of backends and web APIs.",
+        "x": 1,
+        "y": 8,
+        "fontSize": 0.8
+      },
+      
+      {
+        "type": "TEXT",
+        "value": "I specialize in developing rich user interfaces and graphics,",
+        "x": 1,
+        "y": 10,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "such as websites, web apps, VR, AR and 3D visualisations and",
+        "x": 1,
+        "y": 11,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "simulations.",
+        "x": 1,
+        "y": 12,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "Skills:",
+        "x": 1,
+        "y": 14,
+        "fontSize": 0.8,
+        "fontFamily": "Venus Rising",
+        "opacity": 0.72
+      },
+      {
+        "type": "TEXT",
+        "value": "JS / Typescript / React / Firebase / Node.js / WebGL / GLSL / (S)CSS /",
+        "x": 1,
+        "y": 15,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "SVG / Wordpress / Photoshop / Illustrator / Animation Theory & Math",
+        "x": 1,
+        "y": 16,
+        "fontSize": 0.675,
+        "color": 0.8
+      }
+    ]
+  },
+  "hwoa-rang-gl": {
+    "label": "hwoa-rang-gl",
+    "slug": "hwoa-rang-gl",
+    "parent": "works",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "works",
+        "opacity": 0.75
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "OPEN",
+        "x": 14,
+        "y": 1,
+        "link": "https://gnikoloff.github.io/hwoa-rang-gl/"
+      },
+      {
+        "type": "IMAGE",
+        "value": "assets/works/hwoa-rang-gl-preview.png",
+        "x": 0,
+        "y": 3,
+        "width": 19,
+        "height": 12
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "hwoa-rang-gl",
+        "x": 1,
+        "y": 13,
+        "fontSize": 0.9
+      },
+      {
+        "type": "TEXT",
+        "value": "I developed a lightweight WebGL library in Typescript for personal use",
+        "x": 1,
+        "y": 14,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "and my work, along with documentation, examples and tutorials for it",
+        "x": 1,
+        "y": 15,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "I used it to develop the graphics powering this website.",
+        "x": 1,
+        "y": 16,
+        "fontSize": 0.675,
+        "color": 0.8
+      }
+    ]
+  },
+  "awwwards-js-animation-course": {
+    "label": "JS Anim course",
+    "parent": "works",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "works",
+        "opacity": 0.75
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "OPEN",
+        "x": 14,
+        "y": 1,
+        "link": "https://www.awwwards.com/academy/course/dynamically-scripted-animations-with-javascript"
+      },
+      {
+        "type": "IMAGE",
+        "value": "assets/works/awwwwards-course-preview.png",
+        "x": 0,
+        "y": 3,
+        "width": 19,
+        "height": 12
+      },
+      {
+        "type": "TEXT",
+        "value": "JS Animation Course",
+        "x": 1,
+        "y": 13,
+        "fontSize": 0.9,
+        "fontFamily": "Venus Rising",
+        "letterSpacing": 10
+      },
+      {
+        "type": "TEXT",
+        "value": "I made a video course for AWWWARDS for creating dynamic animation",
+        "x": 1,
+        "y": 14,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "and physics based motion with Javascript using the HTML5 canvas.",
+        "x": 1,
+        "y": 15,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "It covers basic trigonometry, velocity & acceleration, easing, springing",
+        "x": 1,
+        "y": 16,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "and collision detection.",
+        "x": 1,
+        "y": 17,
+        "fontSize": 0.675,
+        "color": 0.8
+      }
+    ]
+  },
+  "demo-web-shop": {
+    "label": "Demo Web Shop",
+    "parent": "works",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "works",
+        "opacity": 0.75
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "OPEN",
+        "x": 14,
+        "y": 1,
+        "link": "https://acrnm-product-explorer.vercel.app/"
+      },
+      {
+        "type": "IMAGE",
+        "value": "assets/works/acronym-preview.png",
+        "x": 0,
+        "y": 3,
+        "width": 19,
+        "height": 12
+      },
+      {
+        "type": "TEXT",
+        "value": "Demo web shop",
+        "x": 1,
+        "y": 13,
+        "fontSize": 0.9,
+        "fontFamily": "Venus Rising",
+        "letterSpacing": 10
+      },
+      {
+        "type": "TEXT",
+        "value": "I used THREE.js and GLSL for the layout, sliders, cursor and loader of the",
+        "x": 1,
+        "y": 14,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "website. The rest is built using vanilla JS for DOM manipulation and the",
+        "x": 1,
+        "y": 15,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "popmotion animation library for advanced animation playback.",
+        "x": 1,
+        "y": 16,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "NOTE * All materials and product specs belong to Acronym GmbH",
+        "x": 1,
+        "y": 17,
+        "fontSize": 0.675,
+        "color": 0.8
+      }
+    ]
+  },
+  "codesketch": {
+    "label": "Codesketch",
+    "parent": "works",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "works",
+        "opacity": 0.75
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "OPEN",
+        "x": 14,
+        "y": 1,
+        "link": "https://codesketch.georgi-nikolov.com/"
+      },
+      {
+        "type": "IMAGE",
+        "value": "assets/works/codesketch-preview.png",
+        "x": 0,
+        "y": 3,
+        "width": 19,
+        "height": 12
+      },
+      {
+        "type": "TEXT",
+        "value": "Codesketch",
+        "x": 1,
+        "y": 13,
+        "fontSize": 0.9,
+        "fontFamily": "Venus Rising",
+        "letterSpacing": 10
+      },
+      {
+        "type": "TEXT",
+        "value": "I made this interactive showcase of my CodePen collection using drag",
+        "x": 1,
+        "y": 14,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "interactions and CSS3D for the layout and WebGL & canvas2d for the",
+        "x": 1,
+        "y": 15,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "animations. I used this as a tool to explore motion principles and math.",
+        "x": 1,
+        "y": 16,
+        "fontSize": 0.675,
+        "color": 0.8
+      }
+    ]
+  },
+  "demo-ar-shop": {
+    "label": "Demo AR Shop",
+    "parent": "works",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "works",
+        "opacity": 0.75
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "OPEN",
+        "x": 14,
+        "y": 1,
+        "link": "https://archive.georgi-nikolov.com/project/web-ar-furniture-demo"
+      },
+      {
+        "type": "IMAGE",
+        "value": "assets/works/web-ar-demo-preview.png",
+        "x": 0,
+        "y": 3,
+        "width": 19,
+        "height": 12
+      },
+      {
+        "type": "TEXT",
+        "value": "Web AR Demo Shop",
+        "x": 1,
+        "y": 13,
+        "fontSize": 0.9,
+        "fontFamily": "Venus Rising",
+        "letterSpacing": 10
+      },
+      {
+        "type": "TEXT",
+        "value": "I developed this AR demo shop for Apple Quick Look and ARCore during",
+        "x": 1,
+        "y": 14,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "the first COVID quarantine here in Berlin.",
+        "x": 1,
+        "y": 15,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "It lets you easily preview furniture in Augmented Reality and gracefully",
+        "x": 1,
+        "y": 16,
+        "fontSize": 0.675,
+        "color": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "fallbacks to regular 3D using WebGL if your device does not have AR.",
+        "x": 1,
+        "y": 17,
+        "fontSize": 0.675,
+        "color": 0.8
+      }
+    ]
+  }
 }

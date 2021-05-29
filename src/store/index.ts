@@ -1,6 +1,9 @@
 import { createStore } from 'redux'
+import { VIEW_HOME } from '../constants'
 
 import * as actions from './actions'
+
+import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
 
 const initialState = {
   activeView: null,
@@ -30,9 +33,25 @@ const initialState = {
 const appState = (state = initialState, action) => {
   switch (action.type) {
     case actions.SET_ACTIVE_VIEW: {
+      const { activeView, shouldPush } = action
+      const { label } = VIEWS_DEFINITIONS[activeView]
+      if (activeView === VIEW_HOME) {
+        document.title = `Georgi Nikolov`
+        if (shouldPush) {
+          history.pushState({}, '', '/')
+        }
+      } else {
+        document.title = `${label} - Georgi Nikolov`
+        if (shouldPush) {
+          const slug = activeView
+          const { parent } = VIEWS_DEFINITIONS[activeView]
+          history.pushState({}, '', `${parent ? `/${parent}` : ''}/${slug}`)
+        }
+      }
+
       return {
         ...state,
-        activeView: action.activeView,
+        activeView,
       }
     }
 

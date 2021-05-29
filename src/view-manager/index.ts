@@ -56,12 +56,12 @@ export default class ViewManager {
     if (activeView) {
       if (this.#activeViewName) {
         if (activeView !== this.#activeViewName) {
-          this.setActiveView(VIEWS_DEFINITIONS[activeView])
+          this.setActiveView(VIEWS_DEFINITIONS[activeView].items)
           this.resetPosZ()
           this.#activeViewName = activeView
         }
       } else {
-        this.setActiveView(VIEWS_DEFINITIONS[activeView])
+        this.setActiveView(VIEWS_DEFINITIONS[activeView].items)
         this.resetPosZ()
         this.#activeViewName = activeView
       }

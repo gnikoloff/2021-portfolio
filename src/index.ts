@@ -19,7 +19,11 @@ import LightingManager from './lighting-manager'
 
 import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
-import { DEPTH_TEXTURE_WIDTH, DEPTH_TEXTURE_HEIGHT } from './constants'
+import {
+  DEPTH_TEXTURE_WIDTH,
+  DEPTH_TEXTURE_HEIGHT,
+  VIEW_HOME,
+} from './constants'
 
 import './index.css'
 
@@ -78,7 +82,10 @@ const orthoCamera = new OrthographicCamera(
 
 new CameraController(camera, document.body, true)
 
-store.dispatch(setActiveView('Home'))
+{
+  const viewName = getActiveViewFromURL()
+  store.dispatch(setActiveView(viewName))
+}
 
 let depthDebugMesh
 {
@@ -157,13 +164,17 @@ extractAllImageUrlsFromViews().forEach(({ value: url }) => {
   })
 })
 
-loadManager.load()
-
-sizeCanvas()
-
 document.body.appendChild(canvas)
 document.body.addEventListener('click', onMouseClick)
 document.body.addEventListener('mousemove', onMouseMove)
+
+window.onpopstate = (e) => {
+  const viewName = getActiveViewFromURL()
+  store.dispatch(setActiveView(viewName, false))
+}
+
+loadManager.load()
+sizeCanvas()
 requestAnimationFrame(updateFrame)
 
 function onMouseClick(e) {
@@ -237,7 +248,9 @@ function updateFrame(ts) {
 function extractAllImageUrlsFromViews(): Array<{ value: string }> {
   const allImagesInProject = []
   for (const view of Object.values(VIEWS_DEFINITIONS)) {
-    const images = (view as Array<any>).filter(({ type }) => type === 'IMAGE')
+    const images = (view.items as Array<any>).filter(
+      ({ type }) => type === 'IMAGE',
+    )
     allImagesInProject.push(...images)
   }
   return allImagesInProject
@@ -248,4 +261,13 @@ function sizeCanvas() {
   canvas.height = innerHeight * dpr
   canvas.style.setProperty('width', `${innerWidth}px`)
   canvas.style.setProperty('height', `${innerHeight}px`)
+}
+
+function getActiveViewFromURL(url = location.pathname) {
+  const urlFragments = url.split('/')
+  let viewName = urlFragments[urlFragments.length - 1]
+  if (!viewName) {
+    viewName = VIEW_HOME
+  }
+  return viewName
 }
