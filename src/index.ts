@@ -12,54 +12,25 @@ import {
 import store from './store'
 import { setActiveView, setHoveredItem } from './store/actions'
 
-import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
-
 import ResourceManager from './resource-manager'
 import ViewManager from './view-manager'
 import HoverManager from './hover-manager'
 import LightingManager from './lighting-manager'
 
+import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
+
+import { DEPTH_TEXTURE_WIDTH, DEPTH_TEXTURE_HEIGHT } from './constants'
+
 import './index.css'
 
-const loadManager = new ResourceManager()
-
-let allImagesInProject = []
-for (const [key, view] of Object.entries(VIEWS_DEFINITIONS)) {
-  const images = (view as Array<any>).filter(({ type }) => type === 'IMAGE')
-  allImagesInProject.push(...images)
-}
-
-loadManager
-  .addFontResource({
-    type: ResourceManager.FONT_FACE,
-    name: 'Venus Rising',
-    weight: 400,
-    style: 'normal',
-  })
-  .addFontResource({
-    type: ResourceManager.FONT_GOOGLE,
-    name: 'Noto Sans JP',
-    weight: 400,
-    style: 'normal',
-  })
-allImagesInProject.forEach(({ value: url }) => {
-  loadManager
-    .addImageResource(url, {
-      type: ResourceManager.IMAGE,
-    })
-    .load()
-})
-
-const DEPTH_TEXTURE_WIDTH = 2048
-const DEPTH_TEXTURE_HEIGHT = 2048
-
-store.dispatch(setActiveView('home'))
+// ------------------------------------------------
 
 const dpr = Math.min(2.5, devicePixelRatio)
 const mousePosition = { x: -1000, y: -1000 }
 const canvas = document.createElement('canvas')
 const gl = canvas.getContext('webgl')
 
+const loadManager = new ResourceManager()
 const hoverManager = new HoverManager(gl, {})
 const viewManager = new ViewManager(gl, {
   loadManager,
@@ -71,11 +42,7 @@ const depthFramebuffer = new Framebuffer(gl, {
   useDepthRenderBuffer: false,
 })
 
-canvas.width = innerWidth * dpr
-canvas.height = innerHeight * dpr
-canvas.style.setProperty('width', `${innerWidth}px`)
-canvas.style.setProperty('height', `${innerHeight}px`)
-document.body.appendChild(canvas)
+const lightingManager = new LightingManager()
 
 const camera = new PerspectiveCamera(
   (45 * Math.PI) / 180,
@@ -83,23 +50,6 @@ const camera = new PerspectiveCamera(
   0.1,
   100,
 )
-
-{
-  const { cameraX, cameraY, cameraZ } = store.getState()
-  camera.position = [cameraX, cameraY, cameraZ]
-  camera.lookAt([0, 0, 0])
-}
-
-const lightingManager = new LightingManager()
-{
-  const { lightX, lightY, lightZ } = store.getState()
-  lightingManager.position = [lightX, lightY, lightZ]
-}
-
-const shadowTextureMatrix = lightingManager.getShadowTextureMatrix()
-
-viewManager.setShadowTextureMatrix(shadowTextureMatrix)
-
 const orthoCamera = new OrthographicCamera(
   -innerWidth / 2,
   innerWidth / 2,
@@ -108,8 +58,27 @@ const orthoCamera = new OrthographicCamera(
   0.1,
   4,
 )
-orthoCamera.position = [0, 0, 2]
-orthoCamera.lookAt([0, 0, 0])
+
+{
+  const { cameraX, cameraY, cameraZ } = store.getState()
+  camera.position = [cameraX, cameraY, cameraZ]
+  camera.lookAt([0, 0, 0])
+}
+
+{
+  orthoCamera.position = [0, 0, 2]
+  orthoCamera.lookAt([0, 0, 0])
+}
+
+{
+  const { lightX, lightY, lightZ } = store.getState()
+  lightingManager.position = [lightX, lightY, lightZ]
+  lightingManager.computeShadowTextureMatrix()
+}
+
+new CameraController(camera, document.body, true)
+
+store.dispatch(setActiveView('Home'))
 
 let depthDebugMesh
 {
@@ -168,10 +137,31 @@ let depthDebugMesh
   })
 }
 
-new CameraController(camera, document.body, true)
+loadManager
+  .addFontResource({
+    type: ResourceManager.FONT_FACE,
+    name: 'Venus Rising',
+    weight: 400,
+    style: 'normal',
+  })
+  .addFontResource({
+    type: ResourceManager.FONT_GOOGLE,
+    name: 'Noto Sans JP',
+    weight: 400,
+    style: 'normal',
+  })
 
-viewManager.setActiveView(VIEWS_DEFINITIONS['Home'])
+extractAllImageUrlsFromViews().forEach(({ value: url }) => {
+  loadManager.addImageResource(url, {
+    type: ResourceManager.IMAGE,
+  })
+})
 
+loadManager.load()
+
+sizeCanvas()
+
+document.body.appendChild(canvas)
 document.body.addEventListener('click', onMouseClick)
 document.body.addEventListener('mousemove', onMouseMove)
 requestAnimationFrame(updateFrame)
@@ -185,7 +175,9 @@ function onMouseClick(e) {
   if (hoveredItem.startsWith('https')) {
     window.open(hoveredItem, '_blank')
   } else {
-    viewManager.setActiveView(VIEWS_DEFINITIONS[hoveredItem]).resetPosZ()
+    store.dispatch(setActiveView(hoveredItem))
+    // viewManager.setActiveView(VIEWS_DEFINITIONS[hoveredItem])
+    // .resetPosZ()
   }
 
   store.dispatch(setHoveredItem(null))
@@ -240,4 +232,20 @@ function updateFrame(ts) {
   // }
 
   requestAnimationFrame(updateFrame)
+}
+
+function extractAllImageUrlsFromViews(): Array<{ value: string }> {
+  const allImagesInProject = []
+  for (const view of Object.values(VIEWS_DEFINITIONS)) {
+    const images = (view as Array<any>).filter(({ type }) => type === 'IMAGE')
+    allImagesInProject.push(...images)
+  }
+  return allImagesInProject
+}
+
+function sizeCanvas() {
+  canvas.width = innerWidth * dpr
+  canvas.height = innerHeight * dpr
+  canvas.style.setProperty('width', `${innerWidth}px`)
+  canvas.style.setProperty('height', `${innerHeight}px`)
 }

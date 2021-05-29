@@ -1,5 +1,8 @@
 import { mat4, ReadonlyMat4, ReadonlyVec3, vec3 } from 'gl-matrix'
 
+import store from './store'
+import { setShadowTextureMatrix } from './store/actions'
+
 export default class LightingManager {
   static UP_VECTOR: ReadonlyVec3 = [0, 1, 0]
 
@@ -29,7 +32,7 @@ export default class LightingManager {
     this.shadowFar = shadowFar
   }
 
-  getShadowTextureMatrix(): ReadonlyMat4 {
+  computeShadowTextureMatrix() {
     const position = vec3.fromValues(
       this.position[0],
       this.position[1],
@@ -81,6 +84,6 @@ export default class LightingManager {
       this.shadowTextureMatrix,
       this.shadowTextureWorldMatrixInv,
     )
-    return this.shadowTextureMatrix
+    store.dispatch(setShadowTextureMatrix(this.shadowTextureMatrix))
   }
 }

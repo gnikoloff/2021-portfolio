@@ -19,6 +19,8 @@ const initialState = {
   pointLightSpecularColor: [0, 0, 1],
   pointLightSpecularFactor: 0.5,
 
+  shadowTextureMatrix: null,
+
   hoverIdx: -1,
   hoverItemStartX: -1,
   hoverItemEndX: -1,
@@ -101,6 +103,13 @@ const appState = (state = initialState, action) => {
       return {
         ...state,
         pointLightSpecularFactor: action.pointLightSpecularFactor,
+      }
+    }
+
+    case actions.SET_SHADOW_TEXTURE_MATRIX: {
+      return {
+        ...state,
+        shadowTextureMatrix: action.shadowTextureMatrix,
       }
     }
 

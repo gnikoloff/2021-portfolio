@@ -93,3 +93,9 @@ export const setPointLightSpecularFactor = (pointLightSpecularFactor) => ({
   type: SET_POINT_LIGHT_SPECULAR_FACTOR,
   pointLightSpecularFactor,
 })
+
+export const SET_SHADOW_TEXTURE_MATRIX = 'SET_SHADOW_TEXTURE_MATRIX'
+export const setShadowTextureMatrix = (shadowTextureMatrix) => ({
+  type: SET_SHADOW_TEXTURE_MATRIX,
+  shadowTextureMatrix,
+})

@@ -1,11 +1,13 @@
 // import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
 
-import { ReadonlyMat4 } from 'gl-matrix'
+import { mat4, ReadonlyMat4 } from 'gl-matrix'
 import { PerspectiveCamera, Texture } from '../lib/hwoa-rang-gl/dist/esm'
 import store from '../store'
 
 import TextureManager from '../texture-manager'
 import View from './view'
+
+import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
 
 export default class ViewManager {
   #view0: View
@@ -13,6 +15,8 @@ export default class ViewManager {
   #activeView: number
   #textureManager: TextureManager
   #viewDefinition
+  #shadowTextureMatrix: mat4
+  #activeViewName
 
   constructor(gl, { loadManager }) {
     this.#textureManager = new TextureManager({
@@ -32,6 +36,8 @@ export default class ViewManager {
     })
 
     this.#view1.setPosition(0, 0, -5)
+
+    store.subscribe(this.onGlobalStateChange)
   }
 
   private setHoveredIdx(hoveredIdx: number) {
@@ -43,13 +49,40 @@ export default class ViewManager {
     return this
   }
 
-  resetPosZ(): this {
-    this.#view0.resetPosZ()
-    this.#view1.resetPosZ()
-    return this
+  private onGlobalStateChange = () => {
+    const state = store.getState()
+    const { activeView, shadowTextureMatrix } = state
+
+    if (activeView) {
+      if (this.#activeViewName) {
+        if (activeView !== this.#activeViewName) {
+          this.setActiveView(VIEWS_DEFINITIONS[activeView])
+          this.resetPosZ()
+          this.#activeViewName = activeView
+        }
+      } else {
+        this.setActiveView(VIEWS_DEFINITIONS[activeView])
+        this.resetPosZ()
+        this.#activeViewName = activeView
+      }
+    }
+
+    if (shadowTextureMatrix) {
+      if (this.#shadowTextureMatrix) {
+        if (!mat4.equals(shadowTextureMatrix, this.#shadowTextureMatrix)) {
+          this.#view0.setShadowTextureMatrix(shadowTextureMatrix)
+          this.#view1.setShadowTextureMatrix(shadowTextureMatrix)
+          this.#shadowTextureMatrix = shadowTextureMatrix
+        }
+      } else {
+        this.#view0.setShadowTextureMatrix(shadowTextureMatrix)
+        this.#view1.setShadowTextureMatrix(shadowTextureMatrix)
+        this.#shadowTextureMatrix = shadowTextureMatrix
+      }
+    }
   }
 
-  setActiveView(viewDefiniton: Object): this {
+  setActiveView = (viewDefiniton: Object) => {
     if (this.#activeView != null) {
       this.#activeView = this.#activeView === 0 ? 1 : 0
       const temp = this.#view0
@@ -71,6 +104,11 @@ export default class ViewManager {
       }
     }
     this.#viewDefinition = viewDefiniton
+  }
+
+  resetPosZ(): this {
+    this.#view0.resetPosZ()
+    this.#view1.resetPosZ()
     return this
   }
 
@@ -80,11 +118,6 @@ export default class ViewManager {
     } else {
       this.#view1.updateMatrix()
     }
-  }
-
-  setShadowTextureMatrix(shadowTextureMatrix: ReadonlyMat4) {
-    this.#view0.setShadowTextureMatrix(shadowTextureMatrix)
-    this.#view1.setShadowTextureMatrix(shadowTextureMatrix)
   }
 
   render(
