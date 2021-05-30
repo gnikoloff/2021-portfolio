@@ -23,6 +23,7 @@ import {
 
 import './index.css'
 import { animate, anticipate, circIn } from 'popmotion'
+import TextureManager from './texture-manager'
 
 // ------------------------------------------------
 
@@ -124,18 +125,17 @@ store.subscribe(() => {
 loadManager
   .addFontResource({
     type: ResourceManager.FONT_FACE,
-    name: 'Venus Rising',
-    weight: 400,
-    style: 'normal',
+    name: TextureManager.DEFAULT_HEADING_FONT_FAMILY,
+    weight: TextureManager.FONT_WEIGHT_HEADING,
+    style: TextureManager.FONT_STYLE,
   })
-  .addArtificialDelay(250)
   .addFontResource({
     type: ResourceManager.FONT_GOOGLE,
-    name: 'Noto Sans JP',
-    weight: 400,
-    style: 'normal',
+    name: TextureManager.DEFAULT_BODY_FONT_FAMILY,
+    weight: TextureManager.FONT_WEIGHT_BODY,
+    style: TextureManager.FONT_STYLE,
   })
-  .addArtificialDelay(500)
+  .addArtificialDelay(750)
 
 extractAllImageUrlsFromViews().forEach(({ value: url }, i) => {
   loadManager.addImageResource(url)

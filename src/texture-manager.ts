@@ -22,9 +22,11 @@ export default class TextureManager {
   loadManager
 
   static FILL_STYLE = 'white'
-  static FONT_WEIGHT = 400
+  static FONT_STYLE = 'normal'
+  static FONT_WEIGHT_BODY = 400
+  static FONT_WEIGHT_HEADING = 400
   static DEFAULT_HEADING_FONT_FAMILY = 'Venus Rising'
-  static DEFAULT_BODY_FONT_FAMILY = 'Noto Sans JP'
+  static DEFAULT_BODY_FONT_FAMILY = 'Space Mono'
   static DEFAULT_FONT_SIZE = 1
 
   static fitDimensions(contains) {
@@ -81,7 +83,7 @@ export default class TextureManager {
           (this.#maxSize / IDEAL_TEXTURE_SIZE) *
           (item.fontSize || 1)
 
-        const fontWeight = TextureManager.FONT_WEIGHT
+        const fontWeight = TextureManager.FONT_WEIGHT_BODY
         const fontFamily =
           item.fontFamily || TextureManager.DEFAULT_HEADING_FONT_FAMILY
 
@@ -107,7 +109,7 @@ export default class TextureManager {
           (this.#maxSize / IDEAL_TEXTURE_SIZE) *
           (item.fontSize || TextureManager.DEFAULT_FONT_SIZE)
 
-        const fontWeight = TextureManager.FONT_WEIGHT
+        const fontWeight = TextureManager.FONT_WEIGHT_BODY
         const fontFamily =
           item.fontFamily || TextureManager.DEFAULT_BODY_FONT_FAMILY
 
