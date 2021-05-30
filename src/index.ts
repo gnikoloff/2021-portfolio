@@ -1,12 +1,7 @@
 import {
   CameraController,
-  Framebuffer,
-  Geometry,
-  GeometryUtils,
-  Mesh,
   OrthographicCamera,
   PerspectiveCamera,
-  UNIFORM_TYPE_INT,
 } from './lib/hwoa-rang-gl/dist/esm'
 
 import store from './store'
@@ -106,7 +101,6 @@ extractAllImageUrlsFromViews().forEach(({ value: url }) => {
   })
 })
 
-document.body.appendChild(canvas)
 document.body.addEventListener('click', onMouseClick)
 document.body.addEventListener('mousemove', onMouseMove)
 
@@ -117,6 +111,7 @@ window.onpopstate = (e) => {
 
 loadManager.load()
 sizeCanvas()
+document.body.appendChild(canvas)
 requestAnimationFrame(updateFrame)
 
 function onMouseClick(e) {
@@ -129,8 +124,6 @@ function onMouseClick(e) {
     window.open(hoveredItem, '_blank')
   } else {
     store.dispatch(setActiveView(hoveredItem))
-    // viewManager.setActiveView(VIEWS_DEFINITIONS[hoveredItem])
-    // .resetPosZ()
   }
 
   // store.dispatch(setHoveredItem(null))

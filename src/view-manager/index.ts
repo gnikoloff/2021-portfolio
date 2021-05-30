@@ -1,25 +1,26 @@
-// import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
-
-import { mat4, ReadonlyMat4 } from 'gl-matrix'
+import { mat4 } from 'gl-matrix'
 import { PerspectiveCamera, Texture } from '../lib/hwoa-rang-gl/dist/esm'
 import store from '../store'
 
 import TextureManager from '../texture-manager'
+import ResourceManager from '../resource-manager'
 import View from './view'
 
 import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
-import { GRID_COUNT_X, GRID_COUNT_Y, GRID_TOTAL_COUNT } from '../constants'
 
 export default class ViewManager {
   #view0: View
   #view1: View
-  #activeView: number
   #textureManager: TextureManager
-  #viewDefinition
   #shadowTextureMatrix: mat4
-  #activeViewName
 
-  constructor(gl, { loadManager }) {
+  #viewDefinition: Object
+  #activeViewName: string
+
+  #isTransitioning = false
+  #activeViewIdx: number
+
+  constructor(gl, { loadManager }: { loadManager: ResourceManager }) {
     this.#textureManager = new TextureManager({
       idealFontSize: 80,
       maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
@@ -44,11 +45,8 @@ export default class ViewManager {
   }
 
   private setHoveredIdx(hoveredIdx: number) {
-    if (this.#activeView === 0) {
-      this.#view0.setHoveredIdx(hoveredIdx)
-    } else {
-      this.#view1.setHoveredIdx(hoveredIdx)
-    }
+    this.#view0.setHoveredIdx(hoveredIdx)
+    this.#view1.setHoveredIdx(hoveredIdx)
     return this
   }
 
@@ -87,50 +85,54 @@ export default class ViewManager {
 
   setActiveView = (viewDefiniton: Object, fadeOutLastView = true) => {
     const oldViewDefinition = this.#viewDefinition
-    this.#view0.setView(oldViewDefinition || viewDefiniton)
-    this.#view1.setView(viewDefiniton)
+    this.#view0.setView(
+      this.#activeViewIdx === 0
+        ? oldViewDefinition || viewDefiniton
+        : viewDefiniton,
+    )
+    this.#view1.setView(
+      this.#activeViewIdx === 0
+        ? viewDefiniton
+        : oldViewDefinition || viewDefiniton,
+    )
+
+    this.#isTransitioning = true
+
+    let promise
 
     if (fadeOutLastView) {
-      Promise.all([this.#view0.transitionOut(), this.#view1.transitionIn()])
+      promise = Promise.all(
+        this.#activeViewIdx === 0
+          ? [this.#view0.transitionOut(), this.#view1.transitionIn()]
+          : [this.#view0.transitionIn(), this.#view1.transitionOut()],
+      )
     } else {
-      this.#view0.transitionIn()
+      promise = this.#view0.transitionIn()
     }
-    // if (this.#activeView != null) {
-    //   // this.#activeView = this.#activeView === 0 ? 1 : 0
-    //   const temp = this.#view0
-    //   this.#view0 = this.#view1
-    //   this.#view1 = temp
-    // } else {
-    //   // this.#activeView = 0
-    // }
 
-    // if (this.#activeView === 0) {
-    //   this.#view0.setView(viewDefiniton)
-    //   if (oldViewDefinition) {
-    //     this.#view1.setView(oldViewDefinition)
-    //   }
-    // } else {
-    //   this.#view1.setView(viewDefiniton)
-    //   if (oldViewDefinition) {
-    //     this.#view0.setView(oldViewDefinition)
-    //   }
-    // }
+    promise.then(() => {
+      this.#isTransitioning = false
+      if (this.#activeViewIdx == null) {
+        this.#activeViewIdx = 0
+      } else {
+        this.#activeViewIdx = this.#activeViewIdx === 0 ? 1 : 0
+      }
+    })
 
     this.#viewDefinition = viewDefiniton
   }
 
-  resetPosZ(): this {
-    // this.#view0.resetPosZ()
-    // this.#view1.resetPosZ()
-    return this
-  }
-
   updateMatrix() {
-    // if (this.#activeView === 0) {
-    this.#view0.updateMatrix()
-    // } else {
-    this.#view1.updateMatrix()
-    // }
+    if (this.#isTransitioning) {
+      this.#view0.updateMatrix()
+      this.#view1.updateMatrix()
+    } else {
+      if (this.#activeViewIdx === 0) {
+        this.#view0.updateMatrix()
+      } else {
+        this.#view1.updateMatrix()
+      }
+    }
   }
 
   render(
@@ -140,11 +142,15 @@ export default class ViewManager {
   ) {
     const { hoverIdx } = store.getState()
     this.setHoveredIdx(hoverIdx)
-
-    // if (this.#activeView === 0) {
-    this.#view0.render(camera, renderAsSolidColor, shadowTexture)
-    // } else {
-    this.#view1.render(camera, renderAsSolidColor, shadowTexture)
-    // }
+    if (this.#isTransitioning) {
+      this.#view0.render(camera, renderAsSolidColor, shadowTexture)
+      this.#view1.render(camera, renderAsSolidColor, shadowTexture)
+    } else {
+      if (this.#activeViewIdx === 0) {
+        this.#view0.render(camera, renderAsSolidColor, shadowTexture)
+      } else {
+        this.#view1.render(camera, renderAsSolidColor, shadowTexture)
+      }
+    }
   }
 }

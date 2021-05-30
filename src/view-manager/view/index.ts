@@ -216,11 +216,6 @@ export default class View {
     })
   }
 
-  resetPosZ(): this {
-    // this.#posZ = View.posZInitial
-    return this
-  }
-
   setPosition(x = 0, y = 0, z = 0): this {
     this.#meshes.forEach((mesh) => {
       mesh.setPosition({ x, y, z })
