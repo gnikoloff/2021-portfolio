@@ -358,7 +358,7 @@ export default class View {
           onComplete: () => {
             this.#isTweeningScaleZ = false
             this.#tweenForScaleZ = null
-            // store.dispatch(setHoveredItem(null))
+            store.dispatch(setHoveredItem(null))
           },
         })
       }
