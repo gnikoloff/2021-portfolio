@@ -222,7 +222,7 @@ export default class View {
     return this
   }
 
-  transitionIn = () =>
+  transitionIn = (offsetZ: number = 0) =>
     new Promise((resolve) => {
       const offsets = []
       for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
@@ -234,8 +234,8 @@ export default class View {
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
             const offset = offsets[i]
             this.#positionsOffsets[i * 3 + 2] = clamp(
-              mapNumberRange(v, offset, 1, -4, 0),
-              -4,
+              mapNumberRange(v, offset, 1, -4 + offsetZ, 0),
+              -4 + offsetZ,
               0,
             )
             this.#scaleOffsets[i] = v

@@ -20,9 +20,9 @@ const initialState = {
   activeView: null,
   hoveredItem: null,
 
-  cameraX: 0,
-  cameraY: 0,
-  cameraZ: 16,
+  cameraX: -14,
+  cameraY: 2.5,
+  cameraZ: 7,
 
   lightX: 0,
   lightY: 3,

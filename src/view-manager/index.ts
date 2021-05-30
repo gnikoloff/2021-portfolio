@@ -113,7 +113,7 @@ export default class ViewManager {
           : [this.#view0.transitionIn(), this.#view1.transitionOut()],
       )
     } else {
-      promise = this.#view0.transitionIn()
+      promise = this.#view0.transitionIn(-4)
     }
 
     promise.then(() => {

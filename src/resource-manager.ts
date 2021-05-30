@@ -8,10 +8,12 @@ import {
 
 export default class ResourceManager {
   #resourcesMap = new Map()
+  #delayCounter = 0
 
   static FONT_FACE = 'font-woff'
   static FONT_GOOGLE = 'google-font'
   static IMAGE = 'img'
+  static ARTIFICIAL_DELAY = 'delay'
 
   static getFVD(weight: string | number, style) {
     let output = ''
@@ -86,8 +88,20 @@ export default class ResourceManager {
     return this
   }
 
-  addImageResource(imageUrl: string, resourceAux): this {
-    this.#resourcesMap.set(imageUrl, resourceAux)
+  addImageResource(imageUrl: string): this {
+    this.#resourcesMap.set(imageUrl, {
+      type: ResourceManager.IMAGE,
+    })
+    return this
+  }
+
+  addArtificialDelay(delay: number): this {
+    const key = `DELAY_${this.#delayCounter}`
+    this.#resourcesMap.set(key, {
+      type: ResourceManager.ARTIFICIAL_DELAY,
+      delay,
+    })
+    this.#delayCounter++
     return this
   }
 
@@ -113,6 +127,8 @@ export default class ResourceManager {
           entry.image = img
           return img
         })
+      } else if (entry.type === ResourceManager.ARTIFICIAL_DELAY) {
+        promise = new Promise((resolve) => setTimeout(resolve, entry.delay))
       }
       promise = promise.then((res) => {
         store.dispatch(

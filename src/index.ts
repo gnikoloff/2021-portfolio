@@ -11,6 +11,7 @@ import ResourceManager from './resource-manager'
 import ViewManager from './view-manager'
 import HoverManager from './hover-manager'
 import LightingManager from './lighting-manager'
+import LoadingScreen from './loading-screen'
 
 import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
 
@@ -21,6 +22,7 @@ import {
 } from './constants'
 
 import './index.css'
+import { animate, anticipate, circIn } from 'popmotion'
 
 // ------------------------------------------------
 
@@ -34,6 +36,8 @@ const hoverManager = new HoverManager(gl, {})
 const viewManager = new ViewManager(gl, {
   loadManager,
 })
+
+const loadScreen = new LoadingScreen(gl)
 
 const lightingManager = new LightingManager(gl)
 
@@ -72,7 +76,7 @@ const orthoCamera = new OrthographicCamera(
 {
   const { debugMode } = store.getState()
   // if (debugMode) {
-  new CameraController(camera, document.body, true)
+  // new CameraController(camera, document.body, true)
   // }
 }
 
@@ -85,6 +89,30 @@ store.subscribe(() => {
   $loader.textContent = `${Math.round(state.loadedResourcesPercentage * 100)}%`
   if (hasLoadedResources !== state.hasLoadedResources) {
     hasLoadedResources = true
+    // const { cameraX, cameraY, cameraZ } = state
+    const targetCameraX = 0
+    const targetCameraY = 0
+    const targetCameraZ = 16
+    const cameraX = camera.position[0]
+    const cameraY = camera.position[1]
+    const cameraZ = camera.position[2]
+    animate({
+      duration: 1000,
+      ease: anticipate,
+      onUpdate: (v) => {
+        // const cameraX = camera.position[0]
+        // const cameraY = camera.position[1]
+        // const cameraZ = camera.position[2]
+        const x = cameraX + (targetCameraX - cameraX) * v
+        const y = cameraY + (targetCameraY - cameraY) * v
+        const z = cameraZ + (targetCameraZ - cameraZ) * v
+        console.log({ x: y, z })
+        camera.setPosition({ x, y, z }).updateViewMatrix()
+      },
+      onComplete: () => {
+        new CameraController(camera, document.body, true)
+      },
+    })
   }
 })
 
@@ -100,17 +128,20 @@ loadManager
     weight: 400,
     style: 'normal',
   })
+  .addArtificialDelay(250)
   .addFontResource({
     type: ResourceManager.FONT_GOOGLE,
     name: 'Noto Sans JP',
     weight: 400,
     style: 'normal',
   })
+  .addArtificialDelay(500)
 
-extractAllImageUrlsFromViews().forEach(({ value: url }) => {
-  loadManager.addImageResource(url, {
-    type: ResourceManager.IMAGE,
-  })
+extractAllImageUrlsFromViews().forEach(({ value: url }, i) => {
+  loadManager.addImageResource(url)
+  if (i === 3) {
+    loadManager.addArtificialDelay(300)
+  }
 })
 
 document.body.addEventListener('click', onMouseClick)
@@ -174,6 +205,11 @@ function onMouseClick(e) {
 
 function onMouseMove(e) {
   e.preventDefault()
+  const state = store.getState()
+  const { hasLoadedResources } = state
+  if (!hasLoadedResources) {
+    return null
+  }
   mousePosition.x = e.clientX
   mousePosition.y = e.clientY
   const hoverIdx = hoverManager.determineHoveredIdx(
@@ -204,8 +240,11 @@ function updateFrame(ts) {
 
   gl.clearColor(0.8, 0.8, 0.8, 1)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
   const { hasLoadedResources } = store.getState()
+
+  loadScreen.render(camera)
 
   if (!hasLoadedResources) {
     return
