@@ -131,7 +131,7 @@ export default class HoverManager {
 
     const gl = this.#gl
 
-    const aspect = gl.canvas.width / gl.canvas.height
+    const aspect = innerWidth / innerHeight
     const top = Math.tan(fieldOfView * 0.5) * near
     const bottom = -top
     const left = aspect * bottom
@@ -139,14 +139,13 @@ export default class HoverManager {
     const width = Math.abs(right - left)
     const height = Math.abs(top - bottom)
 
-    const pixelX = (mouseX * gl.canvas.width) / gl.canvas.width
-    const pixelY =
-      gl.canvas.height - (mouseY * gl.canvas.height) / gl.canvas.height - 1
+    const pixelX = (mouseX * innerWidth) / innerWidth
+    const pixelY = innerHeight - (mouseY * innerHeight) / innerHeight - 1
 
-    const subLeft = left + (pixelX * width) / gl.canvas.width
-    const subBottom = bottom + (pixelY * height) / gl.canvas.height
-    const subWidth = 1 / gl.canvas.width
-    const subHeight = 1 / gl.canvas.height
+    const subLeft = left + (pixelX * width) / innerWidth
+    const subBottom = bottom + (pixelY * height) / innerHeight
+    const subWidth = 1 / innerWidth
+    const subHeight = 1 / innerHeight
 
     mat4.identity(this.#frustumProjectionMatrix)
 
