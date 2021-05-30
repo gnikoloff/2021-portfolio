@@ -1,5 +1,5 @@
 import { createStore } from 'redux'
-import { VIEW_HOME } from '../constants'
+import { GRID_WIDTH_X, VIEW_HOME } from '../constants'
 
 import * as actions from './actions'
 
@@ -8,6 +8,16 @@ import { isIPadOS, isMobileBrowser } from '../helpers'
 
 const isIpad = isIPadOS()
 const isMobile = isMobileBrowser()
+
+let targetCameraZ = 16
+{
+  const fov = (45 * Math.PI) / 180 // convert vertical fov to radians
+  const h = 2 * Math.tan(fov / 2) * targetCameraZ // visible height
+  const w = h * (innerWidth / innerHeight)
+  if (GRID_WIDTH_X > w) {
+    targetCameraZ *= GRID_WIDTH_X / w
+  }
+}
 
 const initialState = {
   touchDevice: isIpad || isMobile,
@@ -23,6 +33,10 @@ const initialState = {
   cameraX: -14,
   cameraY: 2.5,
   cameraZ: 7,
+
+  targetCameraX: 0,
+  targetCameraY: 0,
+  targetCameraZ,
 
   lightX: 0,
   lightY: 3,

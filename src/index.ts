@@ -99,10 +99,14 @@ store.subscribe(() => {
   $loader.textContent = `${Math.round(state.loadedResourcesPercentage * 100)}%`
   if (hasLoadedResources !== state.hasLoadedResources) {
     hasLoadedResources = true
-    const { cameraX, cameraY, cameraZ } = state
-    const targetCameraX = 0
-    const targetCameraY = 0
-    const targetCameraZ = 16
+    const {
+      targetCameraX,
+      targetCameraY,
+      targetCameraZ,
+      cameraX,
+      cameraY,
+      cameraZ,
+    } = state
     animate({
       duration: 1000,
       ease: anticipate,
