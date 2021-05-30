@@ -4,8 +4,14 @@ import { VIEW_HOME } from '../constants'
 import * as actions from './actions'
 
 import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
+import { isIPadOS, isMobileBrowser } from '../helpers'
+
+const isIpad = isIPadOS()
+const isMobile = isMobileBrowser()
 
 const initialState = {
+  touchDevice: isIpad || isMobile,
+
   debugMode: new URLSearchParams(location.search).has('debugMode'),
 
   hasLoadedResources: false,

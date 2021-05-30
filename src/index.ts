@@ -71,9 +71,9 @@ const orthoCamera = new OrthographicCamera(
 
 {
   const { debugMode } = store.getState()
-  if (debugMode) {
-    new CameraController(camera, document.body, true)
-  }
+  // if (debugMode) {
+  new CameraController(camera, document.body, true)
+  // }
 }
 
 let hasLoadedResources = false
@@ -130,49 +130,58 @@ requestAnimationFrame(updateFrame)
 
 function onMouseClick(e) {
   e.preventDefault()
-  // const { hoveredItem } = store.getState()
-  // if (!hoveredItem) {
-  //   return
-  // }
-  // if (hoveredItem.startsWith('https')) {
-  //   window.open(hoveredItem, '_blank')
-  // } else {
-  //   store.dispatch(setActiveView(hoveredItem))
-  // }
 
-  console.log('click')
+  const state = store.getState()
+  const { touchDevice } = state
 
-  const hoverIdx = hoverManager.determineHoveredIdx(
-    camera,
-    mousePosition.x,
-    mousePosition.y,
-  )
-  const linkItem = viewManager.setHoveredIdx(hoverIdx)
+  if (touchDevice) {
+    const hoverIdx = hoverManager.determineHoveredIdx(
+      camera,
+      mousePosition.x,
+      mousePosition.y,
+    )
+    const linkItem = viewManager.setHoveredIdx(hoverIdx)
 
-  if (!linkItem) {
-    return
-  }
+    if (!linkItem) {
+      return
+    }
 
-  if (linkItem.startsWith('https')) {
-    window.open(linkItem, '_blank')
+    if (linkItem.startsWith('https')) {
+      window.open(linkItem, '_blank')
+    } else {
+      store.dispatch(setActiveView(linkItem))
+    }
+
+    mousePosition.x = -2000
+    mousePosition.y = -2000
+
+    hoverManager.determineHoveredIdx(camera, mousePosition.x, mousePosition.y)
+    viewManager.setHoveredIdx(hoverIdx)
+
+    store.dispatch(setHoveredItem(null))
   } else {
-    store.dispatch(setActiveView(linkItem))
+    const { hoveredItem } = store.getState()
+    if (!hoveredItem) {
+      return
+    }
+    if (hoveredItem.startsWith('https')) {
+      window.open(hoveredItem, '_blank')
+    } else {
+      store.dispatch(setActiveView(hoveredItem))
+    }
   }
-
-  // store.dispatch(setHoveredItem(null))
 }
 
 function onMouseMove(e) {
   e.preventDefault()
-  const rect = canvas.getBoundingClientRect()
-  mousePosition.x = e.clientX - rect.left
-  mousePosition.y = e.clientY - rect.top
+  mousePosition.x = e.clientX
+  mousePosition.y = e.clientY
   const hoverIdx = hoverManager.determineHoveredIdx(
     camera,
     mousePosition.x,
     mousePosition.y,
   )
-  const linkItem = viewManager.setHoveredIdx(hoverIdx)
+  viewManager.setHoveredIdx(hoverIdx)
 }
 
 function onTouchStart(e) {
