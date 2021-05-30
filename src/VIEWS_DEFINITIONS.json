@@ -41,7 +41,7 @@
         "value": "CONTACT",
         "x": 6,
         "y": 11,
-        "link": "about"
+        "link": "contact"
       },
       {
         "type": "TEXT_SPLIT",
@@ -218,24 +218,23 @@
         "y": 8,
         "fontSize": 0.8
       },
-      
       {
         "type": "TEXT",
-        "value": "I specialize in developing rich user interfaces and graphics,",
+        "value": "Be it rich user interfaces and graphics, web apps, VR, AR and",
         "x": 1,
         "y": 10,
         "fontSize": 0.8
       },
       {
         "type": "TEXT",
-        "value": "such as websites, web apps, VR, AR and 3D visualisations and",
+        "value": "3D visualisations, I endlessly strive for the highest",
         "x": 1,
         "y": 11,
         "fontSize": 0.8
       },
       {
         "type": "TEXT",
-        "value": "simulations.",
+        "value": "possible mark. My approach is simple and iterative.",
         "x": 1,
         "y": 12,
         "fontSize": 0.8
@@ -264,6 +263,82 @@
         "y": 16,
         "fontSize": 0.675,
         "color": 0.8
+      }
+    ]
+  },
+  "contact": {
+    "label": "Contact",
+    "slug": "contact",
+    "items": [
+      {
+        "type": "TEXT_SPLIT",
+        "value": "BACK",
+        "x": 1,
+        "y": 1,
+        "link": "home"
+      },
+      {
+        "type": "TEXT",
+        "value": "I am available for freelance work, cool new projects and",
+        "x": 1,
+        "y": 4,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "possible collaborations",
+        "x": 1,
+        "y": 5,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT",
+        "value": "Get in touch and let's build groundbreaking stuff",
+        "x": 1,
+        "y": 7,
+        "fontSize": 0.8
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "mail",
+        "x": 1,
+        "y": 11,
+        "link": "mailto:nikoloffgeorgi@gmail.com"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "twitter",
+        "x": 7,
+        "y": 11,
+        "link": "https://twitter.com/georgiNikoloff"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "github",
+        "x": 1,
+        "y": 13,
+        "link": "https://github.com/gnikoloff"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "codepen",
+        "x": 9,
+        "y": 13,
+        "link": "https://codepen.io/gbnikolov"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "medium",
+        "x": 1,
+        "y": 15,
+        "link": "https://nikoloffgeorgi.medium.com/"
+      },
+      {
+        "type": "TEXT_SPLIT",
+        "value": "dwitter",
+        "x": 9,
+        "y": 15,
+        "link": "https://www.dwitter.net/u/nikoloffgeorgi"
       }
     ]
   },

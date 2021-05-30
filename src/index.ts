@@ -179,6 +179,8 @@ function onMouseClick(e) {
 
     if (linkItem.startsWith('https')) {
       window.open(linkItem, '_blank')
+    } else if (linkItem.startsWith('mailto')) {
+      window.open(linkItem)
     } else {
       store.dispatch(setActiveView(linkItem))
     }
@@ -197,6 +199,8 @@ function onMouseClick(e) {
     }
     if (hoveredItem.startsWith('https')) {
       window.open(hoveredItem, '_blank')
+    } else if (hoveredItem.startsWith('mailto')) {
+      window.open(hoveredItem)
     } else {
       store.dispatch(setActiveView(hoveredItem))
     }
