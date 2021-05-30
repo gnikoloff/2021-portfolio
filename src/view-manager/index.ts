@@ -45,8 +45,11 @@ export default class ViewManager {
   }
 
   private setHoveredIdx(hoveredIdx: number) {
-    this.#view0.setHoveredIdx(hoveredIdx)
-    this.#view1.setHoveredIdx(hoveredIdx)
+    if (this.#activeViewIdx === 0) {
+      this.#view0.setHoveredIdx(hoveredIdx)
+    } else {
+      this.#view1.setHoveredIdx(hoveredIdx)
+    }
     return this
   }
 
