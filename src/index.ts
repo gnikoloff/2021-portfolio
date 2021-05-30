@@ -5,7 +5,14 @@ import {
 } from './lib/hwoa-rang-gl/dist/esm'
 
 import store from './store'
-import { setActiveView, setHoveredItem } from './store/actions'
+import {
+  setActiveView,
+  setCameraX,
+  setCameraY,
+  setCameraZ,
+  setHoveredItem,
+  setLightX,
+} from './store/actions'
 
 import ResourceManager from './resource-manager'
 import ViewManager from './view-manager'
@@ -26,6 +33,8 @@ import { animate, anticipate, circIn } from 'popmotion'
 import TextureManager from './texture-manager'
 
 // ------------------------------------------------
+
+let oldTime = 0
 
 const dpr = Math.min(2.5, devicePixelRatio)
 const mousePosition = { x: -1000, y: -1000 }
@@ -90,28 +99,23 @@ store.subscribe(() => {
   $loader.textContent = `${Math.round(state.loadedResourcesPercentage * 100)}%`
   if (hasLoadedResources !== state.hasLoadedResources) {
     hasLoadedResources = true
-    // const { cameraX, cameraY, cameraZ } = state
+    const { cameraX, cameraY, cameraZ } = state
     const targetCameraX = 0
     const targetCameraY = 0
     const targetCameraZ = 16
-    const cameraX = camera.position[0]
-    const cameraY = camera.position[1]
-    const cameraZ = camera.position[2]
     animate({
       duration: 1000,
       ease: anticipate,
       onUpdate: (v) => {
-        // const cameraX = camera.position[0]
-        // const cameraY = camera.position[1]
-        // const cameraZ = camera.position[2]
         const x = cameraX + (targetCameraX - cameraX) * v
         const y = cameraY + (targetCameraY - cameraY) * v
         const z = cameraZ + (targetCameraZ - cameraZ) * v
-        console.log({ x: y, z })
-        camera.setPosition({ x, y, z }).updateViewMatrix()
+        store.dispatch(setCameraX(x))
+        store.dispatch(setCameraY(y))
+        store.dispatch(setCameraZ(z))
       },
       onComplete: () => {
-        new CameraController(camera, document.body, true)
+        // new CameraController(camera, document.body, true)
       },
     })
   }
@@ -211,11 +215,21 @@ function onMouseMove(e) {
   e.preventDefault()
   const state = store.getState()
   const { hasLoadedResources } = state
+
+  mousePosition.x = e.clientX
+  mousePosition.y = e.clientY
+
+  const normMouseX = (mousePosition.x / innerWidth) * 2 - 1
+  const normMouseY = (mousePosition.y / innerHeight) * 2 - 1
+
   if (!hasLoadedResources) {
     return null
   }
-  mousePosition.x = e.clientX
-  mousePosition.y = e.clientY
+
+  store.dispatch(setCameraX(normMouseX * 4))
+  store.dispatch(setCameraY(normMouseY * 4))
+  store.dispatch(setLightX(normMouseX))
+
   const hoverIdx = hoverManager.determineHoveredIdx(
     camera,
     mousePosition.x,
@@ -238,6 +252,17 @@ function updateFrame(ts) {
   requestAnimationFrame(updateFrame)
 
   ts /= 1000
+  const dt = ts - oldTime
+  oldTime = ts
+
+  {
+    const { cameraX, cameraY, cameraZ } = store.getState()
+    const speed = dt * 3
+    const x = camera.position[0] + (cameraX - camera.position[0]) * speed
+    const y = camera.position[1] + (cameraY - camera.position[1]) * speed
+    const z = camera.position[2] + (cameraZ - camera.position[2]) * speed
+    camera.setPosition({ x, y, z }).updateViewMatrix()
+  }
 
   gl.enable(gl.DEPTH_TEST)
   gl.depthFunc(gl.LEQUAL)
@@ -247,7 +272,6 @@ function updateFrame(ts) {
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
   const { hasLoadedResources } = store.getState()
-
   loadScreen.render(camera)
 
   if (!hasLoadedResources) {
