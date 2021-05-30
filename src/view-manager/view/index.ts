@@ -87,16 +87,6 @@ export default class View {
     faces.forEach((side) => {
       const { orientation, vertices, normal, uv, indices } = side
 
-      const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
-      const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
-      const colorMixFactors = new Float32Array(GRID_TOTAL_COUNT)
-
-      for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
-        instancedIndexes[i] = i
-        shadedMixFactors[i] = 1
-        colorMixFactors[i] = 0.875 + Math.random() * 0.125
-      }
-
       const geometry = new Geometry(gl)
         .addIndex({ typedArray: indices })
         .addAttribute('position', {
@@ -113,6 +103,15 @@ export default class View {
         })
 
       if (orientation === CUBE_SIDE_FRONT) {
+        const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
+        const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+        const colorMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+
+        for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+          instancedIndexes[i] = i
+          shadedMixFactors[i] = 1
+          colorMixFactors[i] = 0.925 + Math.random() * 0.075
+        }
         geometry
           .addAttribute('instanceIndex', {
             size: 1,
@@ -310,7 +309,7 @@ export default class View {
     return this
   }
 
-  setHoveredIdx(hoveredIdx: number) {
+  setHoveredIdx(hoveredIdx: number): string | null {
     const y = hoveredIdx % GRID_COUNT_Y
     const x = hoveredIdx / GRID_COUNT_X
 
@@ -325,8 +324,8 @@ export default class View {
       store.dispatch(setHoverItemStartX(hoveredItem.x))
       store.dispatch(setHoverItemEndX(hoveredItem.x + hoveredItem.value.length))
       store.dispatch(setHoverItemY(y))
-      store.dispatch(setHoveredItem(hoveredItem.link))
 
+      store.dispatch(setHoveredItem(hoveredItem.link))
       if (!this.#isTweeningScaleZ && this.#posZ === View.posZInitial) {
         this.#isTweeningScaleZ = true
         if (this.#tweenForScaleZ) {
@@ -364,6 +363,8 @@ export default class View {
         })
       }
     }
+
+    return hoveredItem && hoveredItem.link
   }
 
   setShadowTextureMatrix(shadowTextureMatrix: ReadonlyMat4) {
@@ -384,9 +385,17 @@ export default class View {
       for (let y = 0; y < GRID_COUNT_Y; y++) {
         const i = GRID_COUNT_X * x + y
         const posx =
-          x * GRID_STEP_X - GRID_WIDTH_X / 2 + this.#positionsOffsets[i * 3 + 0]
+          x * GRID_STEP_X -
+          GRID_WIDTH_X / 2 +
+          GRID_STEP_X / 2 +
+          this.#positionsOffsets[i * 3 + 0]
+
         const posy =
-          y * GRID_STEP_Y - GRID_WIDTH_Y / 2 + this.#positionsOffsets[i * 3 + 1]
+          y * GRID_STEP_Y -
+          GRID_WIDTH_Y / 2 +
+          GRID_STEP_Y / 2 +
+          this.#positionsOffsets[i * 3 + 1]
+
         let posz = 0 + this.#positionsOffsets[i * 3 + 2]
 
         if (x >= hoverItemStartX && x < hoverItemEndX && y === hoverItemY) {

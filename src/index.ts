@@ -76,6 +76,18 @@ const orthoCamera = new OrthographicCamera(
   }
 }
 
+let hasLoadedResources = false
+
+const $loader = document.getElementById('loading')
+
+store.subscribe(() => {
+  const state = store.getState()
+  $loader.textContent = `${Math.round(state.loadedResourcesPercentage * 100)}%`
+  if (hasLoadedResources !== state.hasLoadedResources) {
+    hasLoadedResources = true
+  }
+})
+
 {
   const viewName = getActiveViewFromURL()
   store.dispatch(setActiveView(viewName))
@@ -103,6 +115,8 @@ extractAllImageUrlsFromViews().forEach(({ value: url }) => {
 
 document.body.addEventListener('click', onMouseClick)
 document.body.addEventListener('mousemove', onMouseMove)
+document.body.addEventListener('touchstart', onTouchStart)
+document.body.addEventListener('touchmove', onTouchMove)
 
 window.onpopstate = (e) => {
   const viewName = getActiveViewFromURL()
@@ -116,14 +130,33 @@ requestAnimationFrame(updateFrame)
 
 function onMouseClick(e) {
   e.preventDefault()
-  const { hoveredItem } = store.getState()
-  if (!hoveredItem) {
+  // const { hoveredItem } = store.getState()
+  // if (!hoveredItem) {
+  //   return
+  // }
+  // if (hoveredItem.startsWith('https')) {
+  //   window.open(hoveredItem, '_blank')
+  // } else {
+  //   store.dispatch(setActiveView(hoveredItem))
+  // }
+
+  console.log('click')
+
+  const hoverIdx = hoverManager.determineHoveredIdx(
+    camera,
+    mousePosition.x,
+    mousePosition.y,
+  )
+  const linkItem = viewManager.setHoveredIdx(hoverIdx)
+
+  if (!linkItem) {
     return
   }
-  if (hoveredItem.startsWith('https')) {
-    window.open(hoveredItem, '_blank')
+
+  if (linkItem.startsWith('https')) {
+    window.open(linkItem, '_blank')
   } else {
-    store.dispatch(setActiveView(hoveredItem))
+    store.dispatch(setActiveView(linkItem))
   }
 
   // store.dispatch(setHoveredItem(null))
@@ -134,9 +167,27 @@ function onMouseMove(e) {
   const rect = canvas.getBoundingClientRect()
   mousePosition.x = e.clientX - rect.left
   mousePosition.y = e.clientY - rect.top
+  const hoverIdx = hoverManager.determineHoveredIdx(
+    camera,
+    mousePosition.x,
+    mousePosition.y,
+  )
+  const linkItem = viewManager.setHoveredIdx(hoverIdx)
+}
+
+function onTouchStart(e) {
+  e.preventDefault()
+  e.stopPropagation()
+}
+
+function onTouchMove(e) {
+  e.preventDefault()
+  e.stopPropagation()
 }
 
 function updateFrame(ts) {
+  requestAnimationFrame(updateFrame)
+
   ts /= 1000
 
   gl.enable(gl.DEPTH_TEST)
@@ -145,7 +196,12 @@ function updateFrame(ts) {
   gl.clearColor(0.8, 0.8, 0.8, 1)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-  hoverManager.determineHoveredIdx(camera, mousePosition.x, mousePosition.y)
+  const { hasLoadedResources } = store.getState()
+
+  if (!hasLoadedResources) {
+    return
+  }
+
   viewManager.updateMatrix()
 
   {
@@ -180,8 +236,6 @@ function updateFrame(ts) {
   if (state.debugMode) {
     lightingManager.renderDebugMesh(orthoCamera)
   }
-
-  requestAnimationFrame(updateFrame)
 }
 
 function extractAllImageUrlsFromViews(): Array<{ value: string }> {

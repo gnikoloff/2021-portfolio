@@ -1,3 +1,15 @@
+export const SET_HAS_LOADED_RESOURCES = 'SET_HAS_LOADED_RESOURCES'
+export const setHasLoadedResources = (hasLoadedResources) => ({
+  type: SET_HAS_LOADED_RESOURCES,
+  hasLoadedResources,
+})
+
+export const SET_LOADED_RESOURCES_PERCENTAGE = 'SET_LOADED_RESOURCES_PERCENTAGE'
+export const setLoadedResourcesPercentage = (loadedResourcesPercentage) => ({
+  type: SET_LOADED_RESOURCES_PERCENTAGE,
+  loadedResourcesPercentage,
+})
+
 export const SET_ACTIVE_VIEW = 'SET_ACTIVE_VIEW'
 export const setActiveView = (activeView, shouldPush = true) => ({
   type: SET_ACTIVE_VIEW,

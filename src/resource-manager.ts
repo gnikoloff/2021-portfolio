@@ -1,5 +1,11 @@
 import WebFont from 'webfontloader'
 
+import store from './store'
+import {
+  setHasLoadedResources,
+  setLoadedResourcesPercentage,
+} from './store/actions'
+
 export default class ResourceManager {
   #resourcesMap = new Map()
 
@@ -21,10 +27,11 @@ export default class ResourceManager {
   static loadImage(url) {
     return new Promise((resolve, reject) => {
       const image = new Image()
+      console.log(url)
       image.onload = () => {
         resolve(image)
       }
-      image.onerror = () => reject()
+      image.onerror = (error) => reject({ error })
       image.src = url
     })
   }
@@ -108,14 +115,18 @@ export default class ResourceManager {
         })
       }
       promise = promise.then((res) => {
-        console.log((n + 1) / this.#resourcesMap.size)
+        store.dispatch(
+          setLoadedResourcesPercentage((n + 1) / this.#resourcesMap.size),
+        )
         n++
         return res
       })
       promises.push(promise)
     }
-    Promise.all(promises).then(() => {
-      console.log('loaded all resource')
-    })
+    Promise.all(promises)
+      .then(() => {
+        store.dispatch(setHasLoadedResources(true))
+      })
+      .catch((error) => console.error(error))
   }
 }

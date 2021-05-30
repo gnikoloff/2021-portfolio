@@ -8,6 +8,9 @@ import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
 const initialState = {
   debugMode: new URLSearchParams(location.search).has('debugMode'),
 
+  hasLoadedResources: false,
+  loadedResourcesPercentage: 0,
+
   activeView: null,
   hoveredItem: null,
 
@@ -16,13 +19,13 @@ const initialState = {
   cameraZ: 16,
 
   lightX: 0,
-  lightY: 5,
+  lightY: 3,
   lightZ: 5,
 
-  pointLightShininess: 20,
-  pointLightColor: [0.9, 0.9, 0.9],
-  pointLightSpecularColor: [0, 0, 1],
-  pointLightSpecularFactor: 0.5,
+  pointLightShininess: 300,
+  pointLightColor: [1, 0.9, 0.9],
+  pointLightSpecularColor: [1, 1, 1],
+  pointLightSpecularFactor: 0.1,
 
   shadowTextureMatrix: null,
 
@@ -32,10 +35,22 @@ const initialState = {
   hoverItemY: -1,
 }
 
-console.log({ initialState })
-
 const appState = (state = initialState, action) => {
   switch (action.type) {
+    case actions.SET_HAS_LOADED_RESOURCES: {
+      return {
+        ...state,
+        hasLoadedResources: action.hasLoadedResources,
+      }
+    }
+
+    case actions.SET_LOADED_RESOURCES_PERCENTAGE: {
+      return {
+        ...state,
+        loadedResourcesPercentage: action.loadedResourcesPercentage,
+      }
+    }
+
     case actions.SET_ACTIVE_VIEW: {
       const { activeView, shouldPush } = action
       const { label } = VIEWS_DEFINITIONS[activeView]

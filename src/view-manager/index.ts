@@ -44,18 +44,13 @@ export default class ViewManager {
     store.subscribe(this.onGlobalStateChange)
   }
 
-  private setHoveredIdx(hoveredIdx: number) {
-    if (this.#activeViewIdx === 0) {
-      this.#view0.setHoveredIdx(hoveredIdx)
-    } else {
-      this.#view1.setHoveredIdx(hoveredIdx)
-    }
-    return this
-  }
-
   private onGlobalStateChange = () => {
     const state = store.getState()
-    const { activeView, shadowTextureMatrix } = state
+    const { activeView, shadowTextureMatrix, hasLoadedResources } = state
+
+    if (!hasLoadedResources) {
+      return
+    }
 
     if (activeView) {
       if (this.#activeViewName) {
@@ -83,6 +78,14 @@ export default class ViewManager {
         this.#view1.setShadowTextureMatrix(shadowTextureMatrix)
         this.#shadowTextureMatrix = shadowTextureMatrix
       }
+    }
+  }
+
+  setHoveredIdx(hoveredIdx: number): string | null {
+    if (this.#activeViewIdx === 0) {
+      return this.#view0.setHoveredIdx(hoveredIdx)
+    } else {
+      return this.#view1.setHoveredIdx(hoveredIdx)
     }
   }
 

@@ -289,7 +289,7 @@
       },
       {
         "type": "IMAGE",
-        "value": "assets/works/hwoa-rang-gl-preview.png",
+        "value": "/assets/works/hwoa-rang-gl-preview.png",
         "x": 0,
         "y": 3,
         "width": 19,
@@ -349,7 +349,7 @@
       },
       {
         "type": "IMAGE",
-        "value": "assets/works/awwwwards-course-preview.png",
+        "value": "/assets/works/awwwwards-course-preview.png",
         "x": 0,
         "y": 3,
         "width": 19,
@@ -419,7 +419,7 @@
       },
       {
         "type": "IMAGE",
-        "value": "assets/works/acronym-preview.png",
+        "value": "/assets/works/acronym-preview.png",
         "x": 0,
         "y": 3,
         "width": 19,
@@ -489,7 +489,7 @@
       },
       {
         "type": "IMAGE",
-        "value": "assets/works/codesketch-preview.png",
+        "value": "/assets/works/codesketch-preview.png",
         "x": 0,
         "y": 3,
         "width": 19,
@@ -551,7 +551,7 @@
       },
       {
         "type": "IMAGE",
-        "value": "assets/works/web-ar-demo-preview.png",
+        "value": "/assets/works/web-ar-demo-preview.png",
         "x": 0,
         "y": 3,
         "width": 19,
