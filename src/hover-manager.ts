@@ -17,6 +17,7 @@ import {
   PerspectiveCamera,
   PROJECTION_MATRIX_UNIFORM_NAME,
   UNIFORM_TYPE_MATRIX4X4,
+  VIEW_MATRIX_UNIFORM_NAME,
 } from './lib/hwoa-rang-gl/dist/esm/index'
 import store from './store'
 import { setHoverIdx } from './store/actions'
@@ -87,6 +88,7 @@ export default class HoverManager {
        
         void main () {
           gl_FragColor = v_id;
+          // gl_FragColor = vec4(1.0, 0.0,)
         }
       `,
     })
@@ -97,9 +99,9 @@ export default class HoverManager {
 
         mat4.identity(this.#instanceMatrix)
 
-        const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2
-        const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2
-        const posz = 1
+        const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2 + GRID_STEP_X / 2
+        const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2 + GRID_STEP_Y / 2
+        const posz = 0
 
         vec3.set(this.#transformVec3, posx, posy, posz)
         mat4.translate(
@@ -122,8 +124,10 @@ export default class HoverManager {
     camera: PerspectiveCamera,
     mouseX: number,
     mouseY: number,
-  ) {
+  ): number {
     const { fieldOfView, near, far } = camera
+
+    // debugger
 
     const gl = this.#gl
 
@@ -135,14 +139,16 @@ export default class HoverManager {
     const width = Math.abs(right - left)
     const height = Math.abs(top - bottom)
 
-    const pixelX = (mouseX * gl.canvas.width) / gl.canvas.height
+    const pixelX = (mouseX * gl.canvas.width) / gl.canvas.width
     const pixelY =
-      innerHeight - (mouseY * gl.canvas.height) / gl.canvas.height - 1
+      gl.canvas.height - (mouseY * gl.canvas.height) / gl.canvas.height - 1
 
     const subLeft = left + (pixelX * width) / gl.canvas.width
     const subBottom = bottom + (pixelY * height) / gl.canvas.height
     const subWidth = 1 / gl.canvas.width
     const subHeight = 1 / gl.canvas.height
+
+    mat4.identity(this.#frustumProjectionMatrix)
 
     // make a frustum for that 1 pixel
     mat4.frustum(
@@ -158,11 +164,19 @@ export default class HoverManager {
     this.#mousepickFramebuffer.bind()
 
     gl.viewport(0, 0, 1, 1)
+
+    gl.enable(gl.DEPTH_TEST)
+
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     this.#mesh
       .use()
-      .setCamera(camera)
+      // .setCamera(camera)
+      .setUniform(
+        VIEW_MATRIX_UNIFORM_NAME,
+        UNIFORM_TYPE_MATRIX4X4,
+        camera.viewMatrix,
+      )
       .setUniform(
         PROJECTION_MATRIX_UNIFORM_NAME,
         UNIFORM_TYPE_MATRIX4X4,
@@ -188,6 +202,7 @@ export default class HoverManager {
     }
 
     store.dispatch(setHoverIdx(pickNdx))
+    return pickNdx
   }
 
   render(camera: PerspectiveCamera) {}
