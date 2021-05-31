@@ -1,3 +1,5 @@
+export const DESIRED_FPS = 60
+
 export const GRID_COUNT_X = 19
 export const GRID_COUNT_Y = 19
 export const GRID_TOTAL_COUNT = GRID_COUNT_X * GRID_COUNT_Y

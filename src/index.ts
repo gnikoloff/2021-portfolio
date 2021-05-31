@@ -26,6 +26,7 @@ import {
   DEPTH_TEXTURE_WIDTH,
   DEPTH_TEXTURE_HEIGHT,
   VIEW_HOME,
+  DESIRED_FPS,
 } from './constants'
 
 import './index.css'
@@ -252,9 +253,13 @@ function onTouchMove(e) {
 function updateFrame(ts) {
   requestAnimationFrame(updateFrame)
 
-  ts /= 1000
-  const dt = ts - oldTime
-  oldTime = ts
+  let dt = ts - oldTime
+  oldTime = ts - (dt % (1 / DESIRED_FPS))
+
+  dt /= 1000
+  if (dt > 1) {
+    dt = 1
+  }
 
   {
     const { cameraX, cameraY, cameraZ } = store.getState()
