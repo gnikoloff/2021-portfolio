@@ -1,5 +1,6 @@
+import Stats from 'stats.js'
+
 import {
-  CameraController,
   OrthographicCamera,
   PerspectiveCamera,
 } from './lib/hwoa-rang-gl/dist/esm'
@@ -36,11 +37,14 @@ import TextureManager from './texture-manager'
 // ------------------------------------------------
 
 let oldTime = 0
+let stats
 
 const dpr = Math.min(2.5, devicePixelRatio)
 const mousePosition = { x: -1000, y: -1000 }
 const canvas = document.createElement('canvas')
-const gl = canvas.getContext('webgl')
+const gl = canvas.getContext('webgl', {
+  powerPreference: 'high-performance',
+})
 
 const loadManager = new ResourceManager()
 const hoverManager = new HoverManager(gl, {})
@@ -89,6 +93,15 @@ const orthoCamera = new OrthographicCamera(
   // if (debugMode) {
   // new CameraController(camera, document.body, true)
   // }
+}
+
+{
+  const { debugMode } = store.getState()
+  if (debugMode) {
+    stats = new Stats()
+    stats.showPanel(1) // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild(stats.dom)
+  }
 }
 
 let hasLoadedResources = false
@@ -258,8 +271,13 @@ function updateFrame(ts) {
   oldTime = ts - (dt % (1 / DESIRED_FPS))
 
   dt /= 1000
-  if (dt > 1) {
-    dt = 1
+  // if (dt > 1) {
+  //   dt = 1
+  // }
+
+  const { debugMode } = store.getState()
+  if (debugMode) {
+    stats.begin()
   }
 
   {
@@ -316,8 +334,10 @@ function updateFrame(ts) {
 
   const state = store.getState()
 
-  if (state.debugMode) {
+  if (debugMode) {
     lightingManager.renderDebugMesh(orthoCamera)
+
+    stats.end()
   }
 }
 
