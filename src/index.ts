@@ -154,6 +154,7 @@ document.body.addEventListener('click', onMouseClick)
 document.body.addEventListener('mousemove', onMouseMove)
 document.body.addEventListener('touchstart', onTouchStart)
 document.body.addEventListener('touchmove', onTouchMove)
+window.addEventListener('resize', onResize)
 
 window.onpopstate = (e) => {
   const viewName = getActiveViewFromURL()
@@ -161,7 +162,7 @@ window.onpopstate = (e) => {
 }
 
 loadManager.load()
-sizeCanvas()
+onResize(null, false)
 document.body.appendChild(canvas)
 requestAnimationFrame(updateFrame)
 
@@ -216,7 +217,7 @@ function onMouseClick(e) {
 function onMouseMove(e) {
   e.preventDefault()
   const state = store.getState()
-  const { hasLoadedResources } = state
+  const { hasFinishedLoadingAnimation } = state
 
   mousePosition.x = e.clientX
   mousePosition.y = e.clientY
@@ -224,7 +225,7 @@ function onMouseMove(e) {
   const normMouseX = (mousePosition.x / innerWidth) * 2 - 1
   const normMouseY = (mousePosition.y / innerHeight) * 2 - 1
 
-  if (!hasLoadedResources) {
+  if (!hasFinishedLoadingAnimation) {
     return null
   }
 
@@ -277,10 +278,10 @@ function updateFrame(ts) {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
-  const { hasLoadedResources } = store.getState()
-  loadScreen.render(camera)
+  const { hasFinishedLoadingAnimation } = store.getState()
+  loadScreen.render(camera, dt)
 
-  if (!hasLoadedResources) {
+  if (!hasFinishedLoadingAnimation) {
     return
   }
 
@@ -329,6 +330,14 @@ function extractAllImageUrlsFromViews(): Array<{ value: string }> {
     allImagesInProject.push(...images)
   }
   return allImagesInProject
+}
+
+function onResize(e, updateProjectionMatrix = true) {
+  if (updateProjectionMatrix) {
+    camera.aspect = innerWidth / innerHeight
+    camera.updateProjectionMatrix()
+  }
+  sizeCanvas()
 }
 
 function sizeCanvas() {
