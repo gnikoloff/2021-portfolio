@@ -15,7 +15,7 @@ let targetCameraZ = 16
   const h = 2 * Math.tan(fov / 2) * targetCameraZ // visible height
   const w = h * (innerWidth / innerHeight)
   if (GRID_WIDTH_X > w) {
-    targetCameraZ *= GRID_WIDTH_X / w
+    targetCameraZ *= (GRID_WIDTH_X / w) * 1.1
   }
 }
 
