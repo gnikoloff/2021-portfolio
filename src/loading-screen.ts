@@ -1,4 +1,5 @@
 import { mat4, vec3 } from 'gl-matrix'
+import { animate } from 'popmotion'
 import { GRID_STEP_X, GRID_STEP_Y } from './constants'
 import {
   Geometry,
@@ -9,6 +10,7 @@ import {
   UNIFORM_TYPE_VEC3,
 } from './lib/hwoa-rang-gl/dist/esm'
 import store from './store'
+import { setHasFinishedLoadingAnimation } from './store/actions'
 
 export default class LoadingScreen {
   #mesh: InstancedMesh
@@ -18,8 +20,10 @@ export default class LoadingScreen {
 
   #loadProgress = 0
   #visibilityThreshold = 0
+  #scales = new Float32Array(LoadingScreen.CUBES_COUNT).fill(0)
+  #targetScales = new Float32Array(LoadingScreen.CUBES_COUNT).fill(0)
 
-  static CUBES_COUNT = 20
+  static CUBES_COUNT = 12
   static TOTAL_WIDTH = LoadingScreen.CUBES_COUNT * GRID_STEP_X
 
   constructor(gl: WebGLRenderingContext) {
@@ -96,55 +100,68 @@ export default class LoadingScreen {
       `,
     })
 
-    for (let i = 0; i < LoadingScreen.CUBES_COUNT; i++) {
-      mat4.identity(this.#matrix)
-      vec3.set(
-        this.#transformVec,
-        i * GRID_STEP_X - LoadingScreen.TOTAL_WIDTH / 2,
-        0,
-        0,
-      )
-      mat4.translate(this.#matrix, this.#matrix, this.#transformVec)
-      vec3.set(this.#transformVec, 0, 0, 0)
-      mat4.scale(this.#matrix, this.#matrix, this.#transformVec)
-      // @ts-ignore
-      this.#mesh.setMatrixAt(i, this.#matrix)
-    }
-
     store.subscribe(this.onGlobalStoreChange)
   }
 
-  render(camera: PerspectiveCamera) {
+  render(camera: PerspectiveCamera, dt: number) {
     const state = store.getState()
-    const { hasLoadedResources } = state
-    if (!hasLoadedResources) {
+    const { hasFinishedLoadingAnimation } = state
+    if (!hasFinishedLoadingAnimation) {
+      for (let i = 0; i < LoadingScreen.CUBES_COUNT; i++) {
+        mat4.identity(this.#matrix)
+        vec3.set(
+          this.#transformVec,
+          i * GRID_STEP_X - LoadingScreen.TOTAL_WIDTH / 2 + GRID_STEP_X / 2,
+          0,
+          0,
+        )
+        mat4.translate(this.#matrix, this.#matrix, this.#transformVec)
+        const speed = dt * 10
+        this.#scales[i] += (this.#targetScales[i] - this.#scales[i]) * speed
+        const scale = this.#scales[i]
+        vec3.set(this.#transformVec, scale, scale, scale)
+        mat4.scale(this.#matrix, this.#matrix, this.#transformVec)
+        // @ts-ignore
+        this.#mesh.setMatrixAt(i, this.#matrix)
+      }
       this.#mesh.use().setCamera(camera).draw()
     }
   }
 
   onGlobalStoreChange = () => {
     const state = store.getState()
-    const { loadedResourcesPercentage } = state
-    if (this.#loadProgress !== loadedResourcesPercentage) {
-      const visibilityThreshold = Math.round(
-        loadedResourcesPercentage * LoadingScreen.CUBES_COUNT,
-      )
-      for (let i = this.#visibilityThreshold; i < visibilityThreshold; i++) {
-        mat4.identity(this.#matrix)
-        vec3.set(
-          this.#transformVec,
-          i * GRID_STEP_X - LoadingScreen.TOTAL_WIDTH / 2,
-          0,
-          0,
-        )
-        mat4.translate(this.#matrix, this.#matrix, this.#transformVec)
-        vec3.set(this.#transformVec, 1, 1, 1)
-        mat4.scale(this.#matrix, this.#matrix, this.#transformVec)
-        // @ts-ignore
-        this.#mesh.setMatrixAt(i, this.#matrix)
+    const {
+      loadedResourcesPercentage,
+      hasLoadedResources,
+      hasFinishedLoadingAnimation,
+    } = state
+    if (hasLoadedResources) {
+      if (!hasFinishedLoadingAnimation) {
+        animate({
+          onUpdate: (v) => {
+            for (let i = 0; i < LoadingScreen.CUBES_COUNT; i++) {
+              this.#targetScales[i] = 1 - v
+            }
+          },
+          onComplete: () => {
+            setTimeout(() => {
+              store.dispatch(setHasFinishedLoadingAnimation(true))
+            }, 1125)
+          },
+        })
       }
-      this.#visibilityThreshold = visibilityThreshold
-      this.#loadProgress = loadedResourcesPercentage
+    } else {
+      if (this.#loadProgress !== loadedResourcesPercentage) {
+        const visibilityThreshold = Math.round(
+          loadedResourcesPercentage * LoadingScreen.CUBES_COUNT,
+        )
+        for (let i = this.#visibilityThreshold; i < visibilityThreshold; i++) {
+          this.#targetScales[i] = 1
+        }
+
+        this.#visibilityThreshold = visibilityThreshold
+        this.#loadProgress = loadedResourcesPercentage
+      }
     }
   }
 }

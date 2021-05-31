@@ -1,5 +1,5 @@
 import { mat4, ReadonlyMat4, vec3 } from 'gl-matrix'
-import { animate } from 'popmotion'
+import { animate, backIn, easeIn, easeInOut, easeOut } from 'popmotion'
 
 import {
   Mesh,
@@ -237,6 +237,7 @@ export default class View {
         offsets[i] = Math.random()
       }
       animate({
+        ease: easeInOut,
         duration: View.transitionDuration,
         onUpdate: (v) => {
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
@@ -260,6 +261,7 @@ export default class View {
         offsets[i] = Math.random()
       }
       animate({
+        ease: easeInOut,
         duration: View.transitionDuration,
         onUpdate: (v) => {
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {

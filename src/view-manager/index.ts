@@ -46,9 +46,10 @@ export default class ViewManager {
 
   private onGlobalStateChange = () => {
     const state = store.getState()
-    const { activeView, shadowTextureMatrix, hasLoadedResources } = state
+    const { activeView, shadowTextureMatrix, hasFinishedLoadingAnimation } =
+      state
 
-    if (!hasLoadedResources) {
+    if (!hasFinishedLoadingAnimation) {
       return
     }
 

@@ -10,6 +10,15 @@ export const setLoadedResourcesPercentage = (loadedResourcesPercentage) => ({
   loadedResourcesPercentage,
 })
 
+export const SET_HAS_FINISHED_LOADING_ANIMATION =
+  'SET_HAS_FINISHED_LOADING_ANIMATION'
+export const setHasFinishedLoadingAnimation = (
+  hasFinishedLoadingAnimation,
+) => ({
+  type: SET_HAS_FINISHED_LOADING_ANIMATION,
+  hasFinishedLoadingAnimation,
+})
+
 export const SET_ACTIVE_VIEW = 'SET_ACTIVE_VIEW'
 export const setActiveView = (activeView, shouldPush = true) => ({
   type: SET_ACTIVE_VIEW,

@@ -26,13 +26,14 @@ const initialState = {
 
   hasLoadedResources: false,
   loadedResourcesPercentage: 0,
+  hasFinishedLoadingAnimation: false,
 
   activeView: null,
   hoveredItem: null,
 
-  cameraX: -14,
-  cameraY: 2.5,
-  cameraZ: 7,
+  cameraX: 0,
+  cameraY: 16,
+  cameraZ: 18,
 
   targetCameraX: 0,
   targetCameraY: 0,
@@ -68,6 +69,13 @@ const appState = (state = initialState, action) => {
       return {
         ...state,
         loadedResourcesPercentage: action.loadedResourcesPercentage,
+      }
+    }
+
+    case actions.SET_HAS_FINISHED_LOADING_ANIMATION: {
+      return {
+        ...state,
+        hasFinishedLoadingAnimation: action.hasFinishedLoadingAnimation,
       }
     }
 
