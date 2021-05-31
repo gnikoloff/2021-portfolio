@@ -316,7 +316,7 @@
       {
         "type": "TEXT_SPLIT",
         "value": "twitter",
-        "x": 7,
+        "x": 9,
         "y": 12,
         "link": "https://twitter.com/georgiNikoloff"
       },
