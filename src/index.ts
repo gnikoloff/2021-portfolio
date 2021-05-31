@@ -92,11 +92,8 @@ const orthoCamera = new OrthographicCamera(
 
 let hasLoadedResources = false
 
-const $loader = document.getElementById('loading')
-
 store.subscribe(() => {
   const state = store.getState()
-  $loader.textContent = `${Math.round(state.loadedResourcesPercentage * 100)}%`
   if (hasLoadedResources !== state.hasLoadedResources) {
     hasLoadedResources = true
     const {
