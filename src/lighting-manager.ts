@@ -1,4 +1,4 @@
-import { mat4, ReadonlyMat4, ReadonlyVec3, vec3 } from 'gl-matrix'
+import { mat4, ReadonlyVec3, vec3 } from 'gl-matrix'
 import { DEPTH_TEXTURE_HEIGHT, DEPTH_TEXTURE_WIDTH } from './constants'
 import {
   Framebuffer,
@@ -113,7 +113,7 @@ export default class LightingManager {
     }
   }
 
-  computeShadowTextureMatrix() {
+  computeShadowTextureMatrix(): void {
     const position = vec3.fromValues(
       this.position[0],
       this.position[1],
@@ -168,7 +168,7 @@ export default class LightingManager {
     store.dispatch(setShadowTextureMatrix(this.shadowTextureMatrix))
   }
 
-  renderDebugMesh(camera: OrthographicCamera) {
+  renderDebugMesh(camera: OrthographicCamera): void {
     this.#gl.activeTexture(this.#gl.TEXTURE0)
     this.depthFramebuffer.depthTexture.bind()
     this.#depthDebugMesh.use().setCamera(camera).draw()

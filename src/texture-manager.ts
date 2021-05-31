@@ -4,6 +4,7 @@ import {
   GRID_COUNT_X,
   GRID_COUNT_Y,
 } from './constants'
+import ResourceManager from './resource-manager'
 
 const IDEAL_TEXTURE_SIZE = 2048
 
@@ -29,8 +30,13 @@ export default class TextureManager {
   static DEFAULT_BODY_FONT_FAMILY = 'Space Mono'
   static DEFAULT_FONT_SIZE = 1
 
-  static fitDimensions(contains) {
-    return (parentWidth, parentHeight, childWidth, childHeight) => {
+  static fitDimensions(contains: boolean) {
+    return (
+      parentWidth: number,
+      parentHeight: number,
+      childWidth: number,
+      childHeight: number,
+    ): { width: number; height: number; x: number; y: number } => {
       const doRatio = childWidth / childHeight
       const cRatio = parentWidth / parentHeight
       let width = parentWidth
@@ -51,7 +57,15 @@ export default class TextureManager {
     }
   }
 
-  constructor({ maxSize, idealFontSize, loadManager }) {
+  constructor({
+    maxSize,
+    idealFontSize,
+    loadManager,
+  }: {
+    maxSize: number
+    idealFontSize: number
+    loadManager: ResourceManager
+  }) {
     this.loadManager = loadManager
 
     this.#canvas0.width = maxSize
@@ -67,7 +81,22 @@ export default class TextureManager {
     this.#cellHeight = this.#maxSize / GRID_COUNT_Y
   }
 
-  getTextureCanvas(idx: number, viewItems): HTMLCanvasElement {
+  getTextureCanvas(
+    idx: number,
+    viewItems: Array<{
+      type
+      value
+      fontSize
+      x
+      y
+      opacity
+      fontFamily
+      letterSpacing
+      paddingLeft
+      width
+      height
+    }>,
+  ): HTMLCanvasElement {
     const ctx = idx === 0 ? this.#ctx0 : this.#ctx1
     const canvas = idx === 0 ? this.#canvas0 : this.#canvas1
 
@@ -167,7 +196,7 @@ export default class TextureManager {
     return canvas
   }
 
-  showDebug(scaleFactor: number = 1): this {
+  showDebug(scaleFactor = 1): this {
     const div = document.createElement('div')
     div.setAttribute('id', 'texture-manager-debug')
     div.setAttribute(

@@ -103,7 +103,7 @@ export default class LoadingScreen {
     store.subscribe(this.onGlobalStoreChange)
   }
 
-  render(camera: PerspectiveCamera, dt: number) {
+  render(camera: PerspectiveCamera, dt: number): void {
     const state = store.getState()
     const { hasFinishedLoadingAnimation } = state
     if (!hasFinishedLoadingAnimation) {
@@ -128,7 +128,7 @@ export default class LoadingScreen {
     }
   }
 
-  onGlobalStoreChange = () => {
+  onGlobalStoreChange = (): void => {
     const state = store.getState()
     const {
       loadedResourcesPercentage,

@@ -15,7 +15,7 @@ export default class ResourceManager {
   static IMAGE = 'img'
   static ARTIFICIAL_DELAY = 'delay'
 
-  static getFVD(weight: string | number, style) {
+  static getFVD(weight: string | number, style: string): string {
     let output = ''
     if (weight === 400 || weight === 'normal') {
       output += 'n:'
@@ -26,7 +26,7 @@ export default class ResourceManager {
     return output
   }
 
-  static loadImage(url) {
+  static loadImage(url: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
       const image = new Image()
       console.log(url)
@@ -38,7 +38,11 @@ export default class ResourceManager {
     })
   }
 
-  static loadWoffFont(name: string, weight: string | number, style: string) {
+  static loadWoffFont(
+    name: string,
+    weight: string | number,
+    style: string,
+  ): Promise<string> {
     const fvd = ResourceManager.getFVD(weight, style)
     const fontFamily = `${name}:${fvd}`
     return new Promise((resolve, reject) => {
@@ -56,7 +60,10 @@ export default class ResourceManager {
     })
   }
 
-  static loadGoogleFont(name: string, weight: string | number, style: string) {
+  static loadGoogleFont(
+    name: string,
+    weight: string | number,
+  ): Promise<string> {
     const fontFamily = `${name}:${weight}:latin`
     return new Promise((resolve, reject) => {
       WebFont.load({
@@ -73,7 +80,7 @@ export default class ResourceManager {
     })
   }
 
-  getImage(resourceName): HTMLImageElement {
+  getImage(resourceName: string): HTMLImageElement {
     const resource = this.#resourcesMap.get(resourceName)
     if (resource) {
       return resource.image
@@ -82,7 +89,12 @@ export default class ResourceManager {
     }
   }
 
-  addFontResource(resourceAux): this {
+  addFontResource(resourceAux: {
+    type: string
+    name: string
+    weight: number
+    style: string
+  }): this {
     const { name } = resourceAux
     this.#resourcesMap.set(name, resourceAux)
     return this
@@ -105,7 +117,7 @@ export default class ResourceManager {
     return this
   }
 
-  load() {
+  load(): void {
     const promises = []
     let n = 0
     for (const [url, entry] of this.#resourcesMap.entries()) {
@@ -117,11 +129,7 @@ export default class ResourceManager {
           entry.style,
         )
       } else if (entry.type === ResourceManager.FONT_GOOGLE) {
-        promise = ResourceManager.loadGoogleFont(
-          entry.name,
-          entry.weight,
-          entry.style,
-        )
+        promise = ResourceManager.loadGoogleFont(entry.name, entry.weight)
       } else if (entry.type === ResourceManager.IMAGE) {
         promise = ResourceManager.loadImage(url).then((img) => {
           entry.image = img

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Personal works",
   "scripts": {
+    "lint": "eslint src",
     "watch": "rollup --watch --c",
     "build": "NODE_ENV=production rollup --c",
     "serve": "node server.js",
@@ -51,6 +52,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.5.1",
     "@types/css-font-loading-module": "0.0.4",
     "compression": "^1.7.4",
     "express": "^4.17.1",

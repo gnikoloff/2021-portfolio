@@ -20,7 +20,10 @@ export default class ViewManager {
   #isTransitioning = false
   #activeViewIdx: number
 
-  constructor(gl, { loadManager }: { loadManager: ResourceManager }) {
+  constructor(
+    gl: WebGLRenderingContext,
+    { loadManager }: { loadManager: ResourceManager },
+  ) {
     this.#textureManager = new TextureManager({
       idealFontSize: 80,
       maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
@@ -46,24 +49,24 @@ export default class ViewManager {
 
   private onGlobalStateChange = () => {
     const state = store.getState()
-    const { activeView, shadowTextureMatrix, hasFinishedLoadingAnimation } =
+    const { activeViewName, shadowTextureMatrix, hasFinishedLoadingAnimation } =
       state
 
     if (!hasFinishedLoadingAnimation) {
       return
     }
 
-    if (activeView) {
+    if (activeViewName) {
       if (this.#activeViewName) {
-        if (activeView !== this.#activeViewName) {
-          this.setActiveView(VIEWS_DEFINITIONS[activeView].items)
+        if (activeViewName !== this.#activeViewName) {
+          this.setActiveView(VIEWS_DEFINITIONS[activeViewName].items)
           // this.resetPosZ()
-          this.#activeViewName = activeView
+          this.#activeViewName = activeViewName
         }
       } else {
-        this.setActiveView(VIEWS_DEFINITIONS[activeView].items, false)
+        this.setActiveView(VIEWS_DEFINITIONS[activeViewName].items, false)
         // this.resetPosZ()
-        this.#activeViewName = activeView
+        this.#activeViewName = activeViewName
       }
     }
 
@@ -129,7 +132,7 @@ export default class ViewManager {
     this.#viewDefinition = viewDefiniton
   }
 
-  updateMatrix() {
+  updateMatrix(): this {
     if (this.#isTransitioning) {
       this.#view0.updateMatrix()
       this.#view1.updateMatrix()
@@ -140,13 +143,14 @@ export default class ViewManager {
         this.#view1.updateMatrix()
       }
     }
+    return this
   }
 
   render(
     camera: PerspectiveCamera,
-    renderAsSolidColor: boolean = false,
+    renderAsSolidColor = false,
     shadowTexture: Texture = null,
-  ) {
+  ): this {
     const { hoverIdx } = store.getState()
     this.setHoveredIdx(hoverIdx)
     if (this.#isTransitioning) {
@@ -159,5 +163,6 @@ export default class ViewManager {
         this.#view1.render(camera, renderAsSolidColor, shadowTexture)
       }
     }
+    return this
   }
 }

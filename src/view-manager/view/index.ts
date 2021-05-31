@@ -1,5 +1,5 @@
 import { mat4, ReadonlyMat4, vec3 } from 'gl-matrix'
-import { animate, backIn, easeIn, easeInOut, easeOut } from 'popmotion'
+import { animate } from 'popmotion'
 
 import {
   Mesh,
@@ -16,6 +16,7 @@ import {
   UNIFORM_TYPE_VEC3,
   mapNumberRange,
   clamp,
+  CUBE_SIDE_BACK,
 } from '../../lib/hwoa-rang-gl/dist/esm'
 
 import store from '../../store'
@@ -51,8 +52,9 @@ export default class View {
 
   #meshes: Array<Mesh> = []
 
-  #positionsOffsets = new Float32Array(GRID_TOTAL_COUNT * 3).fill(0)
+  #positionsOffsetsZ = new Float32Array(GRID_TOTAL_COUNT).fill(0)
   #scaleOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(0)
+  #animationOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(0)
 
   #instanceMatrix = mat4.create()
   #transformVec3 = vec3.create()
@@ -65,9 +67,12 @@ export default class View {
 
   static posZInitial = 0
   static posZHover = GRID_STEP_Y * 0.9
-  static transitionDuration = 1000
+  static transitionDuration = 750
 
-  constructor(gl: WebGLRenderingContext, { idx, textureManager }) {
+  constructor(
+    gl: WebGLRenderingContext,
+    { idx, textureManager }: { idx: number; textureManager: TextureManager },
+  ) {
     this.#idx = idx
     this.#gl = gl
     this.#textureManager = textureManager
@@ -87,140 +92,142 @@ export default class View {
       radius: 0.01,
     })
 
-    faces.forEach((side) => {
-      const { orientation, vertices, normal, uv, indices } = side
+    faces
+      .filter(({ orientation }) => orientation !== CUBE_SIDE_BACK)
+      .forEach((side) => {
+        const { orientation, vertices, normal, uv, indices } = side
 
-      const geometry = new Geometry(gl)
-        .addIndex({ typedArray: indices })
-        .addAttribute('position', {
-          size: 3,
-          typedArray: vertices,
-        })
-        .addAttribute('uv', {
-          size: 2,
-          typedArray: uv,
-        })
-        .addAttribute('normal', {
-          size: 3,
-          typedArray: normal,
-        })
+        const geometry = new Geometry(gl)
+          .addIndex({ typedArray: indices })
+          .addAttribute('position', {
+            size: 3,
+            typedArray: vertices,
+          })
 
-      if (orientation === CUBE_SIDE_FRONT) {
-        const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
-        const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
-        const colorMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+        if (orientation === CUBE_SIDE_FRONT) {
+          const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
+          const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+          const colorMixFactors = new Float32Array(GRID_TOTAL_COUNT)
 
-        for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
-          instancedIndexes[i] = i
-          shadedMixFactors[i] = 1
-          colorMixFactors[i] = 0.925 + Math.random() * 0.075
+          for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+            instancedIndexes[i] = i
+            shadedMixFactors[i] = 1
+            colorMixFactors[i] = 0.925 + Math.random() * 0.075
+          }
+          geometry
+            .addAttribute('uv', {
+              size: 2,
+              typedArray: uv,
+            })
+            .addAttribute('normal', {
+              size: 3,
+              typedArray: normal,
+            })
+            .addAttribute('instanceIndex', {
+              size: 1,
+              typedArray: instancedIndexes,
+              instancedDivisor: 1,
+            })
+            .addAttribute('shadedMixFactor', {
+              size: 1,
+              typedArray: shadedMixFactors,
+              instancedDivisor: 1,
+            })
+            .addAttribute('colorScaleFactor', {
+              size: 1,
+              typedArray: colorMixFactors,
+              instancedDivisor: 1,
+            })
         }
-        geometry
-          .addAttribute('instanceIndex', {
-            size: 1,
-            typedArray: instancedIndexes,
-            instancedDivisor: 1,
-          })
-          .addAttribute('shadedMixFactor', {
-            size: 1,
-            typedArray: shadedMixFactors,
-            instancedDivisor: 1,
-          })
-          .addAttribute('colorScaleFactor', {
-            size: 1,
-            typedArray: colorMixFactors,
-            instancedDivisor: 1,
-          })
-      }
 
-      let mesh
+        let mesh
 
-      const lightDirection = vec3.create()
-      vec3.set(lightDirection, 0, 0, 10)
-      vec3.normalize(lightDirection, lightDirection)
+        const lightDirection = vec3.create()
+        vec3.set(lightDirection, 0, 0, 10)
+        vec3.normalize(lightDirection, lightDirection)
 
-      const {
-        cameraX,
-        cameraY,
-        cameraZ,
-        lightX,
-        lightY,
-        lightZ,
-        pointLightShininess,
-        pointLightColor,
-        pointLightSpecularColor,
-        pointLightSpecularFactor,
-      } = store.getState()
+        const {
+          cameraX,
+          cameraY,
+          cameraZ,
+          lightX,
+          lightY,
+          lightZ,
+          pointLightShininess,
+          pointLightColor,
+          pointLightSpecularColor,
+          pointLightSpecularFactor,
+        } = store.getState()
 
-      const sharedUniforms = {
-        solidColor: { type: UNIFORM_TYPE_FLOAT, value: 1 },
-        eyePosition: {
-          type: UNIFORM_TYPE_VEC3,
-          value: [cameraX, cameraY, cameraZ],
-        },
-        'PointLight.worldPosition': {
-          type: UNIFORM_TYPE_VEC3,
-          value: [lightX, lightY, lightZ],
-        },
-        'PointLight.shininess': {
-          type: UNIFORM_TYPE_FLOAT,
-          value: pointLightShininess,
-        },
-        'PointLight.lightColor': {
-          type: UNIFORM_TYPE_VEC3,
-          value: pointLightColor,
-        },
-        'PointLight.specularColor': {
-          type: UNIFORM_TYPE_VEC3,
-          value: pointLightSpecularColor,
-        },
-        'PointLight.specularFactor': {
-          type: UNIFORM_TYPE_FLOAT,
-          value: pointLightSpecularFactor,
-        },
-      }
+        const sharedUniforms = {
+          solidColor: { type: UNIFORM_TYPE_FLOAT, value: 1 },
+          eyePosition: {
+            type: UNIFORM_TYPE_VEC3,
+            value: [cameraX, cameraY, cameraZ],
+          },
+          'PointLight.worldPosition': {
+            type: UNIFORM_TYPE_VEC3,
+            value: [lightX, lightY, lightZ],
+          },
+          'PointLight.shininess': {
+            type: UNIFORM_TYPE_FLOAT,
+            value: pointLightShininess,
+          },
+          'PointLight.lightColor': {
+            type: UNIFORM_TYPE_VEC3,
+            value: pointLightColor,
+          },
+          'PointLight.specularColor': {
+            type: UNIFORM_TYPE_VEC3,
+            value: pointLightSpecularColor,
+          },
+          'PointLight.specularFactor': {
+            type: UNIFORM_TYPE_FLOAT,
+            value: pointLightSpecularFactor,
+          },
+        }
 
-      if (orientation === CUBE_SIDE_FRONT) {
-        mesh = new InstancedMesh(gl, {
-          geometry,
+        if (orientation === CUBE_SIDE_FRONT) {
+          mesh = new InstancedMesh(gl, {
+            geometry,
 
-          uniforms: {
-            ...sharedUniforms,
-            text: { type: UNIFORM_TYPE_INT, value: 0 },
-            projectedShadowTexture: { type: UNIFORM_TYPE_INT, value: 1 },
-            cellSize: {
-              type: UNIFORM_TYPE_VEC2,
-              value: [GRID_COUNT_X, GRID_COUNT_Y],
+            uniforms: {
+              ...sharedUniforms,
+              text: { type: UNIFORM_TYPE_INT, value: 0 },
+              projectedShadowTexture: { type: UNIFORM_TYPE_INT, value: 1 },
+              cellSize: {
+                type: UNIFORM_TYPE_VEC2,
+                value: [GRID_COUNT_X, GRID_COUNT_Y],
+              },
             },
-          },
-          defines: {
-            IS_FRONT_VIEW: 1,
-            DEPTH_TEXTURE_WIDTH,
-            DEPTH_TEXTURE_HEIGHT,
-          },
-          instanceCount: GRID_TOTAL_COUNT,
-          vertexShaderSource: vertexShaderSource,
-          fragmentShaderSource: fragmentShaderSource,
-        })
-      } else {
-        mesh = new InstancedMesh(gl, {
-          geometry,
-          uniforms: {
-            ...sharedUniforms,
-            projectedShadowTexture: { type: UNIFORM_TYPE_INT, value: 0 },
-          },
-          defines: {
-            DEPTH_TEXTURE_WIDTH,
-            DEPTH_TEXTURE_HEIGHT,
-          },
-          instanceCount: GRID_TOTAL_COUNT,
-          vertexShaderSource: vertexShaderSource,
-          fragmentShaderSource: fragmentShaderSource,
-        })
-      }
+            defines: {
+              IS_FRONT_VIEW: 1,
+              DEPTH_TEXTURE_WIDTH,
+              DEPTH_TEXTURE_HEIGHT,
+            },
+            instanceCount: GRID_TOTAL_COUNT,
+            vertexShaderSource: vertexShaderSource,
+            fragmentShaderSource: fragmentShaderSource,
+          })
+        } else {
+          mesh = new InstancedMesh(gl, {
+            geometry,
+            uniforms: {
+              ...sharedUniforms,
+              projectedShadowTexture: { type: UNIFORM_TYPE_INT, value: 0 },
+            },
+            defines: {
+              DEPTH_TEXTURE_WIDTH,
+              DEPTH_TEXTURE_HEIGHT,
+            },
+            instanceCount: GRID_TOTAL_COUNT,
+            vertexShaderSource: vertexShaderSource,
+            fragmentShaderSource: fragmentShaderSource,
+          })
+        }
 
-      this.#meshes.push(mesh)
-    })
+        this.#meshes.push(mesh)
+      })
   }
 
   setPosition(x = 0, y = 0, z = 0): this {
@@ -230,43 +237,43 @@ export default class View {
     return this
   }
 
-  transitionIn = (offsetZ: number = 0) =>
+  transitionIn = (offsetZ = 0): Promise<void> =>
     new Promise((resolve) => {
-      const offsets = []
       for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
-        offsets[i] = Math.random()
+        this.#animationOffsets[i] = Math.random()
       }
       animate({
-        ease: easeInOut,
+        // ease: circIn,
         duration: View.transitionDuration,
         onUpdate: (v) => {
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
-            const offset = offsets[i]
-            this.#positionsOffsets[i * 3 + 2] = clamp(
-              mapNumberRange(v, offset, 1, -4 + offsetZ, 0),
-              -4 + offsetZ,
+            const offset = this.#animationOffsets[i]
+            this.#positionsOffsetsZ[i] = clamp(
+              mapNumberRange(v, offset, 1, -6 + offsetZ, 0),
+              -6 + offsetZ,
               0,
             )
             this.#scaleOffsets[i] = v
           }
         },
-        onComplete: () => resolve(null),
+        onComplete: () => {
+          resolve(null)
+        },
       })
     })
 
-  transitionOut = () =>
+  transitionOut = (): Promise<void> =>
     new Promise((resolve) => {
-      const offsets = []
       for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
-        offsets[i] = Math.random()
+        this.#animationOffsets[i] = Math.random()
       }
       animate({
-        ease: easeInOut,
+        // ease: circOut,
         duration: View.transitionDuration,
         onUpdate: (v) => {
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
-            const offset = offsets[i]
-            this.#positionsOffsets[i * 3 + 2] = clamp(
+            const offset = this.#animationOffsets[i]
+            this.#positionsOffsetsZ[i] = clamp(
               mapNumberRange(v, offset, 1, 0, 4),
               0,
               4,
@@ -274,16 +281,19 @@ export default class View {
             this.#scaleOffsets[i] = 1 - v
           }
         },
-        onComplete: () => resolve(null),
+        onComplete: () => {
+          resolve(null)
+        },
       })
     })
 
-  setView(viewDefiniton) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  setView(viewDefiniton): this {
     this.#viewDefinition = viewDefiniton
 
     const image = viewDefiniton.find(({ type }) => type === 'IMAGE')
 
-    const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+    let shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
 
     for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
       if (image) {
@@ -310,6 +320,8 @@ export default class View {
       GRID_TOTAL_COUNT,
       shadedMixFactors,
     )
+
+    shadedMixFactors = null
 
     const canvas = this.#textureManager.getTextureCanvas(
       this.#idx,
@@ -377,7 +389,7 @@ export default class View {
     return hoveredItem && hoveredItem.link
   }
 
-  setShadowTextureMatrix(shadowTextureMatrix: ReadonlyMat4) {
+  setShadowTextureMatrix(shadowTextureMatrix: ReadonlyMat4): this {
     this.#meshes.forEach((mesh) => {
       mesh
         .use()
@@ -387,29 +399,22 @@ export default class View {
           shadowTextureMatrix,
         )
     })
+    return this
   }
 
-  updateMatrix() {
+  updateMatrix(): void {
     const { hoverItemStartX, hoverItemEndX, hoverItemY } = store.getState()
     for (let x = 0; x < GRID_COUNT_X; x++) {
       for (let y = 0; y < GRID_COUNT_Y; y++) {
         const i = GRID_COUNT_X * x + y
-        const posx =
-          x * GRID_STEP_X -
-          GRID_WIDTH_X / 2 +
-          GRID_STEP_X / 2 +
-          this.#positionsOffsets[i * 3 + 0]
+        const posx = x * GRID_STEP_X - GRID_WIDTH_X / 2 + GRID_STEP_X / 2
 
-        const posy =
-          y * GRID_STEP_Y -
-          GRID_WIDTH_Y / 2 +
-          GRID_STEP_Y / 2 +
-          this.#positionsOffsets[i * 3 + 1]
+        const posy = y * GRID_STEP_Y - GRID_WIDTH_Y / 2 + GRID_STEP_Y / 2
 
-        let posz = 0 + this.#positionsOffsets[i * 3 + 2]
+        let posz = 0 + this.#positionsOffsetsZ[i]
 
         if (x >= hoverItemStartX && x < hoverItemEndX && y === hoverItemY) {
-          posz = this.#posZ + this.#positionsOffsets[i * 3 + 2]
+          posz = this.#posZ + this.#positionsOffsetsZ[i]
         }
 
         const scalex = this.#scaleOffsets[i]
@@ -443,7 +448,7 @@ export default class View {
 
   render(
     camera: PerspectiveCamera,
-    renderAsSolidColor: boolean = false,
+    renderAsSolidColor = false,
     shadowTexture: Texture = null,
   ): this {
     this.#meshes.forEach((mesh, i) => {

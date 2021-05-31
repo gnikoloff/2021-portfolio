@@ -31,7 +31,7 @@ import {
 } from './constants'
 
 import './index.css'
-import { animate, anticipate, circIn } from 'popmotion'
+import { animate, anticipate } from 'popmotion'
 import TextureManager from './texture-manager'
 
 // ------------------------------------------------
@@ -45,7 +45,7 @@ const canvas = document.createElement('canvas')
 const gl = canvas.getContext('webgl')
 
 const loadManager = new ResourceManager()
-const hoverManager = new HoverManager(gl, {})
+const hoverManager = new HoverManager(gl)
 const viewManager = new ViewManager(gl, {
   loadManager,
 })
@@ -162,7 +162,7 @@ document.body.addEventListener('touchstart', onTouchStart)
 document.body.addEventListener('touchmove', onTouchMove)
 window.addEventListener('resize', onResize)
 
-window.onpopstate = (e) => {
+window.onpopstate = () => {
   const viewName = getActiveViewFromURL()
   store.dispatch(setActiveView(viewName, false))
 }
@@ -338,7 +338,7 @@ function updateFrame(ts) {
 function extractAllImageUrlsFromViews(): Array<{ value: string }> {
   const allImagesInProject = []
   for (const view of Object.values(VIEWS_DEFINITIONS)) {
-    const images = (view.items as Array<any>).filter(
+    const images = (view.items as Array<{ type }>).filter(
       ({ type }) => type === 'IMAGE',
     )
     allImagesInProject.push(...images)

@@ -28,7 +28,7 @@ const initialState = {
   loadedResourcesPercentage: 0,
   hasFinishedLoadingAnimation: false,
 
-  activeView: null,
+  activeViewName: null,
   hoveredItem: null,
 
   cameraX: 0,
@@ -61,28 +61,28 @@ const appState = (state = initialState, action) => {
     case actions.SET_HAS_LOADED_RESOURCES: {
       return {
         ...state,
-        hasLoadedResources: action.hasLoadedResources,
+        hasLoadedResources: action.payload,
       }
     }
 
     case actions.SET_LOADED_RESOURCES_PERCENTAGE: {
       return {
         ...state,
-        loadedResourcesPercentage: action.loadedResourcesPercentage,
+        loadedResourcesPercentage: action.payload,
       }
     }
 
     case actions.SET_HAS_FINISHED_LOADING_ANIMATION: {
       return {
         ...state,
-        hasFinishedLoadingAnimation: action.hasFinishedLoadingAnimation,
+        hasFinishedLoadingAnimation: action.payload,
       }
     }
 
     case actions.SET_ACTIVE_VIEW: {
-      const { activeView, shouldPush } = action
-      const { label } = VIEWS_DEFINITIONS[activeView]
-      if (activeView === VIEW_HOME) {
+      const { activeViewName, shouldPush } = action.payload
+      const { label } = VIEWS_DEFINITIONS[activeViewName]
+      if (activeViewName === VIEW_HOME) {
         document.title = `Georgi Nikolov`
         if (shouldPush) {
           history.pushState({}, '', '/')
@@ -90,98 +90,98 @@ const appState = (state = initialState, action) => {
       } else {
         document.title = `${label} - Georgi Nikolov`
         if (shouldPush) {
-          const slug = activeView
-          const { parent } = VIEWS_DEFINITIONS[activeView]
+          const slug = activeViewName
+          const { parent } = VIEWS_DEFINITIONS[activeViewName]
           history.pushState({}, '', `${parent ? `/${parent}` : ''}/${slug}`)
         }
       }
 
       return {
         ...state,
-        activeView,
+        activeViewName,
       }
     }
 
     case actions.SET_CAMERA_X: {
       return {
         ...state,
-        cameraX: action.cameraX,
+        cameraX: action.payload,
       }
     }
 
     case actions.SET_CAMERA_Y: {
       return {
         ...state,
-        cameraY: action.cameraY,
+        cameraY: action.payload,
       }
     }
 
     case actions.SET_CAMERA_Z: {
       return {
         ...state,
-        cameraZ: action.cameraZ,
+        cameraZ: action.payload,
       }
     }
 
     case actions.SET_LIGHT_X: {
       return {
         ...state,
-        lightX: action.lightX,
+        lightX: action.payload,
       }
     }
 
     case actions.SET_LIGHT_Y: {
       return {
         ...state,
-        lightY: action.lightY,
+        lightY: action.payload,
       }
     }
 
     case actions.SET_LIGHT_Z: {
       return {
         ...state,
-        lightZ: action.lightZ,
+        lightZ: action.payload,
       }
     }
 
     case actions.SET_POINT_LIGHT_SHININESS: {
       return {
         ...state,
-        pointLightShininess: action.pointLightShininess,
+        pointLightShininess: action.payload,
       }
     }
 
     case actions.SET_POINT_LIGHT_COLOR: {
       return {
         ...state,
-        pointLightColor: action.pointLightColor,
+        pointLightColor: action.payload,
       }
     }
 
     case actions.SET_POINT_LIGHT_SPECULAR_COLOR: {
       return {
         ...state,
-        pointLightSpecularColor: action.pointLightSpecularColor,
+        pointLightSpecularColor: action.payload,
       }
     }
 
     case actions.SET_POINT_LIGHT_SPECULAR_FACTOR: {
       return {
         ...state,
-        pointLightSpecularFactor: action.pointLightSpecularFactor,
+        pointLightSpecularFactor: action.payload,
       }
     }
 
     case actions.SET_SHADOW_TEXTURE_MATRIX: {
       return {
         ...state,
-        shadowTextureMatrix: action.shadowTextureMatrix,
+        shadowTextureMatrix: action.payload,
       }
     }
 
     case actions.SET_HOVERED_ITEM: {
-      if (action.hoveredItem !== state.hoveredItem) {
-        if (action.hoveredItem) {
+      if (action.payload !== state.hoveredItem) {
+        if (action.payload) {
           document.body.classList.add('isHovering')
         } else {
           document.body.classList.remove('isHovering')
@@ -189,35 +189,35 @@ const appState = (state = initialState, action) => {
       }
       return {
         ...state,
-        hoveredItem: action.hoveredItem,
+        hoveredItem: action.payload,
       }
     }
 
     case actions.SET_HOVERED_IDX: {
       return {
         ...state,
-        hoverIdx: action.hoverIdx,
+        hoverIdx: action.payload,
       }
     }
 
     case actions.SET_HOVER_ITEM_START_X: {
       return {
         ...state,
-        hoverItemStartX: action.x,
+        hoverItemStartX: action.payload,
       }
     }
 
     case actions.SET_HOVER_ITEM_END_X: {
       return {
         ...state,
-        hoverItemEndX: action.x,
+        hoverItemEndX: action.payload,
       }
     }
 
     case actions.SET_HOVER_ITEM_Y: {
       return {
         ...state,
-        hoverItemY: action.y,
+        hoverItemY: action.payload,
       }
     }
 

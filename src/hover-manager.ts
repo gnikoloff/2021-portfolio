@@ -1,4 +1,4 @@
-import { mat4, ReadonlyMat4, vec3 } from 'gl-matrix'
+import { mat4, vec3 } from 'gl-matrix'
 import {
   GRID_COUNT_X,
   GRID_COUNT_Y,
@@ -31,7 +31,7 @@ export default class HoverManager {
   #transformVec3 = vec3.create()
   #frustumProjectionMatrix = mat4.create()
 
-  constructor(gl: WebGLRenderingContext, {}) {
+  constructor(gl: WebGLRenderingContext) {
     this.#gl = gl
 
     const { vertices, indices } = GeometryUtils.createBox({
@@ -203,6 +203,4 @@ export default class HoverManager {
     store.dispatch(setHoverIdx(pickNdx))
     return pickNdx
   }
-
-  render(camera: PerspectiveCamera) {}
 }
