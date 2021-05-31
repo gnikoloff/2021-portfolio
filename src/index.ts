@@ -1,5 +1,6 @@
+import Stats from 'stats.js'
+
 import {
-  CameraController,
   OrthographicCamera,
   PerspectiveCamera,
 } from './lib/hwoa-rang-gl/dist/esm'
@@ -36,6 +37,7 @@ import TextureManager from './texture-manager'
 // ------------------------------------------------
 
 let oldTime = 0
+let stats
 
 const dpr = Math.min(2.5, devicePixelRatio)
 const mousePosition = { x: -1000, y: -1000 }
@@ -89,6 +91,10 @@ const orthoCamera = new OrthographicCamera(
   // if (debugMode) {
   // new CameraController(camera, document.body, true)
   // }
+  if (debugMode) {
+    stats = new Stats()
+    document.body.appendChild(stats.domElement)
+  }
 }
 
 let hasLoadedResources = false
@@ -254,6 +260,14 @@ function onTouchMove(e) {
 function updateFrame(ts) {
   requestAnimationFrame(updateFrame)
 
+  const state = store.getState()
+
+  const { debugMode } = state
+
+  if (debugMode) {
+    stats.begin()
+  }
+
   let dt = ts - oldTime
   oldTime = ts - (dt % (1 / DESIRED_FPS))
 
@@ -263,7 +277,7 @@ function updateFrame(ts) {
   }
 
   {
-    const { cameraX, cameraY, cameraZ } = store.getState()
+    const { cameraX, cameraY, cameraZ } = state
     const speed = dt * 3
     const x = camera.position[0] + (cameraX - camera.position[0]) * speed
     const y = camera.position[1] + (cameraY - camera.position[1]) * speed
@@ -278,7 +292,7 @@ function updateFrame(ts) {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
-  const { hasFinishedLoadingAnimation } = store.getState()
+  const { hasFinishedLoadingAnimation } = state
   loadScreen.render(camera, dt)
 
   if (!hasFinishedLoadingAnimation) {
@@ -314,10 +328,10 @@ function updateFrame(ts) {
     )
   }
 
-  const state = store.getState()
-
-  if (state.debugMode) {
+  if (debugMode) {
     lightingManager.renderDebugMesh(orthoCamera)
+
+    stats.end()
   }
 }
 

@@ -57,6 +57,7 @@
     "gl-matrix": "^3.3.0",
     "popmotion": "^9.3.6",
     "redux": "^4.1.0",
+    "stats.js": "^0.17.0",
     "webfontloader": "^1.6.28"
   }
 }
