@@ -27,6 +27,8 @@ import {
 } from '../../store/actions'
 
 import {
+  DEPTH_TEXTURE_WIDTH,
+  DEPTH_TEXTURE_HEIGHT,
   GRID_COUNT_X,
   GRID_COUNT_Y,
   GRID_STEP_X,
@@ -56,6 +58,7 @@ export default class View {
   #transformVec3 = vec3.create()
 
   #posZ = 0
+
   #isTweeningScaleZ = false
   #tweenForScaleZ
   #emptyTexture: Texture
@@ -192,6 +195,8 @@ export default class View {
           },
           defines: {
             IS_FRONT_VIEW: 1,
+            DEPTH_TEXTURE_WIDTH,
+            DEPTH_TEXTURE_HEIGHT,
           },
           instanceCount: GRID_TOTAL_COUNT,
           vertexShaderSource: vertexShaderSource,
@@ -204,7 +209,10 @@ export default class View {
             ...sharedUniforms,
             projectedShadowTexture: { type: UNIFORM_TYPE_INT, value: 0 },
           },
-          defines: {},
+          defines: {
+            DEPTH_TEXTURE_WIDTH,
+            DEPTH_TEXTURE_HEIGHT,
+          },
           instanceCount: GRID_TOTAL_COUNT,
           vertexShaderSource: vertexShaderSource,
           fragmentShaderSource: fragmentShaderSource,
