@@ -8,6 +8,7 @@ import json from '@rollup/plugin-json'
 import glslify from 'rollup-plugin-glslify'
 import replace from '@rollup/plugin-replace'
 import { uglify } from 'rollup-plugin-uglify'
+import strip from '@rollup/plugin-strip'
 
 export default {
   input: 'src/index.ts',
@@ -39,5 +40,9 @@ export default {
     }),
     glslify(),
     process.env.NODE_ENV === 'production' && uglify(),
+    process.env.NODE_ENV === 'production' &&
+      strip({
+        include: ['**/*.js', '**/*.ts'],
+      }),
   ],
 }
