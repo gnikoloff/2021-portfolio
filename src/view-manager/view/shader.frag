@@ -45,15 +45,15 @@ void main () {
     float shadow = 0.0;
     vec2 texelSize = 1.0 / vec2(DEPTH_TEXTURE_WIDTH, DEPTH_TEXTURE_HEIGHT);
     
-    #pragma unroll 5
-    for(int x = -2; x <= 2; ++x) {
-        #pragma unroll 5
-        for(int y = -2; y <= 2; ++y) {
+    #pragma unroll 3
+    for(int x = -1; x <= 1; ++x) {
+        #pragma unroll 3
+        for(int y = -1; y <= 1; ++y) {
             float pcfDepth = texture2D(projectedShadowTexture, projectedTexcoord.xy + vec2(x, y) * texelSize).r; 
             shadow += currentDepth > pcfDepth ? 0.7 : 1.0;
         }    
     }
-    shadow /= 25.0;
+    shadow /= 9.0;
 
     // float shadow = (inRange && projectedDepth <= currentDepth) ? shadow : 1.0;
 
@@ -93,7 +93,15 @@ void main () {
         textMixFactor
       );
 
-      gl_FragColor = mix(texColor, textColor, v_shadedMixFactor);
+      vec4 atlasColor = mix(texColor, textColor, v_shadedMixFactor);
+
+      vec4 shadedColor = atlasColor;
+
+      shadedColor.rgb *= pointLight * PointLight.lightColor;
+      shadedColor.rgb += specular * PointLight.specularColor * PointLight.specularFactor;
+      shadedColor.rgb *= shadow;
+
+      gl_FragColor = mix(atlasColor, shadedColor, v_shadedMixFactor);
 
     #else
       // gl_FragColor = vec4(
@@ -103,13 +111,5 @@ void main () {
 
       gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
     #endif
-
-    vec4 shadedColor = gl_FragColor;
-
-    shadedColor.rgb *= pointLight * PointLight.lightColor;
-    shadedColor.rgb += specular * PointLight.specularColor * PointLight.specularFactor;
-    shadedColor.rgb *= shadow;
-
-    gl_FragColor = mix(gl_FragColor, shadedColor, v_shadedMixFactor);
   }
 }
