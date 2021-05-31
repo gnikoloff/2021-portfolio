@@ -7,6 +7,7 @@ import typescript from 'rollup-plugin-typescript2'
 import json from '@rollup/plugin-json'
 import glslify from 'rollup-plugin-glslify'
 import replace from '@rollup/plugin-replace'
+import { uglify } from 'rollup-plugin-uglify'
 
 export default {
   input: 'src/index.ts',
@@ -26,7 +27,9 @@ export default {
       useTsconfigDeclarationDir: true,
       declarationDir: 'dist/src',
     }),
-    css(),
+    css({
+      minify: process.env.NODE_ENV === 'production',
+    }),
     sourcemaps(),
     copy({
       targets: [
@@ -35,5 +38,6 @@ export default {
       ],
     }),
     glslify(),
+    process.env.NODE_ENV === 'production' && uglify(),
   ],
 }

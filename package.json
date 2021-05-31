@@ -4,7 +4,7 @@
   "description": "Personal works",
   "scripts": {
     "watch": "rollup --watch --c",
-    "build": "rollup --c",
+    "build": "NODE_ENV=production rollup --c",
     "serve": "node server.js",
     "start:local": "run-p watch serve"
   },
@@ -44,6 +44,7 @@
     "rollup-plugin-import-css": "^2.0.1",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.30.0",
+    "rollup-plugin-uglify": "^6.0.4",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.2.4"
   },
