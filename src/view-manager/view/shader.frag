@@ -37,8 +37,12 @@ void main () {
   if (solidColor) {
     gl_FragColor = vec4(1.0, 0.5, 0.5, 1.0);
   } else {
+    vec3 normal = normalize(v_normal);
+    vec3 lightDir = vec3(0.0, 3.0, 5.0);
+
     // Shadow
-    float shadowBias = -0.001;
+    // float shadowBias = -0.001;
+    float shadowBias = -max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
     vec3 projectedTexcoord = v_projectedShadowUvs.xyz / v_projectedShadowUvs.w;
     float currentDepth = projectedTexcoord.z + shadowBias;
 
@@ -47,7 +51,7 @@ void main () {
     
     #pragma unroll 5
     for(int x = -2; x <= 2; ++x) {
-        #pragma unroll 5
+      #pragma unroll 5
         for(int y = -2; y <= 2; ++y) {
             float pcfDepth = texture2D(projectedShadowTexture, projectedTexcoord.xy + vec2(x, y) * texelSize).r; 
             shadow += currentDepth > pcfDepth ? 0.7 : 1.0;
@@ -58,7 +62,6 @@ void main () {
     // float shadow = (inRange && projectedDepth <= currentDepth) ? shadow : 1.0;
 
     // Point lighting
-    vec3 normal = normalize(v_normal);
     vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
     vec3 surfaceToViewDirection = normalize(v_surfaceToView);
 
@@ -93,7 +96,15 @@ void main () {
         textMixFactor
       );
 
-      gl_FragColor = mix(texColor, textColor, v_shadedMixFactor);
+      vec4 color = mix(texColor, textColor, v_shadedMixFactor);
+
+      vec4 shadedColor = color;
+
+      shadedColor.rgb *= pointLight * PointLight.lightColor;
+      shadedColor.rgb += specular * PointLight.specularColor * PointLight.specularFactor;
+      shadedColor.rgb *= shadow;
+
+      gl_FragColor = mix(color, shadedColor, v_shadedMixFactor);
 
     #else
       // gl_FragColor = vec4(
@@ -104,12 +115,5 @@ void main () {
       gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
     #endif
 
-    vec4 shadedColor = gl_FragColor;
-
-    shadedColor.rgb *= pointLight * PointLight.lightColor;
-    shadedColor.rgb += specular * PointLight.specularColor * PointLight.specularFactor;
-    shadedColor.rgb *= shadow;
-
-    gl_FragColor = mix(gl_FragColor, shadedColor, v_shadedMixFactor);
   }
 }

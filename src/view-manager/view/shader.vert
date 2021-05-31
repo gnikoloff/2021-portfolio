@@ -39,16 +39,17 @@ void main () {
     v_uv = uv *
            vec2(1.0 / cellSize.x, 1.0 / cellSize.y) +
            vec2(texOffsetX / cellSize.x, texOffsetY / cellSize.y);
+    
+    v_normal = mat3(worldMatrix) * normal;
+    v_projectedShadowUvs = shadowTextureMatrix * worldPosition;
+
+    v_surfaceToLight = PointLight.worldPosition - worldPosition.xyz;
+    v_surfaceToView = eyePosition - worldPosition.xyz;
+
+    v_shadedMixFactor = shadedMixFactor;
+    v_colorScaleFactor = colorScaleFactor;
   #else
     v_uv = uv;
   #endif
 
-  v_normal = mat3(worldMatrix) * normal;
-  v_projectedShadowUvs = shadowTextureMatrix * worldPosition;
-
-  v_surfaceToLight = PointLight.worldPosition - worldPosition.xyz;
-  v_surfaceToView = eyePosition - worldPosition.xyz;
-
-  v_shadedMixFactor = shadedMixFactor;
-  v_colorScaleFactor = colorScaleFactor;
 }
