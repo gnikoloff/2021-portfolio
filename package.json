@@ -6,6 +6,7 @@
     "watch": "rollup --watch --c",
     "build": "NODE_ENV=production rollup --c",
     "serve": "node server.js",
+    "start": "run-p build serve",
     "start:local": "run-p watch serve"
   },
   "repository": {
