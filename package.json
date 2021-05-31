@@ -4,6 +4,7 @@
   "description": "Personal works",
   "scripts": {
     "watch": "rollup --watch --c",
+    "build": "rollup --c",
     "serve": "node server.js",
     "start:local": "run-p watch serve"
   },
@@ -48,6 +49,7 @@
   },
   "dependencies": {
     "@types/css-font-loading-module": "0.0.4",
+    "compression": "^1.7.4",
     "express": "^4.17.1",
     "gl-matrix": "^3.3.0",
     "popmotion": "^9.3.6",
