@@ -37,6 +37,9 @@ import {
   GRID_TOTAL_COUNT,
   GRID_WIDTH_X,
   GRID_WIDTH_Y,
+  CONTENT_TYPE_TEXT,
+  CONTENT_TYPE_SPLIT_TEXT,
+  CONTENT_TYPE_IMAGE,
 } from '../../constants'
 
 import vertexShaderSource from './shader.vert'
@@ -55,6 +58,8 @@ export default class View {
   #positionsOffsetsZ = new Float32Array(GRID_TOTAL_COUNT).fill(0)
   #scaleOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(0)
   #animationOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(0)
+  #shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT).fill(1)
+  #textColors = new Float32Array(GRID_TOTAL_COUNT * 3).fill(0)
 
   #instanceMatrix = mat4.create()
   #transformVec3 = vec3.create()
@@ -106,13 +111,11 @@ export default class View {
 
         if (orientation === CUBE_SIDE_FRONT) {
           const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
-          const shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
           const colorMixFactors = new Float32Array(GRID_TOTAL_COUNT)
 
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
             instancedIndexes[i] = i
-            shadedMixFactors[i] = 1
-            colorMixFactors[i] = 0.925 + Math.random() * 0.075
+            colorMixFactors[i] = 0.95 + Math.random() * 0.05
           }
           geometry
             .addAttribute('uv', {
@@ -130,12 +133,17 @@ export default class View {
             })
             .addAttribute('shadedMixFactor', {
               size: 1,
-              typedArray: shadedMixFactors,
+              typedArray: this.#shadedMixFactors,
               instancedDivisor: 1,
             })
             .addAttribute('colorScaleFactor', {
               size: 1,
               typedArray: colorMixFactors,
+              instancedDivisor: 1,
+            })
+            .addAttribute('textColor', {
+              size: 3,
+              typedArray: this.#textColors,
               instancedDivisor: 1,
             })
         }
@@ -291,37 +299,59 @@ export default class View {
   setView(viewDefiniton): this {
     this.#viewDefinition = viewDefiniton
 
-    const image = viewDefiniton.find(({ type }) => type === 'IMAGE')
-
-    let shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT)
+    const image = viewDefiniton.find(({ type }) => type === CONTENT_TYPE_IMAGE)
 
     for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+      const y = GRID_COUNT_Y - (i % GRID_COUNT_Y) - 1
+      const x = i / GRID_COUNT_X
+
       if (image) {
-        const y = GRID_COUNT_Y - (i % GRID_COUNT_Y) - 1
-        const x = i / GRID_COUNT_X
         if (
           x >= image.x &&
           x < image.width &&
           y >= image.y &&
           y < image.height
         ) {
-          shadedMixFactors[i] = 0
+          this.#shadedMixFactors[i] = 0
         } else {
-          shadedMixFactors[i] = 1
+          this.#shadedMixFactors[i] = 1
         }
       } else {
-        shadedMixFactors[i] = 1
+        this.#shadedMixFactors[i] = 1
       }
+      viewDefiniton.forEach((item) => {
+        if (
+          item.type === CONTENT_TYPE_TEXT ||
+          item.type === CONTENT_TYPE_SPLIT_TEXT
+        ) {
+          if (x >= item.x && x < item.x + item.value.length && y === item.y) {
+            this.#textColors[i * 3 + 0] = item.textColor ? item.textColor[0] : 1
+            this.#textColors[i * 3 + 1] = item.textColor
+              ? item.textColor[1]
+              : 0.2
+            this.#textColors[i * 3 + 2] = item.textColor
+              ? item.textColor[2]
+              : 0.2
+          }
+        }
+      })
     }
     const frontMesh = this.#meshes[this.#meshes.length - 1]
-    frontMesh.updateGeometryAttribute(
-      'shadedMixFactor',
-      0,
-      GRID_TOTAL_COUNT,
-      shadedMixFactors,
-    )
+    frontMesh
+      .updateGeometryAttribute(
+        'shadedMixFactor',
+        0,
+        GRID_TOTAL_COUNT,
+        this.#shadedMixFactors,
+      )
+      .updateGeometryAttribute(
+        'textColor',
+        0,
+        GRID_TOTAL_COUNT,
+        this.#textColors,
+      )
 
-    shadedMixFactors = null
+    // this.#shadedMixFactors.fill(1)
 
     const canvas = this.#textureManager.getTextureCanvas(
       this.#idx,
@@ -385,7 +415,6 @@ export default class View {
         })
       }
     }
-
     return hoveredItem && hoveredItem.link
   }
 

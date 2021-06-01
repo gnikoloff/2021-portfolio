@@ -27,35 +27,40 @@
         "value": "WORKS",
         "x": 7,
         "y": 7,
-        "link": "works"
+        "link": "works",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "ABOUT",
         "x": 7,
         "y": 9,
-        "link": "about"
+        "link": "about",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "CONTACT",
         "x": 6,
         "y": 11,
-        "link": "contact"
+        "link": "contact",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "ARCHIVE",
         "x": 6,
         "y": 13,
-        "link": "https://archive.georgi-nikolov.com"
+        "link": "https://archive.georgi-nikolov.com",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "JOURNAL",
         "x": 6,
         "y": 15,
-        "link": "https://archive.georgi-nikolov.com/blog"
+        "link": "https://archive.georgi-nikolov.com/blog",
+        "textColor": [0, 0, 1]
       }
     ]
   },
@@ -84,7 +89,8 @@
         "value": "hwoa-rang-gl",
         "x": 3,
         "y": 5,
-        "link": "hwoa-rang-gl"
+        "link": "hwoa-rang-gl",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT",
@@ -101,7 +107,8 @@
         "value": "JS Anim Course",
         "x": 3,
         "y": 7,
-        "link": "awwwards-js-animation-course"
+        "link": "awwwards-js-animation-course",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT",
@@ -118,7 +125,8 @@
         "value": "Demo web shop",
         "x": 3,
         "y": 9,
-        "link": "demo-web-shop"
+        "link": "demo-web-shop",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT",
@@ -135,7 +143,8 @@
         "value": "Demo AR Shop",
         "x": 3,
         "y": 11,
-        "link": "demo-ar-shop"
+        "link": "demo-ar-shop",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT",
@@ -152,7 +161,8 @@
         "value": "Codesketch",
         "x": 3,
         "y": 13,
-        "link": "codesketch"
+        "link": "codesketch",
+        "textColor": [0, 0, 1]
       },
       {
         "type": "TEXT",
@@ -169,7 +179,8 @@
         "value": "More works",
         "x": 3,
         "y": 15,
-        "link": "https://archive.georgi-nikolov.com/"
+        "link": "https://archive.georgi-nikolov.com/",
+        "textColor": [0, 0, 1]
       }
     ]
   },

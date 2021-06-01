@@ -24,6 +24,7 @@ varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
 varying float v_shadedMixFactor;
 varying float v_colorScaleFactor;
+varying vec4 v_textColor;
 
 const float near_plane = 0.1;
 const float far_plane = 1.0;
@@ -89,7 +90,7 @@ void main () {
 
       vec4 textColor = mix(
         vec4(bgColor, 1.0),
-        vec4(vec3(0.2), 1.0),
+        v_textColor,
         textMixFactor
       );
 
@@ -104,11 +105,6 @@ void main () {
       gl_FragColor = mix(atlasColor, shadedColor, v_shadedMixFactor);
 
     #else
-      // gl_FragColor = vec4(
-      //   vec3(currentDepth/40.0),
-      //   1.0
-      // );
-
       gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
     #endif
   }
