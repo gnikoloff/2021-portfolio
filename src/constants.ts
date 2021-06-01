@@ -1,9 +1,11 @@
 export const BODY_TEXT_COLOR = [90, 90, 90]
+export const BODY_TEXT_COLOR_MOBILE = [60, 60, 60]
 export const LINK_TEXT_COLOR = [32, 128, 223]
 export const BACK_BUTTON_TEXT_COLOR = [120, 120, 120]
 export const LIST_ORDER_COLOR = [150, 150, 150]
 export const HEADING_COLOR = [23, 70, 154]
 export const SKILL_TEXT_COLOR = [100, 100, 100]
+export const SKILL_TEXT_COLOR_MOBILE = [80, 80, 80]
 
 export const SIDE_COLOR_0 = [34, 135, 235]
 export const SIDE_COLOR_1 = [222, 38, 35]

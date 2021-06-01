@@ -1,11 +1,17 @@
 import {
   BODY_TEXT_COLOR,
+  BODY_TEXT_COLOR_MOBILE,
   LINK_TEXT_COLOR,
   SKILL_TEXT_COLOR,
+  SKILL_TEXT_COLOR_MOBILE,
   BACK_BUTTON_TEXT_COLOR,
   LIST_ORDER_COLOR,
   HEADING_COLOR,
 } from './constants'
+
+import { isMobileBrowser, isIPadOS } from './helpers'
+
+const isHandheld = isMobileBrowser() || isIPadOS()
 
 export default {
   home: {
@@ -212,7 +218,7 @@ export default {
         x: 1,
         y: 3,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -220,7 +226,7 @@ export default {
         x: 1,
         y: 4,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -228,7 +234,7 @@ export default {
         x: 1,
         y: 6,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -236,7 +242,7 @@ export default {
         x: 1,
         y: 7,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -244,7 +250,7 @@ export default {
         x: 1,
         y: 8,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -252,7 +258,7 @@ export default {
         x: 1,
         y: 10,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -260,7 +266,7 @@ export default {
         x: 1,
         y: 11,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -268,7 +274,7 @@ export default {
         x: 1,
         y: 12,
         fontSize: 0.71,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT_SPLIT',
@@ -285,7 +291,7 @@ export default {
         y: 15,
         fontSize: 0.65,
         color: 0.8,
-        textColor: SKILL_TEXT_COLOR,
+        textColor: isHandheld ? SKILL_TEXT_COLOR_MOBILE : SKILL_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -294,7 +300,7 @@ export default {
         y: 16,
         fontSize: 0.65,
         color: 0.8,
-        textColor: SKILL_TEXT_COLOR,
+        textColor: isHandheld ? SKILL_TEXT_COLOR_MOBILE : SKILL_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -303,7 +309,7 @@ export default {
         y: 17,
         fontSize: 0.65,
         color: 0.8,
-        textColor: SKILL_TEXT_COLOR,
+        textColor: isHandheld ? SKILL_TEXT_COLOR_MOBILE : SKILL_TEXT_COLOR,
       },
     ],
   },
@@ -325,7 +331,7 @@ export default {
         x: 1,
         y: 5,
         fontSize: 0.8,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -333,7 +339,7 @@ export default {
         x: 1,
         y: 6,
         fontSize: 0.8,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -341,7 +347,7 @@ export default {
         x: 1,
         y: 8,
         fontSize: 0.8,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT_SPLIT',
@@ -438,7 +444,7 @@ export default {
         x: 1,
         y: 14,
         fontSize: 0.68,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -446,7 +452,7 @@ export default {
         x: 1,
         y: 15,
         fontSize: 0.68,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -454,7 +460,7 @@ export default {
         x: 1,
         y: 16,
         fontSize: 0.68,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -462,7 +468,7 @@ export default {
         x: 1,
         y: 17,
         fontSize: 0.68,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
     ],
   },
@@ -510,7 +516,7 @@ export default {
         x: 1,
         y: 14,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -518,7 +524,7 @@ export default {
         x: 1,
         y: 15,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -526,7 +532,7 @@ export default {
         x: 1,
         y: 16,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -534,7 +540,7 @@ export default {
         x: 1,
         y: 17,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
     ],
   },
@@ -582,7 +588,7 @@ export default {
         x: 1,
         y: 14,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -590,7 +596,7 @@ export default {
         x: 1,
         y: 15,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -598,7 +604,7 @@ export default {
         x: 1,
         y: 16,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -606,7 +612,7 @@ export default {
         x: 1,
         y: 17,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
     ],
   },
@@ -654,7 +660,7 @@ export default {
         x: 1,
         y: 14,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -662,7 +668,7 @@ export default {
         x: 1,
         y: 15,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -670,7 +676,7 @@ export default {
         x: 1,
         y: 16,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -678,7 +684,7 @@ export default {
         x: 1,
         y: 17,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
     ],
   },
@@ -726,7 +732,7 @@ export default {
         x: 1,
         y: 14,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -734,7 +740,7 @@ export default {
         x: 1,
         y: 15,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -742,7 +748,7 @@ export default {
         x: 1,
         y: 16,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
       {
         type: 'TEXT',
@@ -750,7 +756,7 @@ export default {
         x: 1,
         y: 17,
         fontSize: 0.675,
-        textColor: BODY_TEXT_COLOR,
+        textColor: isHandheld ? BODY_TEXT_COLOR_MOBILE : BODY_TEXT_COLOR,
       },
     ],
   },
