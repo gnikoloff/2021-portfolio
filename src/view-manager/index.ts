@@ -22,12 +22,12 @@ export default class ViewManager {
 
   constructor(
     gl: WebGLRenderingContext,
-    { loadManager }: { loadManager: ResourceManager },
+    { resourceManager }: { resourceManager: ResourceManager },
   ) {
     this.#textureManager = new TextureManager({
       idealFontSize: 80,
       maxSize: Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), 2048),
-      loadManager,
+      resourceManager,
     })
     const state = store.getState()
     if (state.debugMode) {

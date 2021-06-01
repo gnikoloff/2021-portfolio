@@ -124,7 +124,7 @@ export default class HoverManager {
     camera: PerspectiveCamera,
     mouseX: number,
     mouseY: number,
-  ): number {
+  ): void {
     const { fieldOfView, near, far } = camera
 
     // debugger
@@ -201,6 +201,5 @@ export default class HoverManager {
     }
 
     store.dispatch(setHoverIdx(pickNdx))
-    return pickNdx
   }
 }

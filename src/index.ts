@@ -37,6 +37,7 @@ import TextureManager from './texture-manager'
 // ------------------------------------------------
 
 let oldTime = 0
+let hasLoadedResources = false
 let stats
 
 const dpr = Math.min(2.5, devicePixelRatio)
@@ -44,16 +45,15 @@ const mousePosition = { x: -1000, y: -1000 }
 const canvas = document.createElement('canvas')
 const gl = canvas.getContext('webgl')
 
-const loadManager = new ResourceManager()
+const resourceManager = new ResourceManager()
 const hoverManager = new HoverManager(gl)
 const viewManager = new ViewManager(gl, {
-  loadManager,
+  resourceManager,
 })
-
 const loadScreen = new LoadingScreen(gl)
-
 const lightingManager = new LightingManager(gl)
 
+// Cameras setup
 const camera = new PerspectiveCamera(
   (45 * Math.PI) / 180,
   innerWidth / innerHeight,
@@ -68,7 +68,6 @@ const orthoCamera = new OrthographicCamera(
   0.1,
   4,
 )
-
 {
   const { cameraX, cameraY, cameraZ } = store.getState()
   camera.position = [cameraX, cameraY, cameraZ]
@@ -86,20 +85,157 @@ const orthoCamera = new OrthographicCamera(
   lightingManager.computeShadowTextureMatrix()
 }
 
+// Debug FPS
 {
   const { debugMode } = store.getState()
-  // if (debugMode) {
-  // new CameraController(camera, document.body, true)
-  // }
   if (debugMode) {
     stats = new Stats()
     document.body.appendChild(stats.domElement)
   }
 }
 
-let hasLoadedResources = false
+// Init correct view based on url
+{
+  const viewName = getActiveViewFromURL()
+  store.dispatch(setActiveView(viewName))
+}
 
-store.subscribe(() => {
+// Load fonts
+resourceManager
+  .addFontResource({
+    type: ResourceManager.FONT_FACE,
+    name: TextureManager.DEFAULT_HEADING_FONT_FAMILY,
+    weight: TextureManager.FONT_WEIGHT_HEADING,
+    style: TextureManager.FONT_STYLE,
+  })
+  .addFontResource({
+    type: ResourceManager.FONT_GOOGLE,
+    name: TextureManager.DEFAULT_BODY_FONT_FAMILY,
+    weight: TextureManager.FONT_WEIGHT_BODY,
+    style: TextureManager.FONT_STYLE,
+  })
+
+// Add a bit of delay to prevent stutter
+resourceManager.addArtificialDelay(750)
+
+// Load skybox sides
+resourceManager
+  .addImageResource('/assets/skybox/bluecloud_bk.jpg')
+  .addImageResource('/assets/skybox/bluecloud_dn.jpg')
+  .addImageResource('/assets/skybox/bluecloud_ft.jpg')
+  .addImageResource('/assets/skybox/bluecloud_lf.jpg')
+  .addImageResource('/assets/skybox/bluecloud_rt.jpg')
+  .addImageResource('/assets/skybox/bluecloud_up.jpg')
+
+// Load project images
+extractAllImageUrlsFromViews().forEach(({ value: url }) => {
+  resourceManager.addImageResource(url)
+})
+resourceManager.load()
+
+// Event Listeners
+store.subscribe(onGlobalStateChange)
+document.body.addEventListener('click', onMouseClick)
+document.body.addEventListener('mousemove', onMouseMove)
+document.body.addEventListener('touchstart', onTouchStart)
+document.body.addEventListener('touchmove', onTouchMove)
+window.addEventListener('resize', onResize)
+window.onpopstate = onPopState
+
+// Canvas setup
+onResize(null, false)
+document.body.appendChild(canvas)
+
+// Start render loop
+requestAnimationFrame(updateFrame)
+
+function updateFrame(ts) {
+  requestAnimationFrame(updateFrame)
+
+  const state = store.getState()
+
+  const { debugMode } = state
+
+  if (debugMode) {
+    stats.begin()
+  }
+
+  let dt = ts - oldTime
+  oldTime = ts - (dt % (1 / DESIRED_FPS))
+
+  dt /= 1000
+  if (dt > 1) {
+    dt = 1
+  }
+
+  // -------- Update camera position --------
+  {
+    const { cameraX, cameraY, cameraZ } = state
+    const speed = dt * 3
+    const x = camera.position[0] + (cameraX - camera.position[0]) * speed
+    const y = camera.position[1] + (cameraY - camera.position[1]) * speed
+    const z = camera.position[2] + (cameraZ - camera.position[2]) * speed
+    camera.setPosition({ x, y, z }).updateViewMatrix()
+  }
+
+  gl.enable(gl.DEPTH_TEST)
+  gl.depthFunc(gl.LEQUAL)
+  gl.clearColor(0.8, 0.8, 0.8, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
+
+  // -------- Render load screen --------
+  const { hasFinishedLoadingAnimation } = state
+  loadScreen.render(camera, dt)
+
+  if (!hasFinishedLoadingAnimation) {
+    return
+  }
+
+  // Update views positions
+  {
+    viewManager.updateMatrix()
+  }
+
+  // -------- Render shadow framebuffer --------
+  {
+    lightingManager.depthFramebuffer.bind()
+    gl.viewport(0, 0, DEPTH_TEXTURE_WIDTH, DEPTH_TEXTURE_HEIGHT)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+    viewManager.render(
+      // @ts-ignore
+      {
+        projectionMatrix: lightingManager.lightProjectionMatrix,
+        viewMatrix: lightingManager.shadowTextureWorldMatrixInv,
+      },
+      true,
+      null,
+    )
+
+    lightingManager.depthFramebuffer.unbind()
+  }
+
+  // Render correct view
+  {
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
+    viewManager.render(
+      camera,
+      false,
+      lightingManager.depthFramebuffer.depthTexture,
+    )
+  }
+
+  // Render debug shadow mesh
+  if (debugMode) {
+    lightingManager.renderDebugMesh(orthoCamera)
+
+    stats.end()
+  }
+}
+
+// Event listeners
+function onGlobalStateChange() {
   const state = store.getState()
   if (hasLoadedResources !== state.hasLoadedResources) {
     hasLoadedResources = true
@@ -127,50 +263,7 @@ store.subscribe(() => {
       },
     })
   }
-})
-
-{
-  const viewName = getActiveViewFromURL()
-  store.dispatch(setActiveView(viewName))
 }
-
-loadManager
-  .addFontResource({
-    type: ResourceManager.FONT_FACE,
-    name: TextureManager.DEFAULT_HEADING_FONT_FAMILY,
-    weight: TextureManager.FONT_WEIGHT_HEADING,
-    style: TextureManager.FONT_STYLE,
-  })
-  .addFontResource({
-    type: ResourceManager.FONT_GOOGLE,
-    name: TextureManager.DEFAULT_BODY_FONT_FAMILY,
-    weight: TextureManager.FONT_WEIGHT_BODY,
-    style: TextureManager.FONT_STYLE,
-  })
-  .addArtificialDelay(750)
-
-extractAllImageUrlsFromViews().forEach(({ value: url }, i) => {
-  loadManager.addImageResource(url)
-  if (i === 3) {
-    loadManager.addArtificialDelay(300)
-  }
-})
-
-document.body.addEventListener('click', onMouseClick)
-document.body.addEventListener('mousemove', onMouseMove)
-document.body.addEventListener('touchstart', onTouchStart)
-document.body.addEventListener('touchmove', onTouchMove)
-window.addEventListener('resize', onResize)
-
-window.onpopstate = () => {
-  const viewName = getActiveViewFromURL()
-  store.dispatch(setActiveView(viewName, false))
-}
-
-loadManager.load()
-onResize(null, false)
-document.body.appendChild(canvas)
-requestAnimationFrame(updateFrame)
 
 function onMouseClick(e) {
   e.preventDefault()
@@ -179,11 +272,8 @@ function onMouseClick(e) {
   const { touchDevice } = state
 
   if (touchDevice) {
-    const hoverIdx = hoverManager.determineHoveredIdx(
-      camera,
-      mousePosition.x,
-      mousePosition.y,
-    )
+    hoverManager.determineHoveredIdx(camera, mousePosition.x, mousePosition.y)
+    const { hoverIdx } = store.getState()
     const linkItem = viewManager.setHoveredIdx(hoverIdx)
 
     if (!linkItem) {
@@ -239,11 +329,8 @@ function onMouseMove(e) {
   store.dispatch(setCameraY(normMouseY * 4))
   store.dispatch(setLightX(normMouseX))
 
-  const hoverIdx = hoverManager.determineHoveredIdx(
-    camera,
-    mousePosition.x,
-    mousePosition.y,
-  )
+  hoverManager.determineHoveredIdx(camera, mousePosition.x, mousePosition.y)
+  const { hoverIdx } = store.getState()
   viewManager.setHoveredIdx(hoverIdx)
 }
 
@@ -257,84 +344,20 @@ function onTouchMove(e) {
   e.stopPropagation()
 }
 
-function updateFrame(ts) {
-  requestAnimationFrame(updateFrame)
-
-  const state = store.getState()
-
-  const { debugMode } = state
-
-  if (debugMode) {
-    stats.begin()
-  }
-
-  let dt = ts - oldTime
-  oldTime = ts - (dt % (1 / DESIRED_FPS))
-
-  dt /= 1000
-  if (dt > 1) {
-    dt = 1
-  }
-
-  {
-    const { cameraX, cameraY, cameraZ } = state
-    const speed = dt * 3
-    const x = camera.position[0] + (cameraX - camera.position[0]) * speed
-    const y = camera.position[1] + (cameraY - camera.position[1]) * speed
-    const z = camera.position[2] + (cameraZ - camera.position[2]) * speed
-    camera.setPosition({ x, y, z }).updateViewMatrix()
-  }
-
-  gl.enable(gl.DEPTH_TEST)
-  gl.depthFunc(gl.LEQUAL)
-
-  gl.clearColor(0.8, 0.8, 0.8, 1)
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
-
-  const { hasFinishedLoadingAnimation } = state
-  loadScreen.render(camera, dt)
-
-  if (!hasFinishedLoadingAnimation) {
-    return
-  }
-
-  viewManager.updateMatrix()
-
-  {
-    lightingManager.depthFramebuffer.bind()
-    gl.viewport(0, 0, DEPTH_TEXTURE_WIDTH, DEPTH_TEXTURE_HEIGHT)
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-    viewManager.render(
-      // @ts-ignore
-      {
-        projectionMatrix: lightingManager.lightProjectionMatrix,
-        viewMatrix: lightingManager.shadowTextureWorldMatrixInv,
-      },
-      true,
-      null,
-    )
-
-    lightingManager.depthFramebuffer.unbind()
-  }
-
-  {
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
-    viewManager.render(
-      camera,
-      false,
-      lightingManager.depthFramebuffer.depthTexture,
-    )
-  }
-
-  if (debugMode) {
-    lightingManager.renderDebugMesh(orthoCamera)
-
-    stats.end()
-  }
+function onPopState() {
+  const viewName = getActiveViewFromURL()
+  store.dispatch(setActiveView(viewName, false))
 }
 
+function onResize(e, updateProjectionMatrix = true) {
+  if (updateProjectionMatrix) {
+    camera.aspect = innerWidth / innerHeight
+    camera.updateProjectionMatrix()
+  }
+  sizeCanvas()
+}
+
+// Helpers
 function extractAllImageUrlsFromViews(): Array<{ value: string }> {
   const allImagesInProject = []
   for (const view of Object.values(VIEWS_DEFINITIONS)) {
@@ -344,14 +367,6 @@ function extractAllImageUrlsFromViews(): Array<{ value: string }> {
     allImagesInProject.push(...images)
   }
   return allImagesInProject
-}
-
-function onResize(e, updateProjectionMatrix = true) {
-  if (updateProjectionMatrix) {
-    camera.aspect = innerWidth / innerHeight
-    camera.updateProjectionMatrix()
-  }
-  sizeCanvas()
 }
 
 function sizeCanvas() {

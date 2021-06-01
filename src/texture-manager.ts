@@ -20,7 +20,7 @@ export default class TextureManager {
   #maxSize: number
   #idealFontSize: number
 
-  loadManager
+  #resourceManager: ResourceManager
 
   static FILL_STYLE = 'white'
   static FONT_STYLE = 'normal'
@@ -60,13 +60,13 @@ export default class TextureManager {
   constructor({
     maxSize,
     idealFontSize,
-    loadManager,
+    resourceManager,
   }: {
     maxSize: number
     idealFontSize: number
-    loadManager: ResourceManager
+    resourceManager: ResourceManager
   }) {
-    this.loadManager = loadManager
+    this.#resourceManager = resourceManager
 
     this.#canvas0.width = maxSize
     this.#canvas0.height = maxSize
@@ -166,7 +166,7 @@ export default class TextureManager {
         const containerWidth = (item.width - item.x) * this.#cellWidth
         const containerHeight = (item.height - item.y) * this.#cellHeight
 
-        const image = this.loadManager.getImage(item.value)
+        const image = this.#resourceManager.getImage(item.value)
 
         const cover = TextureManager.fitDimensions(false)
 
@@ -181,8 +181,6 @@ export default class TextureManager {
           image.naturalWidth,
           image.naturalHeight,
         )
-
-        console.log({ offsetX, offsetY })
 
         const drawX = x + offsetX
         const drawY = y + offsetY
