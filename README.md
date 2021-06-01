@@ -39,4 +39,4 @@ npm run start:local
 
 To access FPS meter, shadow map debug view and texture atlas debug view, simply append `debugMode=1` as a query param at the end of the url
 
-![Debug view](/src/assets/debug-view.png.png?raw=true)
+![Debug view](/src/assets/debug-view.png?raw=true)
