@@ -340,8 +340,10 @@ function onMouseMove(e) {
     return null
   }
 
-  store.dispatch(setCameraX(normMouseX * 4))
-  store.dispatch(setCameraY(normMouseY * 4))
+  const mouseScaleX = 9
+  const mouseScaleY = 9
+  store.dispatch(setCameraX(normMouseX * mouseScaleX))
+  store.dispatch(setCameraY(normMouseY * mouseScaleY))
   store.dispatch(setLightX(normMouseX))
 
   hoverManager.determineHoveredIdx(camera, mousePosition.x, mousePosition.y)
