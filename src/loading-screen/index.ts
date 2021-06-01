@@ -64,7 +64,7 @@ export default class LoadingScreen {
       geometry,
       instanceCount: LoadingScreen.CUBES_COUNT,
       uniforms: {
-        lightDirection: { type: UNIFORM_TYPE_VEC3, value: [-4, 3, 3] },
+        lightDirection: { type: UNIFORM_TYPE_VEC3, value: [0, 3, 3] },
         lightFactor: { type: UNIFORM_TYPE_FLOAT, value: 0.4 },
       },
       defines: {},
@@ -118,6 +118,7 @@ export default class LoadingScreen {
           onComplete: () => {
             setTimeout(() => {
               store.dispatch(setHasFinishedLoadingAnimation(true))
+              this.#mesh.delete()
             }, 1125)
           },
         })
