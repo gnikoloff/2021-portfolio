@@ -131,6 +131,7 @@ resourceManager
 extractAllImageUrlsFromViews().forEach(({ value: url }) => {
   resourceManager.addImageResource(url)
 })
+// Load all assets
 resourceManager.load()
 
 // Event Listeners

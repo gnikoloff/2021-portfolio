@@ -1,13 +1,4 @@
 import { mat4, vec3 } from 'gl-matrix'
-import {
-  GRID_COUNT_X,
-  GRID_COUNT_Y,
-  GRID_STEP_X,
-  GRID_STEP_Y,
-  GRID_TOTAL_COUNT,
-  GRID_WIDTH_X,
-  GRID_WIDTH_Y,
-} from './constants'
 
 import {
   Framebuffer,
@@ -18,9 +9,23 @@ import {
   PROJECTION_MATRIX_UNIFORM_NAME,
   UNIFORM_TYPE_MATRIX4X4,
   VIEW_MATRIX_UNIFORM_NAME,
-} from './lib/hwoa-rang-gl/dist/esm/index'
-import store from './store'
-import { setHoverIdx } from './store/actions'
+} from '../lib/hwoa-rang-gl/dist/esm/index'
+
+import {
+  GRID_COUNT_X,
+  GRID_COUNT_Y,
+  GRID_STEP_X,
+  GRID_STEP_Y,
+  GRID_TOTAL_COUNT,
+  GRID_WIDTH_X,
+  GRID_WIDTH_Y,
+} from '../constants'
+
+import store from '../store'
+import { setHoverIdx } from '../store/actions'
+
+import vertexShaderSource from './shader.vert'
+import fragmentShaderSource from './shader.frag'
 
 export default class HoverManager {
   #gl: WebGLRenderingContext
@@ -66,31 +71,8 @@ export default class HoverManager {
       uniforms: {},
       defines: {},
       geometry,
-      vertexShaderSource: `
-        attribute vec4 position;
-        attribute vec4 id;
-        attribute mat4 instanceModelMatrix;
-
-        varying vec4 v_id;
-
-        void main () {
-          gl_Position = projectionMatrix *
-                        viewMatrix *
-                        modelMatrix *
-                        instanceModelMatrix *
-                        position;
-
-          v_id = id;
-        }
-      `,
-      fragmentShaderSource: `
-        varying vec4 v_id;
-       
-        void main () {
-          gl_FragColor = v_id;
-          // gl_FragColor = vec4(1.0, 0.0,)
-        }
-      `,
+      vertexShaderSource,
+      fragmentShaderSource,
     })
 
     for (let x = 0; x < GRID_COUNT_X; x++) {

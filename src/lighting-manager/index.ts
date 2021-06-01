@@ -1,5 +1,5 @@
 import { mat4, ReadonlyVec3, vec3 } from 'gl-matrix'
-import { DEPTH_TEXTURE_HEIGHT, DEPTH_TEXTURE_WIDTH } from './constants'
+import { DEPTH_TEXTURE_HEIGHT, DEPTH_TEXTURE_WIDTH } from '../constants'
 import {
   Framebuffer,
   Geometry,
@@ -7,10 +7,13 @@ import {
   Mesh,
   OrthographicCamera,
   UNIFORM_TYPE_INT,
-} from './lib/hwoa-rang-gl/dist/esm'
+} from '../lib/hwoa-rang-gl/dist/esm'
 
-import store from './store'
-import { setShadowTextureMatrix } from './store/actions'
+import store from '../store'
+import { setShadowTextureMatrix } from '../store/actions'
+
+import vertexShaderSource from './debug.vert'
+import fragmentShaderSource from './debug.frag'
 
 export default class LightingManager {
   static UP_VECTOR: ReadonlyVec3 = [0, 1, 0]
@@ -72,39 +75,8 @@ export default class LightingManager {
         uniforms: {
           depthTex: { type: UNIFORM_TYPE_INT, value: 0 },
         },
-        vertexShaderSource: `
-          attribute vec4 position;
-          attribute vec2 uv;
-
-          varying vec2 v_uv;
-
-          void main () {
-            gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
-
-            v_uv = uv;
-          }
-        `,
-        fragmentShaderSource: `
-          precision highp float;
-
-          uniform sampler2D depthTex;
-
-          varying vec2 v_uv;
-
-          const float near_plane = ${this.shadowNear};
-          const float far_plane = ${this.shadowFar}.0;
-
-          float LinearizeDepth(float depth) {
-            float z = depth * 2.0 - 1.0; // Back to NDC 
-            return (2.0 * near_plane * far_plane) / (far_plane + near_plane - z * (far_plane - near_plane));
-          }
-
-          void main () {
-            float depth = texture2D(depthTex, v_uv).r;
-            gl_FragColor = vec4(vec3(LinearizeDepth(depth) / far_plane), 1.0);
-          }
-
-        `,
+        vertexShaderSource,
+        fragmentShaderSource,
       })
       this.#depthDebugMesh.setPosition({
         x: -innerWidth / 2 + width / 2 + 20,
