@@ -1,3 +1,5 @@
+[https://georgi-nikolov.com](https://georgi-nikolov.com)
+
 ![Homepage render](/src/assets/georgi-nikolov-social-preview.png?raw=true)
 
 # Personal portfolio 2021
