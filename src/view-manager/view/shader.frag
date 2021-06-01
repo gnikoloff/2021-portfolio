@@ -1,5 +1,7 @@
 precision highp float;
 
+const float CUBES_COUNT = 361.0;
+
 #ifdef IS_FRONT_VIEW
   struct PointLightBase {
     float shininess;
@@ -97,12 +99,12 @@ void main () {
 
       vec4 cubeColor = textureCube(skyboxTexture, direction);
 
-      gl_FragColor = mix(gl_FragColor, cubeColor, v_shadedMixFactor * 0.1);
+      gl_FragColor = mix(gl_FragColor, cubeColor, v_shadedMixFactor * 0.115);
 
     #else
       // Sides color
       vec3 eyeToSurfaceDir = normalize(v_worldPosition - eyePosition);
-      vec3 direction = refract(eyeToSurfaceDir, normal, v_instanceIndex / 361.0);
+      vec3 direction = refract(eyeToSurfaceDir, normal, v_instanceIndex / CUBES_COUNT);
 
       vec4 cubeColor = textureCube(skyboxTexture, direction);
       gl_FragColor = mix(v_sideColor, cubeColor, 0.9);

@@ -10,7 +10,7 @@ import TextureManager from '../texture-manager'
 import ResourceManager from '../resource-manager'
 import View from './view'
 
-import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
+import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS'
 
 export default class ViewManager {
   #view0: View

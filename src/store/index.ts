@@ -3,7 +3,7 @@ import { GRID_WIDTH_X, VIEW_HOME } from '../constants'
 
 import * as actions from './actions'
 
-import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS.json'
+import VIEWS_DEFINITIONS from '../VIEWS_DEFINITIONS'
 import { isIPadOS, isMobileBrowser } from '../helpers'
 
 const isIpad = isIPadOS()
@@ -43,10 +43,10 @@ const initialState = {
   lightY: 3,
   lightZ: 5,
 
-  pointLightShininess: 100,
+  pointLightShininess: 500,
   pointLightColor: [1, 1, 1],
   pointLightSpecularColor: [1, 0, 0],
-  pointLightSpecularFactor: 0.1,
+  pointLightSpecularFactor: 0.2,
 
   shadowTextureMatrix: null,
 

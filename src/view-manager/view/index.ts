@@ -41,6 +41,7 @@ import {
   CONTENT_TYPE_TEXT,
   CONTENT_TYPE_SPLIT_TEXT,
   CONTENT_TYPE_IMAGE,
+  POSSIBLE_SIDE_COLORS,
 } from '../../constants'
 
 import vertexShaderSource from './shader.vert'
@@ -78,10 +79,6 @@ export default class View {
 
   static normalizeColor(color: number): number {
     return color / 255
-  }
-
-  static normalizeColorRGB(color: number[]): number[] {
-    return color.map(View.normalizeColor)
   }
 
   constructor(
@@ -235,17 +232,14 @@ export default class View {
           })
         } else {
           const sideColors = new Float32Array(GRID_TOTAL_COUNT * 3)
-          const possibleColors = [
-            View.normalizeColorRGB([34, 135, 235]),
-            View.normalizeColorRGB([222, 38, 35]),
-            View.normalizeColorRGB([237, 145, 122]),
-          ]
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
             const randColor =
-              possibleColors[Math.floor(Math.random() * possibleColors.length)]
-            sideColors[i * 3 + 0] = randColor[0]
-            sideColors[i * 3 + 1] = randColor[1]
-            sideColors[i * 3 + 2] = randColor[2]
+              POSSIBLE_SIDE_COLORS[
+                Math.floor(Math.random() * POSSIBLE_SIDE_COLORS.length)
+              ]
+            sideColors[i * 3 + 0] = View.normalizeColor(randColor[0])
+            sideColors[i * 3 + 1] = View.normalizeColor(randColor[1])
+            sideColors[i * 3 + 2] = View.normalizeColor(randColor[2])
           }
           geometry.addAttribute('sideColor', {
             size: 3,
