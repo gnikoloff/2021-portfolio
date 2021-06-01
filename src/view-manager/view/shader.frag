@@ -95,7 +95,8 @@ void main () {
 
       // Skybox color
       vec3 eyeToSurfaceDir = normalize(v_worldPosition - eyePosition);
-      vec3 direction = refract(eyeToSurfaceDir, normal, 1.0 / v_colorScaleFactor);
+      // vec3 direction = refract(eyeToSurfaceDir, normal, 1.0 / v_colorScaleFactor);
+      vec3 direction = reflect(eyeToSurfaceDir, normal);
 
       vec4 cubeColor = textureCube(skyboxTexture, direction);
 
@@ -104,7 +105,8 @@ void main () {
     #else
       // Sides color
       vec3 eyeToSurfaceDir = normalize(v_worldPosition - eyePosition);
-      vec3 direction = refract(eyeToSurfaceDir, normal, v_instanceIndex / CUBES_COUNT);
+      // vec3 direction = refract(eyeToSurfaceDir, normal, v_instanceIndex / CUBES_COUNT);
+      vec3 direction = reflect(eyeToSurfaceDir, normal);
 
       vec4 cubeColor = textureCube(skyboxTexture, direction);
       gl_FragColor = mix(v_sideColor, cubeColor, 0.9);
