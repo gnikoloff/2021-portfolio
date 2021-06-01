@@ -1,4 +1,4 @@
-import { mat4, ReadonlyMat4, vec3 } from 'gl-matrix'
+import { mat4, ReadonlyMat4, ReadonlyVec3, vec3 } from 'gl-matrix'
 import { animate } from 'popmotion'
 
 import {
@@ -73,6 +73,14 @@ export default class View {
   static posZInitial = 0
   static posZHover = GRID_STEP_Y * 0.9
   static transitionDuration = 750
+
+  static normalizeColor(color: number): number {
+    return color / 255
+  }
+
+  static normalizeColorRGB(color: number[]): number[] {
+    return color.map(View.normalizeColor)
+  }
 
   constructor(
     gl: WebGLRenderingContext,
@@ -218,6 +226,25 @@ export default class View {
             fragmentShaderSource: fragmentShaderSource,
           })
         } else {
+          const sideColors = new Float32Array(GRID_TOTAL_COUNT * 3)
+          const possibleColors = [
+            View.normalizeColorRGB([34, 135, 235]),
+            View.normalizeColorRGB([222, 38, 35]),
+            View.normalizeColorRGB([237, 145, 122]),
+          ]
+          for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+            const randColor =
+              possibleColors[Math.floor(Math.random() * possibleColors.length)]
+            sideColors[i * 3 + 0] = randColor[0]
+            sideColors[i * 3 + 1] = randColor[1]
+            sideColors[i * 3 + 2] = randColor[2]
+          }
+          geometry.addAttribute('sideColor', {
+            size: 3,
+            typedArray: sideColors,
+            instancedDivisor: 1,
+          })
+
           mesh = new InstancedMesh(gl, {
             geometry,
             uniforms: {
@@ -325,12 +352,14 @@ export default class View {
           item.type === CONTENT_TYPE_SPLIT_TEXT
         ) {
           if (x >= item.x && x < item.x + item.value.length && y === item.y) {
-            this.#textColors[i * 3 + 0] = item.textColor ? item.textColor[0] : 1
+            this.#textColors[i * 3 + 0] = item.textColor
+              ? View.normalizeColor(item.textColor[0])
+              : 0.2
             this.#textColors[i * 3 + 1] = item.textColor
-              ? item.textColor[1]
+              ? View.normalizeColor(item.textColor[1])
               : 0.2
             this.#textColors[i * 3 + 2] = item.textColor
-              ? item.textColor[2]
+              ? View.normalizeColor(item.textColor[2])
               : 0.2
           }
         }

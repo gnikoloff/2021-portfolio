@@ -89,7 +89,6 @@ export default class TextureManager {
       fontSize
       x
       y
-      opacity
       fontFamily
       letterSpacing
       paddingLeft
@@ -120,7 +119,6 @@ export default class TextureManager {
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillStyle = TextureManager.FILL_STYLE
-        ctx.globalAlpha = item.opacity || 1
 
         for (let i = 0; i < count; i++) {
           const char = item.value[i]
@@ -150,7 +148,6 @@ export default class TextureManager {
         ctx.textAlign = 'left'
         ctx.textBaseline = 'middle'
         ctx.fillStyle = TextureManager.FILL_STYLE
-        ctx.globalAlpha = item.opacity || 1
 
         let accX = x
 

@@ -9,7 +9,8 @@
         "y": 1,
         "fontFamily": "Venus Rising",
         "fontSize": 1.1,
-        "letterSpacing": 26
+        "letterSpacing": 26,
+        "textColor": [222, 38, 35]
       },
       {
         "type": "TEXT",
@@ -20,7 +21,7 @@
         "fontFamily": "Venus Rising",
         "fontSize": 0.75,
         "letterSpacing": 12,
-        "opacity": 0.8
+        "textColor": [160, 160, 160]
       },
       {
         "type": "TEXT_SPLIT",
@@ -28,7 +29,7 @@
         "x": 7,
         "y": 7,
         "link": "works",
-        "textColor": [0, 0, 1]
+        "textColor": [34, 135, 234]
       },
       {
         "type": "TEXT_SPLIT",
@@ -36,7 +37,7 @@
         "x": 7,
         "y": 9,
         "link": "about",
-        "textColor": [0, 0, 1]
+        "textColor": [34, 135, 234]
       },
       {
         "type": "TEXT_SPLIT",
@@ -44,7 +45,7 @@
         "x": 6,
         "y": 11,
         "link": "contact",
-        "textColor": [0, 0, 1]
+        "textColor": [34, 135, 234]
       },
       {
         "type": "TEXT_SPLIT",
@@ -52,7 +53,7 @@
         "x": 6,
         "y": 13,
         "link": "https://archive.georgi-nikolov.com",
-        "textColor": [0, 0, 1]
+        "textColor": [34, 135, 234]
       },
       {
         "type": "TEXT_SPLIT",
@@ -60,7 +61,7 @@
         "x": 6,
         "y": 15,
         "link": "https://archive.georgi-nikolov.com/blog",
-        "textColor": [0, 0, 1]
+        "textColor": [34, 135, 234]
       }
     ]
   },
@@ -72,7 +73,8 @@
         "value": "BACK",
         "x": 1,
         "y": 1,
-        "link": "home"
+        "link": "home",
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT",
@@ -82,7 +84,7 @@
         "paddingLeft": 0.125,
         "fontSize": 0.8,
         "fontFamily": "Venus Rising",
-        "opacity": 0.5
+        "textColor": [160, 160, 160]
       },
       {
         "type": "TEXT_SPLIT",
@@ -90,7 +92,7 @@
         "x": 3,
         "y": 5,
         "link": "hwoa-rang-gl",
-        "textColor": [0, 0, 1]
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT",
@@ -100,7 +102,7 @@
         "paddingLeft": 0.125,
         "fontSize": 0.8,
         "fontFamily": "Venus Rising",
-        "opacity": 0.5
+        "textColor": [160, 160, 160]
       },
       {
         "type": "TEXT_SPLIT",
@@ -108,7 +110,7 @@
         "x": 3,
         "y": 7,
         "link": "awwwards-js-animation-course",
-        "textColor": [0, 0, 1]
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT",
@@ -118,7 +120,7 @@
         "paddingLeft": 0.125,
         "fontSize": 0.8,
         "fontFamily": "Venus Rising",
-        "opacity": 0.5
+        "textColor": [160, 160, 160]
       },
       {
         "type": "TEXT_SPLIT",
@@ -126,7 +128,7 @@
         "x": 3,
         "y": 9,
         "link": "demo-web-shop",
-        "textColor": [0, 0, 1]
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT",
@@ -136,7 +138,7 @@
         "paddingLeft": 0.125,
         "fontSize": 0.8,
         "fontFamily": "Venus Rising",
-        "opacity": 0.5
+        "textColor": [160, 160, 160]
       },
       {
         "type": "TEXT_SPLIT",
@@ -144,7 +146,7 @@
         "x": 3,
         "y": 11,
         "link": "demo-ar-shop",
-        "textColor": [0, 0, 1]
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT",
@@ -154,7 +156,7 @@
         "paddingLeft": 0.125,
         "fontSize": 0.8,
         "fontFamily": "Venus Rising",
-        "opacity": 0.5
+        "textColor": [160, 160, 160]
       },
       {
         "type": "TEXT_SPLIT",
@@ -162,7 +164,7 @@
         "x": 3,
         "y": 13,
         "link": "codesketch",
-        "textColor": [0, 0, 1]
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT",
@@ -172,7 +174,7 @@
         "paddingLeft": 0.125,
         "fontSize": 0.8,
         "fontFamily": "Venus Rising",
-        "opacity": 0.5
+        "textColor": [160, 160, 160]
       },
       {
         "type": "TEXT_SPLIT",
@@ -180,7 +182,7 @@
         "x": 3,
         "y": 15,
         "link": "https://archive.georgi-nikolov.com/",
-        "textColor": [0, 0, 1]
+        "textColor": [33, 133, 236]
       }
     ]
   },
@@ -192,72 +194,80 @@
         "value": "BACK",
         "x": 1,
         "y": 1,
-        "link": "home"
+        "link": "home",
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT",
         "value": "My name is Georgi Nikolov, a frontend developer from",
         "x": 1,
         "y": 3,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "Bulgaria and I am based in Berlin, Germany.",
         "x": 1,
         "y": 4,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "My daily work consists of developing tools, complex",
         "x": 1,
         "y": 6,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "dashboards, consumer facing products and award winning",
         "x": 1,
         "y": 7,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "websites using wide range of backends and web APIs.",
         "x": 1,
         "y": 8,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "Be it rich user interfaces and graphics, web apps, VR,",
         "x": 1,
         "y": 10,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "AR and 3D visualisations, I endlessly strive for the",
         "x": 1,
         "y": 11,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "highest possible mark.",
         "x": 1,
         "y": 12,
-        "fontSize": 0.71
+        "fontSize": 0.71,
+        "textColor": [100, 100, 100]
       },
       {
-        "type": "TEXT",
-        "value": "Skills:",
+        "type": "TEXT_SPLIT",
+        "value": "Skills",
         "x": 1,
         "y": 14,
-        "fontSize": 0.8,
         "fontFamily": "Venus Rising",
-        "opacity": 0.72
+        "textColor": [222, 38, 35]
       },
       {
         "type": "TEXT",
@@ -265,7 +275,8 @@
         "x": 1,
         "y": 15,
         "fontSize": 0.65,
-        "color": 0.8
+        "color": 0.8,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -273,7 +284,8 @@
         "x": 1,
         "y": 16,
         "fontSize": 0.65,
-        "color": 0.8
+        "color": 0.8,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -281,7 +293,8 @@
         "x": 1,
         "y": 17,
         "fontSize": 0.65,
-        "color": 0.8
+        "color": 0.8,
+        "textColor": [100, 100, 100]
       }
     ]
   },
@@ -294,70 +307,80 @@
         "value": "BACK",
         "x": 1,
         "y": 1,
-        "link": "home"
+        "link": "home",
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT",
         "value": "I am available for freelance work, cool new",
         "x": 1,
         "y": 5,
-        "fontSize": 0.8
+        "fontSize": 0.8,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "projects and possible collaborations.",
         "x": 1,
         "y": 6,
-        "fontSize": 0.8
+        "fontSize": 0.8,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
         "value": "Get in touch and let's build the next web.",
         "x": 1,
         "y": 8,
-        "fontSize": 0.8
+        "fontSize": 0.8,
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "mail",
         "x": 1,
         "y": 12,
-        "link": "mailto:nikoloffgeorgi@gmail.com"
+        "link": "mailto:nikoloffgeorgi@gmail.com",
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "twitter",
         "x": 9,
         "y": 12,
-        "link": "https://twitter.com/georgiNikoloff"
+        "link": "https://twitter.com/georgiNikoloff",
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "github",
         "x": 1,
         "y": 14,
-        "link": "https://github.com/gnikoloff"
+        "link": "https://github.com/gnikoloff",
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "codepen",
         "x": 9,
         "y": 14,
-        "link": "https://codepen.io/gbnikolov"
+        "link": "https://codepen.io/gbnikolov",
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "medium",
         "x": 1,
         "y": 16,
-        "link": "https://nikoloffgeorgi.medium.com/"
+        "link": "https://nikoloffgeorgi.medium.com/",
+        "textColor": [33, 133, 236]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "dwitter",
         "x": 9,
         "y": 16,
-        "link": "https://www.dwitter.net/u/nikoloffgeorgi"
+        "link": "https://www.dwitter.net/u/nikoloffgeorgi",
+        "textColor": [33, 133, 236]
       }
     ]
   },
@@ -372,14 +395,15 @@
         "x": 1,
         "y": 1,
         "link": "works",
-        "opacity": 0.75
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "OPEN",
         "x": 14,
         "y": 1,
-        "link": "https://gnikoloff.github.io/hwoa-rang-gl/"
+        "link": "https://gnikoloff.github.io/hwoa-rang-gl/",
+        "textColor": [34, 135, 234]
       },
       {
         "type": "IMAGE",
@@ -390,11 +414,14 @@
         "height": 12
       },
       {
-        "type": "TEXT_SPLIT",
+        "type": "TEXT",
         "value": "hwoa-rang-gl",
         "x": 1,
         "y": 13,
-        "fontSize": 0.9
+        "fontSize": 0.9,
+        "fontFamily": "Venus Rising",
+        "letterSpacing": 10,
+        "textColor": [222, 38, 35]
       },
       {
         "type": "TEXT",
@@ -402,7 +429,7 @@
         "x": 1,
         "y": 14,
         "fontSize": 0.68,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -410,7 +437,7 @@
         "x": 1,
         "y": 15,
         "fontSize": 0.68,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -418,7 +445,7 @@
         "x": 1,
         "y": 16,
         "fontSize": 0.68,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -426,7 +453,7 @@
         "x": 1,
         "y": 17,
         "fontSize": 0.68,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       }
       
     ]
@@ -441,14 +468,15 @@
         "x": 1,
         "y": 1,
         "link": "works",
-        "opacity": 0.75
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "OPEN",
         "x": 14,
         "y": 1,
-        "link": "https://www.awwwards.com/academy/course/dynamically-scripted-animations-with-javascript"
+        "link": "https://www.awwwards.com/academy/course/dynamically-scripted-animations-with-javascript",
+        "textColor": [34, 135, 234]
       },
       {
         "type": "IMAGE",
@@ -465,7 +493,8 @@
         "y": 13,
         "fontSize": 0.9,
         "fontFamily": "Venus Rising",
-        "letterSpacing": 10
+        "letterSpacing": 10,
+        "textColor": [222, 38, 35]
       },
       {
         "type": "TEXT",
@@ -473,7 +502,7 @@
         "x": 1,
         "y": 14,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -481,7 +510,7 @@
         "x": 1,
         "y": 15,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -489,7 +518,7 @@
         "x": 1,
         "y": 16,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -497,7 +526,7 @@
         "x": 1,
         "y": 17,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       }
     ]
   },
@@ -511,14 +540,15 @@
         "x": 1,
         "y": 1,
         "link": "works",
-        "opacity": 0.75
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "OPEN",
         "x": 14,
         "y": 1,
-        "link": "https://acrnm-product-explorer.vercel.app/"
+        "link": "https://acrnm-product-explorer.vercel.app/",
+        "textColor": [34, 135, 234]
       },
       {
         "type": "IMAGE",
@@ -535,7 +565,8 @@
         "y": 13,
         "fontSize": 0.9,
         "fontFamily": "Venus Rising",
-        "letterSpacing": 10
+        "letterSpacing": 10,
+        "textColor": [222, 38, 35]
       },
       {
         "type": "TEXT",
@@ -543,7 +574,7 @@
         "x": 1,
         "y": 14,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -551,7 +582,7 @@
         "x": 1,
         "y": 15,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -559,7 +590,7 @@
         "x": 1,
         "y": 16,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -567,7 +598,7 @@
         "x": 1,
         "y": 17,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       }
     ]
   },
@@ -581,14 +612,15 @@
         "x": 1,
         "y": 1,
         "link": "works",
-        "opacity": 0.75
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "OPEN",
         "x": 14,
         "y": 1,
-        "link": "https://codesketch.georgi-nikolov.com/"
+        "link": "https://codesketch.georgi-nikolov.com/",
+        "textColor": [34, 135, 234]
       },
       {
         "type": "IMAGE",
@@ -605,7 +637,8 @@
         "y": 13,
         "fontSize": 0.9,
         "fontFamily": "Venus Rising",
-        "letterSpacing": 10
+        "letterSpacing": 10,
+        "textColor": [222, 38, 35]
       },
       {
         "type": "TEXT",
@@ -613,7 +646,7 @@
         "x": 1,
         "y": 14,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -621,7 +654,7 @@
         "x": 1,
         "y": 15,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -629,7 +662,7 @@
         "x": 1,
         "y": 16,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -637,7 +670,7 @@
         "x": 1,
         "y": 17,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       }
     ]
   },
@@ -651,14 +684,15 @@
         "x": 1,
         "y": 1,
         "link": "works",
-        "opacity": 0.75
+        "textColor": [140, 140, 140]
       },
       {
         "type": "TEXT_SPLIT",
         "value": "OPEN",
         "x": 14,
         "y": 1,
-        "link": "https://archive.georgi-nikolov.com/project/web-ar-furniture-demo"
+        "link": "https://archive.georgi-nikolov.com/project/web-ar-furniture-demo",
+        "textColor": [34, 135, 234]
       },
       {
         "type": "IMAGE",
@@ -675,7 +709,8 @@
         "y": 13,
         "fontSize": 0.9,
         "fontFamily": "Venus Rising",
-        "letterSpacing": 10
+        "letterSpacing": 10,
+        "textColor": [222, 38, 35]
       },
       {
         "type": "TEXT",
@@ -683,7 +718,7 @@
         "x": 1,
         "y": 14,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -691,7 +726,7 @@
         "x": 1,
         "y": 15,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -699,7 +734,7 @@
         "x": 1,
         "y": 16,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       },
       {
         "type": "TEXT",
@@ -707,7 +742,7 @@
         "x": 1,
         "y": 17,
         "fontSize": 0.675,
-        "color": 0.8
+        "textColor": [100, 100, 100]
       }
     ]
   }
