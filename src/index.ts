@@ -22,14 +22,14 @@ import HoverManager from './hover-manager'
 import LightingManager from './lighting-manager'
 import LoadingScreen from './loading-screen'
 
-import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS.json'
+import VIEWS_DEFINITIONS from './VIEWS_DEFINITIONS'
 
 import {
   DEPTH_TEXTURE_WIDTH,
   DEPTH_TEXTURE_HEIGHT,
   VIEW_HOME,
   DESIRED_FPS,
-  SKYBOX_ASSETS,
+  POSSIBLE_SKYBOXES,
   CONTENT_TYPE_IMAGE,
 } from './constants'
 
@@ -38,6 +38,9 @@ import { animate, anticipate } from 'popmotion'
 import TextureManager from './texture-manager'
 
 // ------------------------------------------------
+
+const SKYBOX_ASSETS =
+  POSSIBLE_SKYBOXES[Math.floor(Math.random() * POSSIBLE_SKYBOXES.length)]
 
 let oldTime = 0
 let hasLoadedResources = false
