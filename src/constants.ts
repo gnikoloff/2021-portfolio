@@ -41,31 +41,40 @@ export const VIEW_HOME = 'home'
 // negz
 // posz
 export const SKYBOX_ASSETS_0 = [
+  '/assets/skybox/miramar_lf.png',
+  '/assets/skybox/miramar_rt.png',
+  '/assets/skybox/miramar_dn.png',
+  '/assets/skybox/miramar_up.png',
+  '/assets/skybox/miramar_bk.png',
+  '/assets/skybox/miramar_ft.png',
+]
+
+export const SKYBOX_ASSETS_1 = [
   '/assets/skybox/stormydays_lf.png',
   '/assets/skybox/stormydays_rt.png',
   '/assets/skybox/stormydays_dn.png',
   '/assets/skybox/stormydays_up.png',
-  '/assets/skybox/stormydays_ft.png',
   '/assets/skybox/stormydays_bk.png',
-]
-
-export const SKYBOX_ASSETS_1 = [
-  '/assets/skybox/vz_dusk_ocean_left.png',
-  '/assets/skybox/vz_dusk_ocean_right.png',
-  '/assets/skybox/vz_dusk_ocean_down.png',
-  '/assets/skybox/vz_dusk_ocean_up.png',
-  '/assets/skybox/vz_dusk_ocean_front.png',
-  '/assets/skybox/vz_dusk_ocean_back.png',
+  '/assets/skybox/stormydays_ft.png',
 ]
 
 export const SKYBOX_ASSETS_2 = [
-  '/assets/skybox/vz_clear_ocean_left.png',
-  '/assets/skybox/vz_clear_ocean_right.png',
-  '/assets/skybox/vz_clear_ocean_down.png',
-  '/assets/skybox/vz_clear_ocean_up.png',
-  '/assets/skybox/vz_clear_ocean_front.png',
-  '/assets/skybox/vz_clear_ocean_back.png',
+  '/assets/skybox/interstellar_lf.png',
+  '/assets/skybox/interstellar_rt.png',
+  '/assets/skybox/interstellar_dn.png',
+  '/assets/skybox/interstellar_up.png',
+  '/assets/skybox/interstellar_bk.png',
+  '/assets/skybox/interstellar_ft.png',
 ]
+
+// export const SKYBOX_ASSETS_2 = [
+//   '/assets/skybox/vz_clear_ocean_left.png',
+//   '/assets/skybox/vz_clear_ocean_right.png',
+//   '/assets/skybox/vz_clear_ocean_down.png',
+//   '/assets/skybox/vz_clear_ocean_up.png',
+//   '/assets/skybox/vz_clear_ocean_back.png',
+//   '/assets/skybox/vz_clear_ocean_front.png',
+// ]
 
 export const POSSIBLE_SKYBOXES = [
   SKYBOX_ASSETS_0,
