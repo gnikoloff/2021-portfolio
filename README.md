@@ -4,7 +4,7 @@
 
 # Personal portfolio 2021
 
-Source codes for my new website. It is written as a pure webgl scene.
+Source codes for my new website. It is written as a pure webgl scene. I wrote a custom layouting system for the text positions and the boxes.
 
 ### Tools used
 
