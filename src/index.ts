@@ -36,6 +36,7 @@ import {
 import './index.css'
 import { animate, anticipate } from 'popmotion'
 import TextureManager from './texture-manager'
+import { isInstagram } from './helpers'
 
 // ------------------------------------------------
 
@@ -137,8 +138,18 @@ SKYBOX_ASSETS.forEach((url: string) => {
 extractAllImageUrlsFromViews().forEach((url: string) => {
   resourceManager.addImageResource(url)
 })
-// Load all assets
 resourceManager.load()
+
+// Instagram browser message
+{
+  if (isInstagram()) {
+    const instaMessage = document.getElementById('insta-message')
+    instaMessage.classList.add('visible')
+
+    const closeInstaBtn = document.getElementById('close-insta-message')
+    closeInstaBtn.addEventListener('click', onInstaCloseMessage)
+  }
+}
 
 // Event Listeners
 store.subscribe(onGlobalStateChange)
@@ -372,6 +383,12 @@ function onResize(e, updateProjectionMatrix = true) {
     camera.updateProjectionMatrix()
   }
   sizeCanvas()
+}
+
+function onInstaCloseMessage(e) {
+  const instaMessage = document.getElementById('insta-message')
+  instaMessage.classList.remove('visible')
+  e.target.removeEventListener('click', onInstaCloseMessage)
 }
 
 // Helpers
