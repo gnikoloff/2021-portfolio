@@ -6,6 +6,7 @@ import {
   GeometryUtils,
   Mesh,
   OrthographicCamera,
+  UNIFORM_TYPE_FLOAT,
   UNIFORM_TYPE_INT,
 } from '../lib/hwoa-rang-gl/dist/esm'
 
@@ -74,6 +75,8 @@ export default class LightingManager {
         geometry,
         uniforms: {
           depthTex: { type: UNIFORM_TYPE_INT, value: 0 },
+          nearPlane: { type: UNIFORM_TYPE_FLOAT, value: this.shadowNear },
+          farPlane: { type: UNIFORM_TYPE_FLOAT, value: this.shadowFar },
         },
         vertexShaderSource,
         fragmentShaderSource,

@@ -1,7 +1,5 @@
 precision highp float;
 
-uniform bool solidColor;
-
 #ifdef IS_FRONT_VIEW
   struct PointLightBase {
     float shininess;
@@ -14,31 +12,33 @@ uniform bool solidColor;
   uniform PointLightBase PointLight;
   uniform sampler2D text;
   uniform sampler2D projectedShadowTexture;
+  uniform samplerCube skyboxTexture;
   
   varying vec2 v_uv;
   varying vec4 v_projectedShadowUvs;
-  varying vec3 v_normal;
   varying vec3 v_surfaceToLight;
   varying vec3 v_surfaceToView;
   varying float v_shadedMixFactor;
   varying float v_colorScaleFactor;
   varying vec4 v_textColor;
 #else
+  uniform samplerCube skyboxTexture;
+
   varying vec4 v_sideColor;
 #endif
 
-const float near_plane = 0.1;
-const float far_plane = 1.0;
-
-float LinearizeDepth(float depth) {
-  float z = depth * 2.0 - 1.0; // Back to NDC 
-  return (2.0 * near_plane * far_plane) / (far_plane + near_plane - z * (far_plane - near_plane));
-}
+uniform vec3 eyePosition;
+uniform bool solidColor;
+varying vec3 v_normal;
+varying vec3 v_worldPosition;
+varying float v_instanceIndex;
 
 void main () {
   if (solidColor) {
     gl_FragColor = vec4(1.0, 0.5, 0.5, 1.0);
   } else {
+
+    vec3 normal = normalize(v_normal);
     
     #ifdef IS_FRONT_VIEW
       // Shadow
@@ -60,7 +60,6 @@ void main () {
       shadow /= 9.0;
 
       // Point lighting
-      vec3 normal = normalize(v_normal);
       vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
       vec3 surfaceToViewDirection = normalize(v_surfaceToView);
 
@@ -92,8 +91,22 @@ void main () {
       shadedColor.rgb *= shadow;
       gl_FragColor = mix(atlasColor, shadedColor, v_shadedMixFactor);
 
+      // Skybox color
+      vec3 eyeToSurfaceDir = normalize(v_worldPosition - eyePosition);
+      vec3 direction = refract(eyeToSurfaceDir, normal, 1.0 / v_colorScaleFactor);
+
+      vec4 cubeColor = textureCube(skyboxTexture, direction);
+
+      gl_FragColor = mix(gl_FragColor, cubeColor, v_shadedMixFactor * 0.1);
+
     #else
-      gl_FragColor = v_sideColor;
+      // Sides color
+      vec3 eyeToSurfaceDir = normalize(v_worldPosition - eyePosition);
+      vec3 direction = refract(eyeToSurfaceDir, normal, v_instanceIndex / 361.0);
+
+      vec4 cubeColor = textureCube(skyboxTexture, direction);
+      gl_FragColor = mix(v_sideColor, cubeColor, 0.9);
+      // gl_FragColor = cubeColor;
     #endif
   }
 }

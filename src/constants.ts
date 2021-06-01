@@ -17,3 +17,18 @@ export const CONTENT_TYPE_SPLIT_TEXT = 'TEXT_SPLIT'
 export const CONTENT_TYPE_IMAGE = 'IMAGE'
 
 export const VIEW_HOME = 'home'
+
+// negx
+// posx
+// negy
+// posy
+// negz
+// posz
+export const SKYBOX_ASSETS = [
+  '/assets/skybox/stormydays_lf.png',
+  '/assets/skybox/stormydays_rt.png',
+  '/assets/skybox/stormydays_up.png',
+  '/assets/skybox/stormydays_dn.png',
+  '/assets/skybox/stormydays_ft.png',
+  '/assets/skybox/stormydays_bk.png',
+]

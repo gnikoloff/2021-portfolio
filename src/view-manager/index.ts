@@ -1,5 +1,9 @@
 import { mat4 } from 'gl-matrix'
-import { PerspectiveCamera, Texture } from '../lib/hwoa-rang-gl/dist/esm'
+import {
+  PerspectiveCamera,
+  Texture,
+  CubeTexture,
+} from '../lib/hwoa-rang-gl/dist/esm'
 import store from '../store'
 
 import TextureManager from '../texture-manager'
@@ -150,17 +154,43 @@ export default class ViewManager {
     camera: PerspectiveCamera,
     renderAsSolidColor = false,
     shadowTexture: Texture = null,
+    skyboxTexture: CubeTexture = null,
+    deltaTime: number,
   ): this {
     const { hoverIdx } = store.getState()
     this.setHoveredIdx(hoverIdx)
     if (this.#isTransitioning) {
-      this.#view0.render(camera, renderAsSolidColor, shadowTexture)
-      this.#view1.render(camera, renderAsSolidColor, shadowTexture)
+      this.#view0.render(
+        camera,
+        renderAsSolidColor,
+        shadowTexture,
+        skyboxTexture,
+        deltaTime,
+      )
+      this.#view1.render(
+        camera,
+        renderAsSolidColor,
+        shadowTexture,
+        skyboxTexture,
+        deltaTime,
+      )
     } else {
       if (this.#activeViewIdx === 0) {
-        this.#view0.render(camera, renderAsSolidColor, shadowTexture)
+        this.#view0.render(
+          camera,
+          renderAsSolidColor,
+          shadowTexture,
+          skyboxTexture,
+          deltaTime,
+        )
       } else {
-        this.#view1.render(camera, renderAsSolidColor, shadowTexture)
+        this.#view1.render(
+          camera,
+          renderAsSolidColor,
+          shadowTexture,
+          skyboxTexture,
+          deltaTime,
+        )
       }
     }
     return this

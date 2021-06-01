@@ -1,4 +1,4 @@
-import { mat4, ReadonlyMat4, ReadonlyVec3, vec3 } from 'gl-matrix'
+import { mat4, ReadonlyMat4, vec3 } from 'gl-matrix'
 import { animate } from 'popmotion'
 
 import {
@@ -8,6 +8,7 @@ import {
   InstancedMesh,
   PerspectiveCamera,
   Texture,
+  CubeTexture,
   UNIFORM_TYPE_INT,
   UNIFORM_TYPE_VEC2,
   CUBE_SIDE_FRONT,
@@ -60,6 +61,7 @@ export default class View {
   #animationOffsets = new Float32Array(GRID_TOTAL_COUNT).fill(0)
   #shadedMixFactors = new Float32Array(GRID_TOTAL_COUNT).fill(1)
   #textColors = new Float32Array(GRID_TOTAL_COUNT * 3).fill(0)
+  #eyePosition: number[]
 
   #instanceMatrix = mat4.create()
   #transformVec3 = vec3.create()
@@ -90,7 +92,7 @@ export default class View {
     this.#gl = gl
     this.#textureManager = textureManager
 
-    this.#emptyTexture = new Texture(gl).bind().fromSize(1, 1)
+    this.#emptyTexture = new Texture(gl).bind().fromSize(1, 1).unbind()
 
     this.#textTexture = new Texture(gl, {
       format: gl.RGBA,
@@ -109,6 +111,10 @@ export default class View {
       .filter(({ orientation }) => orientation !== CUBE_SIDE_BACK)
       .forEach((side) => {
         const { orientation, vertices, normal, uv, indices } = side
+        const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
+        for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
+          instancedIndexes[i] = i
+        }
 
         const geometry = new Geometry(gl)
           .addIndex({ typedArray: indices })
@@ -116,28 +122,27 @@ export default class View {
             size: 3,
             typedArray: vertices,
           })
+          .addAttribute('normal', {
+            size: 3,
+            typedArray: normal,
+          })
+
+          .addAttribute('instanceIndex', {
+            size: 1,
+            typedArray: instancedIndexes,
+            instancedDivisor: 1,
+          })
 
         if (orientation === CUBE_SIDE_FRONT) {
-          const instancedIndexes = new Float32Array(GRID_TOTAL_COUNT)
           const colorMixFactors = new Float32Array(GRID_TOTAL_COUNT)
 
           for (let i = 0; i < GRID_TOTAL_COUNT; i++) {
-            instancedIndexes[i] = i
             colorMixFactors[i] = 0.95 + Math.random() * 0.05
           }
           geometry
             .addAttribute('uv', {
               size: 2,
               typedArray: uv,
-            })
-            .addAttribute('normal', {
-              size: 3,
-              typedArray: normal,
-            })
-            .addAttribute('instanceIndex', {
-              size: 1,
-              typedArray: instancedIndexes,
-              instancedDivisor: 1,
             })
             .addAttribute('shadedMixFactor', {
               size: 1,
@@ -175,8 +180,11 @@ export default class View {
           pointLightSpecularFactor,
         } = store.getState()
 
+        this.#eyePosition = [cameraX, cameraY, cameraZ]
+
         const sharedUniforms = {
           solidColor: { type: UNIFORM_TYPE_FLOAT, value: 1 },
+          skyboxTexture: { type: UNIFORM_TYPE_INT, value: 2 },
           eyePosition: {
             type: UNIFORM_TYPE_VEC3,
             value: [cameraX, cameraY, cameraZ],
@@ -508,29 +516,38 @@ export default class View {
     camera: PerspectiveCamera,
     renderAsSolidColor = false,
     shadowTexture: Texture = null,
+    skyboxTexture: CubeTexture = null,
+    deltaTime = 0,
   ): this {
     this.#meshes.forEach((mesh, i) => {
-      if (shadowTexture) {
-        const isFront = i === this.#meshes.length - 1
-        if (isFront) {
-          this.#gl.activeTexture(this.#gl.TEXTURE0)
-          this.#textTexture.bind()
-
-          this.#gl.activeTexture(this.#gl.TEXTURE1)
-          shadowTexture.bind()
-        } else {
-          this.#gl.activeTexture(this.#gl.TEXTURE0)
-          shadowTexture.bind()
-        }
-      } else {
+      if (renderAsSolidColor) {
         this.#gl.activeTexture(this.#gl.TEXTURE0)
         this.#emptyTexture.bind()
         this.#gl.activeTexture(this.#gl.TEXTURE1)
         this.#emptyTexture.bind()
+      } else {
+        const isFront = i === this.#meshes.length - 1
+        if (isFront) {
+          this.#gl.activeTexture(this.#gl.TEXTURE0)
+          this.#textTexture.bind()
+          this.#gl.activeTexture(this.#gl.TEXTURE1)
+          shadowTexture.bind()
+          this.#gl.activeTexture(this.#gl.TEXTURE2)
+          skyboxTexture.bind()
+        } else {
+          this.#gl.activeTexture(this.#gl.TEXTURE2)
+          skyboxTexture.bind()
+        }
       }
+      const { cameraX, cameraY, cameraZ } = store.getState()
+      const eyeSpeed = deltaTime * 0.4
+      this.#eyePosition[0] += (cameraX - this.#eyePosition[0]) * eyeSpeed
+      this.#eyePosition[1] += (cameraY - this.#eyePosition[1]) * eyeSpeed
+      this.#eyePosition[2] += (cameraZ - this.#eyePosition[2]) * eyeSpeed
       mesh
         .use()
         .setCamera(camera)
+        .setUniform('eyePosition', UNIFORM_TYPE_VEC3, this.#eyePosition)
         .setUniform('solidColor', UNIFORM_TYPE_FLOAT, renderAsSolidColor)
         .draw()
     })

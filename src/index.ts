@@ -3,6 +3,7 @@ import Stats from 'stats.js'
 import {
   OrthographicCamera,
   PerspectiveCamera,
+  CubeTexture,
 } from './lib/hwoa-rang-gl/dist/esm'
 
 import store from './store'
@@ -28,6 +29,8 @@ import {
   DEPTH_TEXTURE_HEIGHT,
   VIEW_HOME,
   DESIRED_FPS,
+  SKYBOX_ASSETS,
+  CONTENT_TYPE_IMAGE,
 } from './constants'
 
 import './index.css'
@@ -52,6 +55,10 @@ const viewManager = new ViewManager(gl, {
 })
 const loadScreen = new LoadingScreen(gl)
 const lightingManager = new LightingManager(gl)
+
+const skyboxTexture = new CubeTexture(gl, {
+  minFilter: gl.LINEAR_MIPMAP_LINEAR,
+})
 
 // Cameras setup
 const camera = new PerspectiveCamera(
@@ -118,17 +125,13 @@ resourceManager
 // Add a bit of delay to prevent stutter
 resourceManager.addArtificialDelay(750)
 
-// Load skybox sides
-resourceManager
-  .addImageResource('/assets/skybox/bluecloud_bk.jpg')
-  .addImageResource('/assets/skybox/bluecloud_dn.jpg')
-  .addImageResource('/assets/skybox/bluecloud_ft.jpg')
-  .addImageResource('/assets/skybox/bluecloud_lf.jpg')
-  .addImageResource('/assets/skybox/bluecloud_rt.jpg')
-  .addImageResource('/assets/skybox/bluecloud_up.jpg')
+// Load skyboxTexture sides
+SKYBOX_ASSETS.forEach((url: string) => {
+  resourceManager.addImageResource(url)
+})
 
 // Load project images
-extractAllImageUrlsFromViews().forEach(({ value: url }) => {
+extractAllImageUrlsFromViews().forEach((url: string) => {
   resourceManager.addImageResource(url)
 })
 // Load all assets
@@ -212,6 +215,8 @@ function updateFrame(ts) {
       },
       true,
       null,
+      null,
+      dt,
     )
 
     lightingManager.depthFramebuffer.unbind()
@@ -224,6 +229,8 @@ function updateFrame(ts) {
       camera,
       false,
       lightingManager.depthFramebuffer.depthTexture,
+      skyboxTexture,
+      dt,
     )
   }
 
@@ -263,6 +270,10 @@ function onGlobalStateChange() {
         // new CameraController(camera, document.body, true)
       },
     })
+    const images: Array<HTMLImageElement> = SKYBOX_ASSETS.map((url: string) =>
+      resourceManager.getImage(url),
+    )
+    skyboxTexture.bind().addSides(images).generateMipmap().unbind()
   }
 }
 
@@ -359,12 +370,12 @@ function onResize(e, updateProjectionMatrix = true) {
 }
 
 // Helpers
-function extractAllImageUrlsFromViews(): Array<{ value: string }> {
+function extractAllImageUrlsFromViews(): Array<string> {
   const allImagesInProject = []
   for (const view of Object.values(VIEWS_DEFINITIONS)) {
-    const images = (view.items as Array<{ type }>).filter(
-      ({ type }) => type === 'IMAGE',
-    )
+    const images = (view.items as Array<{ type; value }>)
+      .filter(({ type }) => type === CONTENT_TYPE_IMAGE)
+      .map(({ value }) => value)
     allImagesInProject.push(...images)
   }
   return allImagesInProject
