@@ -1,6 +1,12 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { ReadonlyMat4, ReadonlyVec3 } from 'gl-matrix'
 
+export const SET_IS_DARK_MODE = 'SET_IS_DARK_MODE'
+export const setIsDarkMode = (payload: boolean): PayloadAction<boolean> => ({
+  type: SET_IS_DARK_MODE,
+  payload,
+})
+
 export const SET_HAS_LOADED_RESOURCES = 'SET_HAS_LOADED_RESOURCES'
 export const setHasLoadedResources = (
   payload: boolean,

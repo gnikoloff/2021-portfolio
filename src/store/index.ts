@@ -24,6 +24,8 @@ const initialState = {
 
   debugMode: new URLSearchParams(location.search).has('debugMode'),
 
+  isDarkMode: true,
+
   hasLoadedResources: false,
   loadedResourcesPercentage: 0,
   hasFinishedLoadingAnimation: false,
@@ -58,6 +60,12 @@ const initialState = {
 
 const appState = (state = initialState, action) => {
   switch (action.type) {
+    case actions.SET_IS_DARK_MODE: {
+      return {
+        ...state,
+        isDarkMode: action.payload,
+      }
+    }
     case actions.SET_HAS_LOADED_RESOURCES: {
       return {
         ...state,

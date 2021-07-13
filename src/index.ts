@@ -13,6 +13,7 @@ import {
   setCameraY,
   setCameraZ,
   setHoveredItem,
+  setIsDarkMode,
   setLightX,
 } from './store/actions'
 
@@ -159,6 +160,9 @@ document.body.addEventListener('touchstart', onTouchStart)
 document.body.addEventListener('touchmove', onTouchMove)
 window.addEventListener('resize', onResize)
 window.onpopstate = onPopState
+window
+  .matchMedia('(prefers-color-scheme: dark)')
+  .addEventListener('change', onColorPreferenceChange)
 
 // Canvas setup
 onResize(null, false)
@@ -198,7 +202,14 @@ function updateFrame(ts) {
 
   gl.enable(gl.DEPTH_TEST)
   gl.depthFunc(gl.LEQUAL)
-  gl.clearColor(0.8, 0.8, 0.8, 1)
+  {
+    const { isDarkMode } = store.getState()
+    if (isDarkMode) {
+      gl.clearColor(0.2, 0.2, 0.2, 1)
+    } else {
+      gl.clearColor(0.8, 0.8, 0.8, 1)
+    }
+  }
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
@@ -389,6 +400,11 @@ function onInstaCloseMessage(e) {
   const instaMessage = document.getElementById('insta-message')
   instaMessage.classList.remove('visible')
   e.target.removeEventListener('click', onInstaCloseMessage)
+}
+
+function onColorPreferenceChange(e) {
+  const isDarkMode = e.matches
+  store.dispatch(setIsDarkMode(isDarkMode))
 }
 
 // Helpers
